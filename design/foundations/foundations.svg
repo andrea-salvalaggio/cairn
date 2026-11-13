@@ -1,0 +1,207 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1780" viewBox="0 0 1280 1780" xmlns:c2pa="http://c2pa.org/manifest">
+<rect width="1280" height="1780" fill="#0C0A09"/>
+<text x="40" y="70" font-family="Geist, Inter, sans-serif" font-size="40" font-weight="600" fill="#FAFAF9" text-anchor="start" >Cairn foundations</text>
+<text x="40" y="104" font-family="Geist, Inter, sans-serif" font-size="16" font-weight="400" fill="#A8A29E" text-anchor="start" >Primitives and semantic theme tokens. Dark is the default mode.</text>
+<text x="40" y="160" font-family="Geist, Inter, sans-serif" font-size="20" font-weight="600" fill="#FAFAF9" text-anchor="start" >Primitives</text>
+<rect x="40" y="184" width="180" height="56" rx="10" fill="#FAFAF9" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="40" y="260" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >stone/50</text>
+<text x="40" y="277" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#FAFAF9</text>
+<rect x="240" y="184" width="180" height="56" rx="10" fill="#F5F5F4" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="240" y="260" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >stone/100</text>
+<text x="240" y="277" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#F5F5F4</text>
+<rect x="440" y="184" width="180" height="56" rx="10" fill="#E7E5E4" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="440" y="260" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >stone/200</text>
+<text x="440" y="277" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#E7E5E4</text>
+<rect x="640" y="184" width="180" height="56" rx="10" fill="#D6D3D1" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="640" y="260" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >stone/300</text>
+<text x="640" y="277" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#D6D3D1</text>
+<rect x="840" y="184" width="180" height="56" rx="10" fill="#A8A29E" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="840" y="260" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >stone/400</text>
+<text x="840" y="277" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#A8A29E</text>
+<rect x="1040" y="184" width="180" height="56" rx="10" fill="#78716C" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="1040" y="260" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >stone/500</text>
+<text x="1040" y="277" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#78716C</text>
+<rect x="40" y="292" width="180" height="56" rx="10" fill="#57534E" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="40" y="368" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >stone/600</text>
+<text x="40" y="385" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#57534E</text>
+<rect x="240" y="292" width="180" height="56" rx="10" fill="#44403C" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="240" y="368" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >stone/700</text>
+<text x="240" y="385" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#44403C</text>
+<rect x="440" y="292" width="180" height="56" rx="10" fill="#292524" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="440" y="368" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >stone/800</text>
+<text x="440" y="385" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#292524</text>
+<rect x="640" y="292" width="180" height="56" rx="10" fill="#1C1917" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="640" y="368" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >stone/900</text>
+<text x="640" y="385" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#1C1917</text>
+<rect x="840" y="292" width="180" height="56" rx="10" fill="#0C0A09" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="840" y="368" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >stone/950</text>
+<text x="840" y="385" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#0C0A09</text>
+<rect x="1040" y="292" width="180" height="56" rx="10" fill="#FCD34D" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="1040" y="368" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >amber/300</text>
+<text x="1040" y="385" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#FCD34D</text>
+<rect x="40" y="400" width="180" height="56" rx="10" fill="#FBBF24" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="40" y="476" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >amber/400</text>
+<text x="40" y="493" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#FBBF24</text>
+<rect x="240" y="400" width="180" height="56" rx="10" fill="#F59E0B" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="240" y="476" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >amber/500</text>
+<text x="240" y="493" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#F59E0B</text>
+<rect x="440" y="400" width="180" height="56" rx="10" fill="#D97706" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="440" y="476" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >amber/600</text>
+<text x="440" y="493" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#D97706</text>
+<rect x="640" y="400" width="180" height="56" rx="10" fill="#E07A5F" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="640" y="476" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >terracotta/400</text>
+<text x="640" y="493" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#E07A5F</text>
+<rect x="840" y="400" width="180" height="56" rx="10" fill="#C8553D" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="840" y="476" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >terracotta/500</text>
+<text x="840" y="493" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#C8553D</text>
+<rect x="1040" y="400" width="180" height="56" rx="10" fill="#A63F2B" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="1040" y="476" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >terracotta/600</text>
+<text x="1040" y="493" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#A63F2B</text>
+<rect x="40" y="508" width="180" height="56" rx="10" fill="#FB7185" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="40" y="584" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >rose/400</text>
+<text x="40" y="601" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#FB7185</text>
+<rect x="240" y="508" width="180" height="56" rx="10" fill="#F43F5E" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="240" y="584" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >rose/500</text>
+<text x="240" y="601" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#F43F5E</text>
+<rect x="440" y="508" width="180" height="56" rx="10" fill="#A3B18A" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="440" y="584" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >sage/400</text>
+<text x="440" y="601" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#A3B18A</text>
+<rect x="640" y="508" width="180" height="56" rx="10" fill="#6B8F5E" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="640" y="584" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >sage/500</text>
+<text x="640" y="601" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#6B8F5E</text>
+<rect x="840" y="508" width="180" height="56" rx="10" fill="#38BDF8" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="840" y="584" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >sky/400</text>
+<text x="840" y="601" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#38BDF8</text>
+<rect x="1040" y="508" width="180" height="56" rx="10" fill="#0EA5E9" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="1040" y="584" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >sky/500</text>
+<text x="1040" y="601" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#0EA5E9</text>
+<rect x="40" y="616" width="180" height="56" rx="10" fill="#FFFFFF" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="40" y="692" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >base/white</text>
+<text x="40" y="709" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#FFFFFF</text>
+<rect x="240" y="616" width="180" height="56" rx="10" fill="#000000" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="240" y="692" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >base/black</text>
+<text x="240" y="709" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#000000</text>
+<text x="40" y="754" font-family="Geist, Inter, sans-serif" font-size="20" font-weight="600" fill="#FAFAF9" text-anchor="start" >Theme / Dark</text>
+<rect x="40" y="778" width="180" height="56" rx="10" fill="#0C0A09" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="40" y="854" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >wallpaper/bg</text>
+<text x="40" y="871" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#0C0A09</text>
+<rect x="240" y="778" width="180" height="56" rx="10" fill="#E7E5E4" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="240" y="854" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >wallpaper/past</text>
+<text x="240" y="871" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#E7E5E4</text>
+<rect x="440" y="778" width="180" height="56" rx="10" fill="#292524" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="440" y="854" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >wallpaper/future</text>
+<text x="440" y="871" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#292524</text>
+<rect x="640" y="778" width="180" height="56" rx="10" fill="#F59E0B" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="640" y="854" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >wallpaper/current</text>
+<text x="640" y="871" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#F59E0B</text>
+<rect x="840" y="778" width="180" height="56" rx="10" fill="#78716C" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="840" y="854" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >wallpaper/label</text>
+<text x="840" y="871" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#78716C</text>
+<rect x="1040" y="778" width="180" height="56" rx="10" fill="#FB7185" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="1040" y="854" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >event/love</text>
+<text x="1040" y="871" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#FB7185</text>
+<rect x="40" y="886" width="180" height="56" rx="10" fill="#FCD34D" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="40" y="962" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >event/milestone</text>
+<text x="40" y="979" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#FCD34D</text>
+<rect x="240" y="886" width="180" height="56" rx="10" fill="#38BDF8" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="240" y="962" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >event/journey</text>
+<text x="240" y="979" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#38BDF8</text>
+<rect x="440" y="886" width="180" height="56" rx="10" fill="#A3B18A" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="440" y="962" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >event/growth</text>
+<text x="440" y="979" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#A3B18A</text>
+<rect x="640" y="886" width="180" height="56" rx="10" fill="#0C0A09" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="640" y="962" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >ui/bg/default</text>
+<text x="640" y="979" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#0C0A09</text>
+<rect x="840" y="886" width="180" height="56" rx="10" fill="#1C1917" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="840" y="962" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >ui/bg/surface</text>
+<text x="840" y="979" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#1C1917</text>
+<rect x="1040" y="886" width="180" height="56" rx="10" fill="#292524" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="1040" y="962" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >ui/bg/elevated</text>
+<text x="1040" y="979" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#292524</text>
+<rect x="40" y="994" width="180" height="56" rx="10" fill="#FAFAF9" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="40" y="1070" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >ui/text/primary</text>
+<text x="40" y="1087" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#FAFAF9</text>
+<rect x="240" y="994" width="180" height="56" rx="10" fill="#A8A29E" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="240" y="1070" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >ui/text/secondary</text>
+<text x="240" y="1087" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#A8A29E</text>
+<rect x="440" y="994" width="180" height="56" rx="10" fill="#78716C" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="440" y="1070" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >ui/text/muted</text>
+<text x="440" y="1087" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#78716C</text>
+<rect x="640" y="994" width="180" height="56" rx="10" fill="#292524" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="640" y="1070" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >ui/border/default</text>
+<text x="640" y="1087" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#292524</text>
+<rect x="840" y="994" width="180" height="56" rx="10" fill="#57534E" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="840" y="1070" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >ui/border/strong</text>
+<text x="840" y="1087" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#57534E</text>
+<rect x="1040" y="994" width="180" height="56" rx="10" fill="#F59E0B" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="1040" y="1070" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >ui/accent/default</text>
+<text x="1040" y="1087" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#F59E0B</text>
+<rect x="40" y="1102" width="180" height="56" rx="10" fill="#0C0A09" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="40" y="1178" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >ui/accent/on</text>
+<text x="40" y="1195" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#0C0A09</text>
+<rect x="240" y="1102" width="180" height="56" rx="10" fill="#F43F5E" stroke="#A8A29E" stroke-opacity="0.35"/>
+<text x="240" y="1178" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#FAFAF9" text-anchor="start" >guide/unsafe</text>
+<text x="240" y="1195" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#A8A29E" text-anchor="start" >#F43F5E</text>
+<rect x="0" y="1220" width="1280" height="560" fill="#FAFAF9"/>
+<text x="40" y="1270" font-family="Geist, Inter, sans-serif" font-size="20" font-weight="600" fill="#1C1917" text-anchor="start" >Theme / Light</text>
+<rect x="40" y="1294" width="180" height="56" rx="10" fill="#F5F5F4" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="40" y="1370" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >wallpaper/bg</text>
+<text x="40" y="1387" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#F5F5F4</text>
+<rect x="240" y="1294" width="180" height="56" rx="10" fill="#44403C" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="240" y="1370" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >wallpaper/past</text>
+<text x="240" y="1387" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#44403C</text>
+<rect x="440" y="1294" width="180" height="56" rx="10" fill="#D6D3D1" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="440" y="1370" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >wallpaper/future</text>
+<text x="440" y="1387" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#D6D3D1</text>
+<rect x="640" y="1294" width="180" height="56" rx="10" fill="#C8553D" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="640" y="1370" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >wallpaper/current</text>
+<text x="640" y="1387" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#C8553D</text>
+<rect x="840" y="1294" width="180" height="56" rx="10" fill="#78716C" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="840" y="1370" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >wallpaper/label</text>
+<text x="840" y="1387" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#78716C</text>
+<rect x="1040" y="1294" width="180" height="56" rx="10" fill="#F43F5E" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="1040" y="1370" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >event/love</text>
+<text x="1040" y="1387" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#F43F5E</text>
+<rect x="40" y="1402" width="180" height="56" rx="10" fill="#D97706" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="40" y="1478" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >event/milestone</text>
+<text x="40" y="1495" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#D97706</text>
+<rect x="240" y="1402" width="180" height="56" rx="10" fill="#0EA5E9" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="240" y="1478" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >event/journey</text>
+<text x="240" y="1495" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#0EA5E9</text>
+<rect x="440" y="1402" width="180" height="56" rx="10" fill="#6B8F5E" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="440" y="1478" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >event/growth</text>
+<text x="440" y="1495" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#6B8F5E</text>
+<rect x="640" y="1402" width="180" height="56" rx="10" fill="#FAFAF9" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="640" y="1478" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >ui/bg/default</text>
+<text x="640" y="1495" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#FAFAF9</text>
+<rect x="840" y="1402" width="180" height="56" rx="10" fill="#FFFFFF" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="840" y="1478" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >ui/bg/surface</text>
+<text x="840" y="1495" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#FFFFFF</text>
+<rect x="1040" y="1402" width="180" height="56" rx="10" fill="#F5F5F4" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="1040" y="1478" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >ui/bg/elevated</text>
+<text x="1040" y="1495" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#F5F5F4</text>
+<rect x="40" y="1510" width="180" height="56" rx="10" fill="#1C1917" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="40" y="1586" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >ui/text/primary</text>
+<text x="40" y="1603" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#1C1917</text>
+<rect x="240" y="1510" width="180" height="56" rx="10" fill="#57534E" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="240" y="1586" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >ui/text/secondary</text>
+<text x="240" y="1603" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#57534E</text>
+<rect x="440" y="1510" width="180" height="56" rx="10" fill="#78716C" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="440" y="1586" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >ui/text/muted</text>
+<text x="440" y="1603" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#78716C</text>
+<rect x="640" y="1510" width="180" height="56" rx="10" fill="#E7E5E4" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="640" y="1586" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >ui/border/default</text>
+<text x="640" y="1603" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#E7E5E4</text>
+<rect x="840" y="1510" width="180" height="56" rx="10" fill="#A8A29E" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="840" y="1586" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >ui/border/strong</text>
+<text x="840" y="1603" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#A8A29E</text>
+<rect x="1040" y="1510" width="180" height="56" rx="10" fill="#C8553D" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="1040" y="1586" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >ui/accent/default</text>
+<text x="1040" y="1603" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#C8553D</text>
+<rect x="40" y="1618" width="180" height="56" rx="10" fill="#FFFFFF" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="40" y="1694" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >ui/accent/on</text>
+<text x="40" y="1711" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#FFFFFF</text>
+<rect x="240" y="1618" width="180" height="56" rx="10" fill="#F43F5E" stroke="#57534E" stroke-opacity="0.35"/>
+<text x="240" y="1694" font-family="Geist, Inter, sans-serif" font-size="13" font-weight="500" fill="#1C1917" text-anchor="start" >guide/unsafe</text>
+<text x="240" y="1711" font-family="Geist, Inter, sans-serif" font-size="12" font-weight="400" fill="#57534E" text-anchor="start" >#F43F5E</text>
+<metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTpiNDRmMTU0OS04MDc1LTRiOTUtYjlkZi0zZTQwYTdkODdjZjkAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaEvZFA6pllffoQTnm2HM7Z0AAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDo2OGI4ZTg0NS1jMGY3LTQ2OWEtODA2OC0yN2U4OWNlZGNlMDdscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoPa3yUep+vznOo+8cVi9XLgAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggnVn2n+Xc1EzH8petKV9AeSw0jIfMPZZs14gq3LAb+iWkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaHq2LYutuKZkq5J4Jme30AEAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRMAAAAAAAAAAAAAAAAZGhhc2hYIO1xJHYO0PTqmVAMSrtTvVQ0xRdPvzqThtI2eKzcCxqnZG5hbWVuanVtYmYgbWFuaWZlc3RqZXhjbHVzaW9uc4GiZXN0YXJ0GWzsZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOmI0NGYxNTQ5LTgwNzUtNGI5NS1iOWRmLTNlNDBhN2Q4N2NmOS9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjFmMTFmZmZlLTNhM2UtNDM4Mi04OGZjLTYyZWFiOWIyODZiZnJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCCdWfaf5dzUTMfyl60pX0B5LDSMh8w9lmzXiCrcsBv6JaJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggeFaPtZiPjqjjOpsX8OM+LiBYRMaw135/7j9xtAcfBESiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggl+ZkPnJJGOE1DnfQNW8GIJZRteh6zAGKZKkzl4UyIRJ0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQBXgxFw+W5JsWoL2CZEQk+b/w+b/cLTHJZ0QCtkABoliKgtAgGzbH/YRh5s/yww9OoeP2dFnu3B3DT87lPE+GNg=</c2pa:manifest></metadata></svg>
