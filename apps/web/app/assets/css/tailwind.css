@@ -1,0 +1,3 @@
+/* Required by Nuxt UI. Sass cannot import Tailwind, so this entry stays CSS; app styles live in ../scss. */
+@import "tailwindcss";
+@import "@nuxt/ui";

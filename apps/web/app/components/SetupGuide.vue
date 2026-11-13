@@ -35,62 +35,62 @@ async function copy() {
     :title="STEPS[step]!.title"
     :description="STEPS[step]!.description"
     :ui="{
-      overlay: 'bg-black/60 backdrop-blur-sm',
-      content: 'max-w-md rounded-[20px] bg-[var(--ios-grouped)] ring-0 divide-y-0 shadow-2xl',
-      header: 'flex-col items-start gap-0 px-6 pt-6 pb-0',
-      title: 'text-[22px] font-bold tracking-tight text-white pr-8',
-      description: 'mt-1.5 text-[15px] leading-snug text-[var(--ios-secondary)]',
-      body: 'px-6 py-5',
-      footer: 'px-6 pb-6 pt-0',
-      close: 'top-5 end-5',
+      overlay: 'guide-overlay',
+      content: 'guide-sheet',
+      header: 'guide-header',
+      title: 'guide-title',
+      description: 'guide-description',
+      body: 'guide-body',
+      footer: 'guide-footer',
+      close: 'guide-close',
     }"
-    :close="{ color: 'neutral', variant: 'soft', class: 'rounded-full size-[30px] justify-center bg-[var(--ios-fill)] text-[var(--ios-secondary)]' }"
+    :close="{ color: 'neutral', variant: 'soft', class: 'guide-close-button' }"
   >
     <template #body>
       <Transition :name="direction > 0 ? 'next' : 'prev'" mode="out-in">
         <!-- 1. Link -->
-        <div v-if="step === 0" key="0" class="flex flex-col gap-3">
-          <div class="ios-group flex items-center gap-3 bg-[var(--ios-elevated)] px-4 py-3">
-            <UIcon name="i-lucide-link" class="size-5 shrink-0 text-[var(--ios-tint)]" />
-            <code class="min-w-0 flex-1 truncate text-[13px] text-[var(--ios-secondary)]">{{ url }}</code>
+        <div v-if="step === 0" key="0" class="step">
+          <div class="ios-group ios-group--elevated link">
+            <UIcon name="i-lucide-link" class="ios-icon link-icon" />
+            <code>{{ url }}</code>
           </div>
-          <button type="button" class="ios-button ios-button--tinted w-full" @click="copy">
-            <UIcon :name="copied ? 'i-lucide-check' : 'i-lucide-copy'" class="size-5" />
+          <button type="button" class="ios-button ios-button--tinted" @click="copy">
+            <UIcon :name="copied ? 'i-lucide-check' : 'i-lucide-copy'" class="ios-icon" />
             {{ copied ? 'Copied' : 'Copy link' }}
           </button>
         </div>
 
         <!-- 2. Shortcut: a miniature of the two actions as they look in the Shortcuts app -->
-        <div v-else-if="step === 1" key="1" class="flex flex-col gap-2.5">
+        <div v-else-if="step === 1" key="1" class="step step--tight">
           <div class="action">
-            <span class="action-icon bg-[#0a84ff]"><UIcon name="i-lucide-globe" class="size-4" /></span>
+            <span class="action-icon action-icon--blue"><UIcon name="i-lucide-globe" class="action-glyph" /></span>
             <p>Get contents of <span class="token">your link</span></p>
           </div>
-          <div class="mx-auto h-3 w-px bg-[var(--ios-separator)]" />
+          <div class="connector" />
           <div class="action">
-            <span class="action-icon bg-[#5e5ce6]"><UIcon name="i-lucide-image" class="size-4" /></span>
+            <span class="action-icon action-icon--indigo"><UIcon name="i-lucide-image" class="action-glyph" /></span>
             <p>Set <span class="token">Lock Screen</span> wallpaper to <span class="token">Contents of URL</span></p>
           </div>
-          <p class="ios-footnote mx-0 mt-2">
-            Tap the arrow on <em>Set Wallpaper</em> and turn off <strong class="text-white">Crop to Subject</strong> and <strong class="text-white">Show Preview</strong>.
+          <p class="ios-footnote hint">
+            Tap the arrow on <em>Set Wallpaper</em> and turn off <strong>Crop to Subject</strong> and <strong>Show Preview</strong>.
           </p>
-          <a v-if="onIos" href="shortcuts://create-shortcut" class="ios-button ios-button--tinted mt-2 w-full">
-            <UIcon name="i-lucide-square-arrow-out-up-right" class="size-5" /> Open Shortcuts
+          <a v-if="onIos" href="shortcuts://create-shortcut" class="ios-button ios-button--tinted">
+            <UIcon name="i-lucide-square-arrow-out-up-right" class="ios-icon" /> Open Shortcuts
           </a>
         </div>
 
         <!-- 3. Automation -->
-        <div v-else key="2" class="flex flex-col gap-4">
-          <ol class="ios-group bg-[var(--ios-elevated)]">
-            <li class="ios-row"><span>Time</span><span class="text-[var(--ios-secondary)]">6:00 AM</span></li>
-            <li class="ios-row"><span>Repeat</span><span class="text-[var(--ios-secondary)]">Daily</span></li>
-            <li class="ios-row"><span>Run Immediately</span><UIcon name="i-lucide-check" class="size-5 text-[var(--ios-tint)]" /></li>
-            <li class="ios-row"><span>Shortcut</span><span class="text-[var(--ios-secondary)]">Your new shortcut</span></li>
+        <div v-else key="2" class="step">
+          <ol class="ios-group ios-group--elevated">
+            <li class="ios-row"><span>Time</span><span class="ios-value">6:00 AM</span></li>
+            <li class="ios-row"><span>Repeat</span><span class="ios-value">Daily</span></li>
+            <li class="ios-row"><span>Run Immediately</span><UIcon name="i-lucide-check" class="ios-icon check" /></li>
+            <li class="ios-row"><span>Shortcut</span><span class="ios-value">Your new shortcut</span></li>
           </ol>
-          <div class="flex gap-3 rounded-xl bg-[rgb(255_159_10/0.1)] p-4 text-[15px] leading-snug">
-            <UIcon name="i-lucide-info" class="mt-0.5 size-5 shrink-0 text-[var(--ios-tint)]" />
-            <p class="text-[var(--ios-secondary)]">
-              Your Lock Screen must use a <strong class="text-white">Photo</strong> wallpaper. Colors, gradients and live wallpapers can’t be replaced by a Shortcut.
+          <div class="note">
+            <UIcon name="i-lucide-info" class="ios-icon note-icon" />
+            <p>
+              Your Lock Screen must use a <strong>Photo</strong> wallpaper. Colors, gradients and live wallpapers can’t be replaced by a Shortcut.
             </p>
           </div>
         </div>
@@ -98,8 +98,8 @@ async function copy() {
     </template>
 
     <template #footer>
-      <div class="flex w-full flex-col items-center gap-4">
-        <div class="flex items-center gap-2" role="tablist" aria-label="Setup progress">
+      <div class="footer">
+        <div class="dots" role="tablist" aria-label="Setup progress">
           <button
             v-for="(s, i) in STEPS"
             :key="s.title"
@@ -107,16 +107,16 @@ async function copy() {
             role="tab"
             :aria-selected="i === step"
             :aria-label="`Step ${i + 1} of ${STEPS.length}: ${s.title}`"
-            class="h-2 rounded-full transition-all duration-300"
-            :class="i === step ? 'w-6 bg-[var(--ios-tint)]' : 'w-2 bg-[var(--ios-tertiary)]'"
+            class="dot"
+            :class="{ 'dot--active': i === step }"
             @click="go(i)"
           />
         </div>
-        <div class="flex w-full gap-3">
-          <button v-if="step > 0" type="button" class="ios-button ios-button--tinted flex-1" @click="go(step - 1)">Back</button>
+        <div class="nav">
+          <button v-if="step > 0" type="button" class="ios-button ios-button--tinted nav-back" @click="go(step - 1)">Back</button>
           <button
             type="button"
-            class="ios-button ios-button--filled flex-[2]"
+            class="ios-button ios-button--filled nav-next"
             @click="step < STEPS.length - 1 ? go(step + 1) : (open = false)"
           >
             {{ step < STEPS.length - 1 ? 'Continue' : 'Done' }}
@@ -127,45 +127,267 @@ async function copy() {
   </UModal>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: $spacer-3;
+
+  &--tight {
+    gap: 10px;
+  }
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: $spacer-3;
+  padding: $spacer-3 $spacer;
+
+  code {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-family: $font-mono;
+    font-size: $font-size-footnote;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: $label-secondary;
+  }
+}
+
+.link-icon,
+.check,
+.note-icon {
+  color: $tint;
+}
+
 .action {
   display: flex;
   align-items: center;
-  gap: 12px;
-  border-radius: 12px;
-  background: var(--ios-elevated);
-  padding: 12px 14px;
-  font-size: 15px;
-  line-height: 1.5;
+  gap: $spacer-3;
+  padding: $spacer-3 14px;
+  font-size: $font-size-subhead;
+  line-height: $line-height-relaxed;
+  border-radius: $radius;
+  background-color: $elevated;
+
+  p {
+    margin: $spacer-0;
+  }
 }
 
 .action-icon {
   display: grid;
-  width: 28px;
-  height: 28px;
   flex-shrink: 0;
   place-items: center;
-  border-radius: 7px;
-  color: #fff;
+  width: 28px;
+  height: 28px;
+  color: $white;
+  border-radius: $radius-2;
+
+  &--blue {
+    background-color: $blue;
+  }
+
+  &--indigo {
+    background-color: $indigo;
+  }
 }
 
-/* Shortcuts shows parameters as tinted tokens. */
+.action-glyph {
+  width: 16px;
+  height: 16px;
+}
+
+// Shortcuts shows parameters as tinted tokens.
 .token {
-  border-radius: 6px;
-  background: rgb(10 132 255 / 0.18);
   padding: 1px 6px;
-  color: #64b5ff;
   white-space: nowrap;
+  color: $blue-light;
+  border-radius: $radius-1;
+  background-color: rgba($blue, 0.18);
 }
 
-.next-enter-active, .next-leave-active, .prev-enter-active, .prev-leave-active {
-  transition: opacity 180ms ease, transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+.connector {
+  width: 1px;
+  height: $spacer-3;
+  margin: $spacer-0 auto;
+  background-color: $separator;
 }
-.next-enter-from, .prev-leave-to { opacity: 0; transform: translateX(16px); }
-.next-leave-to, .prev-enter-from { opacity: 0; transform: translateX(-16px); }
 
-@media (prefers-reduced-motion: reduce) {
-  .next-enter-active, .next-leave-active, .prev-enter-active, .prev-leave-active { transition: opacity 150ms; }
-  .next-enter-from, .next-leave-to, .prev-enter-from, .prev-leave-to { transform: none; }
+.hint {
+  margin: $spacer-2 $spacer-0 $spacer-0;
+
+  strong {
+    color: $label;
+  }
+}
+
+.note {
+  display: flex;
+  gap: $spacer-3;
+  padding: $spacer;
+  font-size: $font-size-subhead;
+  line-height: $line-height-base;
+  border-radius: $radius;
+  background-color: rgba($tint, 0.1);
+
+  .note-icon {
+    margin-top: 2px;
+  }
+
+  p {
+    margin: $spacer-0;
+    color: $label-secondary;
+  }
+
+  strong {
+    color: $label;
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacer;
+  width: 100%;
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: $spacer-2;
+}
+
+.dot {
+  width: $spacer-2;
+  height: $spacer-2;
+  padding: $spacer-0;
+  cursor: pointer;
+  border: 0;
+  border-radius: $radius-pill;
+  background-color: $label-tertiary;
+  transition: width 300ms $ease-out, background-color 300ms;
+
+  &--active {
+    width: $spacer-4;
+    background-color: $tint;
+  }
+
+  @include reduced-motion {
+    transition: none;
+  }
+}
+
+.nav {
+  display: flex;
+  gap: $spacer-3;
+  width: 100%;
+}
+
+.nav-back {
+  flex: 1;
+}
+
+.nav-next {
+  flex: 2;
+}
+
+.next-enter-active,
+.next-leave-active,
+.prev-enter-active,
+.prev-leave-active {
+  transition: opacity 180ms ease, transform 220ms $ease-out;
+
+  @include reduced-motion {
+    transition: opacity 150ms;
+  }
+}
+
+.next-enter-from,
+.prev-leave-to {
+  opacity: 0;
+  transform: translateX(16px);
+}
+
+.next-leave-to,
+.prev-enter-from {
+  opacity: 0;
+  transform: translateX(-16px);
+}
+
+@include reduced-motion {
+  .next-enter-from,
+  .next-leave-to,
+  .prev-enter-from,
+  .prev-leave-to {
+    transform: none;
+  }
+}
+</style>
+
+<!-- The sheet is teleported by Nuxt UI, so its frame cannot be scoped. -->
+<style lang="scss">
+.guide-overlay {
+  background-color: rgba($black, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.guide-sheet {
+  max-width: 28rem;
+  border-radius: $radius-4;
+  background-color: $grouped;
+  box-shadow: 0 24px 48px rgba($black, 0.5);
+
+  > * {
+    border: 0;
+  }
+}
+
+.guide-header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $spacer-0;
+  min-height: 0;
+  padding: $spacer-4 $spacer-4 $spacer-0;
+}
+
+.guide-title {
+  padding-right: $spacer-5;
+  font-size: $font-size-title-2;
+  font-weight: $font-weight-bold;
+  letter-spacing: -0.02em;
+  color: $label;
+}
+
+.guide-description {
+  margin-top: 6px;
+  font-size: $font-size-subhead;
+  line-height: $line-height-base;
+  color: $label-secondary;
+}
+
+.guide-body {
+  padding: 1.25rem $spacer-4;
+}
+
+.guide-footer {
+  padding: $spacer-0 $spacer-4 $spacer-4;
+}
+
+.guide-close {
+  top: 1.25rem;
+  right: 1.25rem;
+}
+
+.guide-close-button {
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: $label-secondary;
+  border-radius: $radius-pill;
+  background-color: $fill;
 }
 </style>

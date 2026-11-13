@@ -1,0 +1,85 @@
+// Typography: San Francisco on Apple devices, closest system face elsewhere.
+$font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, sans-serif;
+$font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
+$font-rounded: ui-rounded, 'SF Pro Rounded', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+$font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+// iOS text styles (Apple HIG, points = CSS px).
+$font-size-large-title: 34px;
+$font-size-title-2: 22px;
+$font-size-body: 17px;
+$font-size-subhead: 15px;
+$font-size-footnote: 13px;
+
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+$line-height-tight: 1.2;
+$line-height-base: 1.4;
+$line-height-relaxed: 1.5;
+
+$white: #FFFFFF;
+$black: #000000;
+$bg: $black;
+$grouped: #1C1C1E;
+$elevated: #2C2C2E;
+$gray: #636366;
+$fill: rgba(118, 118, 128, 0.24);
+$separator: rgba(84, 84, 88, 0.6);
+$label: $white;
+$label-secondary: rgba(235, 235, 245, 0.6);
+$label-tertiary: rgba(235, 235, 245, 0.3);
+$tint: #FF9F0A;
+$red: #FF453A;
+$blue: #0A84FF;
+$blue-light: #64B5FF;
+$indigo: #5E5CE6;
+
+$spacer-0: 0;
+$spacer-1: .25rem;
+$spacer-2: .5rem;
+$spacer-3: .75rem;
+$spacer: 1rem;
+$spacer-4: 1.5rem;
+$spacer-5: 2rem;
+$spacer-6: 3rem;
+$spacer-7: 4rem;
+$spacer-8: 5rem;
+
+$radius-1: 6px;
+$radius-2: 7px;
+$radius-3: 9px;
+$radius: 12px;
+$radius-4: 20px;
+$radius-pill: 999px;
+
+// Row and control heights from the HIG.
+$row-height: 44px;
+$button-height: 50px;
+$segment-height: 32px;
+
+$ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+$bp-sm: 576px;
+$bp-md: 768px;
+$bp-lg: 992px;
+
+@mixin up($bp) {
+  @media (min-width: $bp) {
+    @content;
+  }
+}
+
+@mixin down($bp) {
+  @media (max-width: $bp - 0.02px) {
+    @content;
+  }
+}
+
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}

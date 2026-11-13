@@ -1,0 +1,220 @@
+@use "variables" as *;
+
+:root {
+  color-scheme: dark;
+}
+
+// Nuxt UI surfaces follow the iOS palette.
+.dark {
+  --ui-bg: #{$bg};
+  --ui-bg-elevated: #{$grouped};
+  --ui-border: #{$separator};
+}
+
+body {
+  margin: $spacer-0;
+  font-family: $font-sans;
+  font-size: $font-size-body;
+  letter-spacing: -0.01em;
+  color: $label;
+  background-color: $bg;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ios-group {
+  margin: $spacer-0;
+  padding: $spacer-0;
+  overflow: hidden;
+  list-style: none;
+  border-radius: $radius;
+  background-color: $grouped;
+
+  &--elevated {
+    background-color: $elevated;
+  }
+}
+
+.ios-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacer;
+  min-height: $row-height;
+  padding: $spacer-0 $spacer;
+
+  & + &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: $spacer;
+    border-top: 0.5px solid $separator;
+  }
+
+  > span:first-child {
+    flex-shrink: 0;
+  }
+
+  &:focus-within {
+    background-color: rgba($white, 0.04);
+  }
+}
+
+.ios-value {
+  color: $label-secondary;
+}
+
+.ios-field {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: $label-secondary;
+  text-align: right;
+  border: 0;
+  outline: none;
+  background: transparent;
+
+  &:focus {
+    color: $label;
+  }
+
+  &::placeholder {
+    color: $label-tertiary;
+  }
+
+  &[type="date"] {
+    display: inline-flex;
+    justify-content: flex-end;
+  }
+
+  &::-webkit-date-and-time-value {
+    text-align: right;
+  }
+
+  &::-webkit-datetime-edit {
+    margin-left: auto;
+  }
+
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.5;
+  }
+}
+
+select.ios-field {
+  appearance: none;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  text-align-last: right;
+}
+
+.ios-chevron {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-left: -$spacer-2;
+  color: $label-tertiary;
+}
+
+.ios-footnote {
+  margin: $spacer-2 $spacer 0;
+  font-size: $font-size-footnote;
+  line-height: $line-height-base;
+  color: $label-secondary;
+}
+
+.ios-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.ios-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacer-2;
+  height: $button-height;
+  padding: $spacer-0 1.25rem;
+  font-size: $font-size-body;
+  font-weight: $font-weight-semibold;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  border-radius: $radius;
+  transition: opacity 150ms, transform 150ms;
+
+  &:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $tint;
+    outline-offset: 2px;
+  }
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  &--filled {
+    color: $black;
+    background-color: $tint;
+  }
+
+  &--tinted {
+    color: $tint;
+    background-color: $fill;
+  }
+
+  @include reduced-motion {
+    transition: none;
+  }
+}
+
+// iOS segmented control: one thumb that slides between equal segments.
+.ios-segmented {
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(var(--n), 1fr);
+	padding: 2px;
+	border-radius: $radius-3;
+	background-color: $fill;
+}
+
+.ios-segmented-thumb {
+	position: absolute;
+	inset: 2px auto 2px 2px;
+	width: calc((100% - 4px) / var(--n));
+	border-radius: $radius-2;
+	background-color: $gray;
+	box-shadow: 0 3px 8px rgba($black, 0.12), 0 3px 1px rgba($black, 0.04);
+	transform: translateX(calc(var(--i) * 100%));
+	transition: transform 250ms $ease-out;
+
+	@include reduced-motion {
+		transition: none;
+	}
+}
+
+.ios-segmented-item {
+	position: relative;
+	height: $segment-height;
+	font-size: $font-size-footnote;
+	font-weight: $font-weight-semibold;
+	color: $label;
+	cursor: pointer;
+	border: 0;
+	border-radius: $radius-2;
+	background: transparent;
+
+	&:focus-visible {
+		outline: 2px solid $tint;
+		outline-offset: 1px;
+	}
+}

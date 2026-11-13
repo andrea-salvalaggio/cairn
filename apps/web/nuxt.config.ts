@@ -2,7 +2,16 @@
 export default defineNuxtConfig({
   compatibilityDate: '2026-11-01',
   modules: ['@nuxt/ui'],
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/tailwind.css', '~/assets/scss/main.scss'],
+
+  // Design tokens are available in every SCSS file and <style lang="scss"> block.
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: { additionalData: '@use "@/assets/scss/variables" as *;' },
+      },
+    },
+  },
   devtools: { enabled: true },
 
   // @cairn/core ships TypeScript source; let Nuxt and Nitro compile it.
@@ -16,8 +25,9 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Cairn',
+      title: 'Cairn | Your life in dots',
       htmlAttrs: { lang: 'en' },
+      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
       meta: [
         { name: 'description', content: 'Free iPhone lock screen wallpapers that show your time as a grid of dots.' },
         { name: 'theme-color', content: '#0C0A09' },
