@@ -4,8 +4,6 @@ Free, open-source iPhone lock screen wallpapers that show your time as a grid of
 
 A cairn is a pile of stones that marks a path. Each dot is a stone; the moment that matters gets a different shape.
 
-![Three concept wallpapers: Birthday, Anniversary and Goal](design/concepts/concepts-preview.png)
-
 > Status: milestone 0 (scaffold). See [PLAN.md](PLAN.md) for the roadmap.
 
 ## Themes
