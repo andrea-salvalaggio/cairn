@@ -18,8 +18,8 @@ describe('render', () => {
 
   it('keeps the dot size fixed in points, whatever the amount of data', () => {
     const goal = parseConfig({ v: 1, theme: 'goal', device: 'iphone-6.1', startDate: '2026-01-01', targetDate: '2040-01-01' })
-    expect(render(birthday, TODAY)).toContain('r="18"')
-    expect(render(goal, TODAY)).toContain('r="18"')
+    expect(render(birthday, TODAY)).toContain('scale(0.432)" fill')
+    expect(render(goal, TODAY)).toContain('scale(0.432)" fill')
   })
 
   it('escapes user text', () => {

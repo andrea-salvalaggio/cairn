@@ -137,10 +137,10 @@ const compactClock = ref(false)
 				</template>
 			</div>
 			<p class="ios-footnote">
-				<template v-if="form.theme === 'birthday'">One dot per year of a 90-year life.</template>
-				<template v-else-if="form.theme === 'anniversary'">One heart per week until your next
+				<template v-if="form.theme === 'birthday'">One stone per year of a 90-year life.</template>
+				<template v-else-if="form.theme === 'anniversary'">One stone per week, the heart marks this one, until your next
 					anniversary.</template>
-				<template v-else>One dot per day. Longer goals switch to weeks or months.</template>
+				<template v-else>One stone per day. Longer goals switch to weeks or months.</template>
 			</p>
 
 			<h2 class="section-header">Device</h2>

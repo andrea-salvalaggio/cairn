@@ -23,9 +23,9 @@ describe('anniversary theme', () => {
   const config = parseConfig({ v: 1, theme: 'anniversary', startDate: '2018-04-22', title: 'In love with Elisa' })
   const model = buildModel(config, TODAY)
 
-  it('shows 52 hearts for the weeks toward the next anniversary', () => {
+  it('shows 52 stone weeks with a heart on the current one', () => {
     expect(model.cells).toHaveLength(52)
-    expect(model.cells.every(c => c.glyph === 'heart')).toBe(true)
+    expect(model.cells.filter(c => c.glyph === 'heart')).toEqual([{ glyph: 'heart', state: 'current' }])
     expect(model.cells.filter(c => c.state === 'current')).toHaveLength(1)
   })
 

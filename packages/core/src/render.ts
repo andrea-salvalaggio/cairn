@@ -23,6 +23,15 @@ const ICONS = {
   star: [576, 512, 'M316.9 18c-5.3-11-16.5-18-28.8-18s-23.4 7-28.8 18L195 150.3L51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329l-24.6 145.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5l128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329l104.2-103.1c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7l-143.7-21.2z'],
 } as const
 
+// Hand-drawn stones, 100 wide and centered on 0,0, flatter at the base like the stones of a cairn.
+const STONES = [
+  'M-50 8C-51-10-30-27 0-28S50-14 50 6 28 27 0 27-49 24-50 8Z',
+  'M-48 12C-50-6-34-30-6-31S47-24 49-6 36 26 8 27-46 28-48 12Z',
+  'M-50 4C-47-13-22-23 6-23S50-12 50 6 34 24 0 24-52 18-50 4Z',
+  'M-44 10C-48-12-26-32 2-31S45-14 46 4 30 30 0 29-42 28-44 10Z',
+  'M-50 10C-50-4-38-22-12-26S42-22 49-2 40 25 6 27-50 24-50 10Z',
+] as const
+
 /** Width of each symbol relative to the dot diameter, tuned so they read as the same optical size. */
 const ICON_WIDTH = { heart: 1.2, flame: 1.2, star: 1.3 } as const
 
@@ -32,8 +41,9 @@ function escapeXml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
+/** Stones are only past or future: the accent color belongs to the marker symbol alone. */
 function fill(cell: Cell, colors: Colors): string {
-  return cell.state === 'past' ? colors.past : cell.state === 'current' ? colors.accent : colors.future
+  return cell.state === 'future' ? colors.future : colors.past
 }
 
 function icon(name: keyof typeof ICONS, cx: number, cy: number, d: number, color: string): string {
@@ -42,13 +52,15 @@ function icon(name: keyof typeof ICONS, cx: number, cy: number, d: number, color
   return `<path d="${path}" transform="translate(${n(cx - (w * k) / 2)} ${n(cy - (h * k) / 2)}) scale(${Number(k.toFixed(5))})" fill="${color}"/>`
 }
 
-function glyph(cell: Cell, cx: number, cy: number, d: number, colors: Colors): string {
-  switch (cell.glyph) {
-    case 'heart': return icon('heart', cx, cy, d, fill(cell, colors))
-    case 'flame': return icon('flame', cx, cy, d, colors.accent)
-    case 'star': return icon('star', cx, cy, d, colors.accent)
-    default: return `<circle cx="${n(cx)}" cy="${n(cy)}" r="${n(d / 2)}" fill="${fill(cell, colors)}"/>`
-  }
+/** Stone 1.2 × the dot size wide, to keep the weight of the old 12 pt dot. Shape picked by index: varied but deterministic. */
+function stone(i: number, cx: number, cy: number, d: number, color: string): string {
+  const k = (d * 1.2) / 100
+  return `<path d="${STONES[(i * 3 + (i >> 2)) % STONES.length]}" transform="translate(${n(cx)} ${n(cy)}) scale(${Number(k.toFixed(5))})" fill="${color}"/>`
+}
+
+function glyph(cell: Cell, i: number, cx: number, cy: number, d: number, colors: Colors): string {
+  if (cell.glyph === 'stone') return stone(i, cx, cy, d, fill(cell, colors))
+  return icon(cell.glyph, cx, cy, d, colors.accent)
 }
 
 /**
@@ -70,7 +82,7 @@ export function render(config: Config, today: string): string {
   const gridBottom = y0 + (rows - 1) * pitch
 
   const cells = model.cells
-    .map((cell, i) => glyph(cell, x0 + (i % model.columns) * pitch, y0 + Math.floor(i / model.columns) * pitch, dot, colors))
+    .map((cell, i) => glyph(cell, i, x0 + (i % model.columns) * pitch, y0 + Math.floor(i / model.columns) * pitch, dot, colors))
     .join('')
 
   const titleSize = n(LAYOUT.titleSize * scale)

@@ -25,7 +25,15 @@ def t(y, s, size, fill, weight=400, spans=None):
                 f'<text x="{W/2}" y="{y}" font-family="{FONT}" font-size="{size}" fill="{cb}" text-anchor="middle">·</text>'
                 f'<text x="{W/2+gap}" y="{y}" font-family="{FONT}" font-size="{size}" fill="{cb}" text-anchor="start">{b}</text>')
     return f'<text x="{W/2}" y="{y}" font-family="{FONT}" font-size="{size}" font-weight="{weight}" fill="{fill}" text-anchor="middle">{s}</text>'
-def dot(cx, cy, fill, r=D/2): return f'<circle cx="{cx:g}" cy="{cy:g}" r="{r:g}" fill="{fill}"/>'
+# Hand-drawn stones, 100 wide centered on 0,0. Mirrors STONES in packages/core/src/render.ts.
+STONES = [
+    "M-50 8C-51-10-30-27 0-28S50-14 50 6 28 27 0 27-49 24-50 8Z",
+    "M-48 12C-50-6-34-30-6-31S47-24 49-6 36 26 8 27-46 28-48 12Z",
+    "M-50 4C-47-13-22-23 6-23S50-12 50 6 34 24 0 24-52 18-50 4Z",
+    "M-44 10C-48-12-26-32 2-31S45-14 46 4 30 30 0 29-42 28-44 10Z",
+    "M-50 10C-50-4-38-22-12-26S42-22 49-2 40 25 6 27-50 24-50 10Z",
+]
+def stone(i, cx, cy, fill): return f'<path d="{STONES[(i*3 + (i >> 2)) % len(STONES)]}" transform="translate({cx:g} {cy:g}) scale({D*1.2/100:g})" fill="{fill}"/>'
 def heart(cx, cy, fill, s=D*1.2): return icon("heart", cx, cy, s, fill)
 def flame(cx, cy, s=D*1.2): return icon("flame", cx, cy, s, ACC)
 def star(cx, cy, fill, s=D*1.3): return icon("star", cx, cy, s, fill)
@@ -42,26 +50,26 @@ def grid(n, y0, draw, cols=COLS):
 def page(parts): return f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}"><rect id="background" width="{W}" height="{H}" fill="{BG}"/>{"".join(parts)}</svg>\n'
 TITLE_Y, GRID_Y = 1105, 1200
 
-# 1. Goal: one dot per day, target day is a symbol
+# 1. Goal: one stone per day, target day is a symbol
 n, done = 89, 25
-g, yb = grid(n, GRID_Y, lambda i, x, y: star(x, y, ACC) if i == n-1 else dot(x, y, PAST if i < done else ACC if i == done else FUT))
+g, yb = grid(n, GRID_Y, lambda i, x, y: star(x, y, ACC) if i == n-1 else stone(i, x, y, PAST if i <= done else FUT))
 goal = page([t(TITLE_Y, "New York City Marathon", 44, LABEL), f'<g id="days">{g}</g>',
              t(yb+100, "", 34, LABEL, spans=[(f"{n-done-1}d left", ACC), ("28%", LABEL)])])
 
-# 2. Anniversary: 52 hearts, the weeks toward the next anniversary; years live in the counter
+# 2. Anniversary: 52 stones, the weeks toward the next anniversary; years live in the counter
 years, weeks = 8, 29
 hy = GRID_Y
 hx0 = W/2 - (years-1)*PITCH*1.15/2
 hearts = "".join(heart(hx0 + i*PITCH*1.15, hy, ROSE, D*1.5) for i in range(years))
-g, yb = grid(52, GRID_Y, lambda i, x, y: heart(x, y, PAST if i < weeks else ROSE if i == weeks else FUT), cols=13)
+g, yb = grid(52, GRID_Y, lambda i, x, y: heart(x, y, ROSE) if i == weeks else stone(i, x, y, PAST if i < weeks else FUT), cols=13)
 # centre a 13-column block
 shift = (COLS-13)*PITCH/2
 ann = page([t(TITLE_Y, "In love with Elisa", 44, LABEL), f'<g id="weeks" transform="translate({shift:g} 0)">{g}</g>',
             t(yb+100, "", 34, LABEL, spans=[("8 years", ROSE), (f"{52-weeks} weeks to the 9th", LABEL)])])
 
-# 3. Birthday: one dot per year of a 90-year life, the current year is a candle
+# 3. Birthday: one stone per year of a 90-year life, the current year is a candle
 age = 34
-g, yb = grid(90, GRID_Y, lambda i, x, y: flame(x, y) if i == age else dot(x, y, PAST if i < age else FUT))
+g, yb = grid(90, GRID_Y, lambda i, x, y: flame(x, y) if i == age else stone(i, x, y, PAST if i < age else FUT))
 bday = page([t(TITLE_Y, "My life in years", 44, LABEL), f'<g id="years">{g}</g>',
              t(yb+100, "", 34, LABEL, spans=[("34 years", ACC), ("56 ahead", LABEL)])])
 

@@ -1,7 +1,8 @@
 import { type Config, DEFAULT_LIFESPAN } from './config'
 import { addYears, diffDays, fullYears } from './dates'
 
-export type Glyph = 'dot' | 'heart' | 'flame' | 'star'
+/** Every cell is a stone; one marker cell per theme gets a Font Awesome symbol. */
+export type Glyph = 'stone' | 'heart' | 'flame' | 'star'
 export type CellState = 'past' | 'current' | 'future'
 export interface Cell { glyph: Glyph, state: CellState }
 
@@ -32,7 +33,7 @@ function birthday(config: Config, today: string): Model {
   const lifespan = config.lifespanYears ?? DEFAULT_LIFESPAN
   const age = Math.min(fullYears(config.birthDate!, today), lifespan)
   const cells: Cell[] = Array.from({ length: lifespan }, (_, i) =>
-    i < age ? { glyph: 'dot', state: 'past' } : i === age ? { glyph: 'flame', state: 'current' } : { glyph: 'dot', state: 'future' })
+    i < age ? { glyph: 'stone', state: 'past' } : i === age ? { glyph: 'flame', state: 'current' } : { glyph: 'stone', state: 'future' })
   return {
     title: config.title ?? 'My life in years',
     columns: COLUMNS,
@@ -47,7 +48,7 @@ function anniversary(config: Config, today: string): Model {
   const started = diffDays(config.startDate!, today) >= 0
   const week = started ? Math.min(51, Math.floor(diffDays(last, today) / 7)) : -1
   const cells: Cell[] = Array.from({ length: 52 }, (_, i) =>
-    ({ glyph: 'heart', state: i < week ? 'past' : i === week ? 'current' : 'future' }))
+    ({ glyph: i === week ? 'heart' : 'stone', state: i < week ? 'past' : i === week ? 'current' : 'future' }))
   return {
     title: config.title ?? 'Together',
     columns: 13,
@@ -73,7 +74,7 @@ function goal(config: Config, today: string): Model {
   const current = Math.min(total - 1, Math.floor(elapsedDays / unit.days))
   const cells: Cell[] = Array.from({ length: total }, (_, i) => {
     const state: CellState = i < current ? 'past' : i === current ? 'current' : 'future'
-    return { glyph: i === total - 1 ? 'star' : 'dot', state }
+    return { glyph: i === total - 1 ? 'star' : 'stone', state }
   })
   const leftDays = Math.max(0, diffDays(today, target))
   const left = Math.ceil(leftDays / unit.days)
