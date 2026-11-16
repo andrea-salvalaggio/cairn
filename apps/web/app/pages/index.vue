@@ -74,6 +74,12 @@ const device = computed(() => getDevice(result.value.config?.device ?? DEFAULT_D
 const pngPath = computed(() => (result.value.config ? `/w/${encodeConfig(result.value.config)}.png` : undefined))
 const liveUrl = computed(() => (pngPath.value ? new URL(pngPath.value, window.location.origin).toString() : ''))
 const guideOpen = ref(false)
+
+const contacts = [
+	{ label: 'Email', icon: 'i-fa7-solid-envelope', href: 'mailto:andrea.salvalaggio95@gmail.com' },
+	{ label: 'LinkedIn', icon: 'i-fa7-brands-linkedin-in', href: 'https://linkedin.com/in/andrea-salvalaggio' },
+	{ label: 'GitHub', icon: 'i-fa7-brands-github', href: 'https://github.com/andrea-salvalaggio' },
+]
 const compactClock = ref(false)
 </script>
 
@@ -176,6 +182,16 @@ const compactClock = ref(false)
 					<UIcon name="i-lucide-arrow-down-to-line" class="ios-icon" /> Download PNG
 				</a>
 			</div>
+
+			<footer class="credits">
+				<p>Made by <a href="https://andreasalvalaggio.vercel.app/" target="_blank" rel="noopener">Andrea Salvalaggio</a></p>
+				<nav class="credits-links" aria-label="Contact">
+					<a v-for="link in contacts" :key="link.label" :href="link.href" :aria-label="link.label" :title="link.label"
+						:target="link.href.startsWith('mailto:') ? undefined : '_blank'" rel="noopener">
+						<UIcon :name="link.icon" class="credits-icon" />
+					</a>
+				</nav>
+			</footer>
 		</section>
 
 		<SetupGuide v-model:open="guideOpen" :url="liveUrl" />
@@ -229,6 +245,60 @@ const compactClock = ref(false)
 	max-width: 32rem;
 }
 
+.credits {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: $spacer;
+	// Auto: on desktop the form column stretches to the preview's height, so the credits sit level with the clock toggle.
+	margin-top: auto;
+	padding-top: $spacer-4;
+	border-top: 0.5px solid $separator;
+	font-size: $font-size-footnote;
+	color: $gray;
+
+	@include up($bp-md) {
+		// shortcut: measured (~38px) so the separator lines up with the top of the clock toggle; revisit if the caption, toggle or credits change size.
+		margin-bottom: 2.375rem;
+	}
+
+	p {
+		margin: $spacer-0;
+		white-space: nowrap;
+	}
+
+	a {
+		color: $label-secondary;
+		text-decoration: none;
+		transition: color 0.2s ease;
+
+		&:hover,
+		&:focus-visible {
+			color: $tint;
+		}
+	}
+}
+
+.credits-links {
+	display: flex;
+	// Pull the 44pt tap targets out so the last icon lines up with the separator's edge.
+	margin-right: -$spacer-3;
+
+	a {
+		display: grid;
+		place-items: center;
+		width: $row-height;
+		height: $row-height;
+		margin: -$spacer-3 0;
+		border-radius: $radius-pill;
+	}
+}
+
+.credits-icon {
+	width: 1.25rem;
+	height: 1.25rem;
+}
+
 .form-header {
 	margin-bottom: $spacer-5;
 
@@ -264,6 +334,7 @@ const compactClock = ref(false)
 	flex-direction: column;
 	gap: $spacer-3;
 	margin-top: $spacer-5;
+	margin-bottom: $spacer-6;
 
 	@include up($bp-sm) {
 		flex-direction: row;
