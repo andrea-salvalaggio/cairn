@@ -389,7 +389,7 @@ Risks to the "free" goal:
 │   └── web/                 # Nuxt app: editor UI + server route /w/[config].png
 ├── packages/
 │   └── core/                # schema, date math, layout, shapes, renderer
-├── design/                  # generated SVG kit, tokens, generator script
+├── design/                  # wallpaper concepts, cover, concept generator
 ├── docs/
 │   ├── architecture.md
 │   └── adr/

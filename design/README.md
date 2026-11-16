@@ -1,16 +1,14 @@
 # Design kit
 
-Generated assets for the Cairn design file. Colors and sizes mirror `packages/core`.
+Design assets that match what the code renders. Colors and sizes mirror `packages/core`.
 
 | Folder | Content |
 |---|---|
-| `concepts/` | Big-dot wallpaper drafts for the three themes, plus a preview sheet |
-| `tokens/` | `cairn.css` (Tailwind v4), `tokens.json`, and DTCG files for Figma variables |
-| `shapes/` | Cell shapes as SVG |
-| `foundations/`, `cover/` | Color sheet and file cover |
-| `tools/` | Python generators (`generate.py`, `concepts.py`) |
+| `concepts/` | Wallpaper concepts for the three themes: stones, with one Font Awesome marker each |
+| `cover/` | File cover with the logo stones (the favicon uses the top two) |
+| `tools/` | `concepts.py`, which regenerates `concepts/` (`python3 tools/concepts.py concepts`) |
 
 Notes:
 
-- `tools/generate.py` still produces the dense 52 × 80 templates from an earlier revision. They are outdated; the big-dot layout in `concepts/` is the current direction.
+- `tools/concepts.py` mirrors the stone shapes in `packages/core/src/render.ts`: change both together.
 - Concept data is sample data, not a real person.
