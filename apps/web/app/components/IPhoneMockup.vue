@@ -31,7 +31,7 @@ const time = computed(() =>
     .trim())
 
 const date = computed(() => {
-  const text = new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric', timeZone: props.timeZone }).format(props.now)
+  const text = new Intl.DateTimeFormat(undefined, { weekday: 'long', day: 'numeric', month: 'long', timeZone: props.timeZone }).format(props.now)
   return text.charAt(0).toLocaleUpperCase() + text.slice(1)
 })
 </script>
@@ -55,22 +55,24 @@ const date = computed(() => {
         <div class="cutout" />
 
         <div class="status">
-          <svg viewBox="0 0 18 12" class="status-icon"><rect x="0" y="8" width="3" height="4" rx="1" /><rect x="5" y="5.5" width="3" height="6.5" rx="1" /><rect x="10" y="3" width="3" height="9" rx="1" /><rect x="15" y="0" width="3" height="12" rx="1" /></svg>
-          <svg viewBox="0 0 16 12" class="status-icon"><path d="M8 2.3c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.3 10.3 0 0 0 8 .5 10.3 10.3 0 0 0 .6 3.6l1.2 1.2A8.7 8.7 0 0 1 8 2.3m0 3.5c1.4 0 2.8.6 3.8 1.5l1.2-1.2A7.1 7.1 0 0 0 8 4a7.1 7.1 0 0 0-5 2.1l1.2 1.2A5.4 5.4 0 0 1 8 5.8m0 3.4c.6 0 1.1.2 1.5.6L8 11.5 6.5 9.8c.4-.4.9-.6 1.5-.6" /></svg>
-          <svg viewBox="0 0 27 13" class="status-icon status-icon--battery"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="currentColor" opacity=".4" /><rect x="2" y="2" width="16" height="9" rx="2.5" /><path d="M25 4.5v4a2.2 2.2 0 0 0 0-4" opacity=".4" /></svg>
+          <svg viewBox="0 0 18 12" class="status-icon"><rect x="0" y="7.5" width="3.4" height="4.5" rx="1.2" /><rect x="4.9" y="5" width="3.4" height="7" rx="1.2" /><rect x="9.8" y="2.5" width="3.4" height="9.5" rx="1.2" /><rect x="14.6" y="0" width="3.4" height="12" rx="1.2" opacity=".35" /></svg>
+          <span class="status-network">5G</span>
+          <!-- iOS battery: translucent body, level fill with a straight edge. -->
+          <svg viewBox="0 0 29 13" class="status-icon status-icon--battery"><rect width="26" height="13" rx="4" opacity=".35" /><path d="M4 0h16.8v13H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4" /><path d="M27.3 4.5v4a2 2 0 0 0 0-4" opacity=".35" /></svg>
         </div>
 
-        <!-- iOS 27 compact clock: the time moves into the date row. -->
+        <!-- iOS 27 compact clock: the time moves into the date row. Both clocks stay mounted so the switch can animate. -->
         <p class="date">
-          <span v-if="compactClock" class="date-time">{{ time }}</span>{{ date }}
+          <span class="date-time">{{ time }}</span>{{ date }}
         </p>
-        <p v-if="!compactClock" class="clock">{{ time }}</p>
+        <!-- x offset recentres the -1.5 letter-spacing. SVG text so the numerals get a round-joined stroke: softly rounded corners, like the iOS clock. -->
+        <svg class="clock" :viewBox="`0 0 ${width} 124`"><text :x="width / 2 - 0.75" y="104" text-anchor="middle">{{ time }}</text></svg>
 
         <span class="quick quick--left">
-          <UIcon name="i-lucide-flashlight" class="quick-icon" />
+          <svg viewBox="0 0 24 24" class="quick-icon"><path fill-rule="evenodd" d="M7.5 1.5h9A1.5 1.5 0 0 1 18 3v2H6V3a1.5 1.5 0 0 1 1.5-1.5M6 6h12l-2.4 5a2.5 2.5 0 0 0-.3 1.1V21a1.5 1.5 0 0 1-1.5 1.5h-3.6A1.5 1.5 0 0 1 8.7 21v-8.9a2.5 2.5 0 0 0-.3-1.1zm6 7.4a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 1 0 0-2.8" /></svg>
         </span>
         <span class="quick quick--right">
-          <UIcon name="i-lucide-camera" class="quick-icon" />
+          <svg viewBox="0 0 24 24" class="quick-icon"><path fill-rule="evenodd" d="M9.2 3.5h5.6a1.5 1.5 0 0 1 1.3.8L17 6h2.5A2.5 2.5 0 0 1 22 8.5v10a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-10A2.5 2.5 0 0 1 4.5 6H7l.9-1.7a1.5 1.5 0 0 1 1.3-.8M12 8.8a4.4 4.4 0 1 0 0 8.8 4.4 4.4 0 1 0 0-8.8m0 2a2.4 2.4 0 1 1 0 4.8 2.4 2.4 0 1 1 0-4.8" /></svg>
         </span>
         <span class="home" />
       </div>
@@ -171,8 +173,6 @@ $key-dark: #3A3937;
   color: $white;
   pointer-events: none;
   user-select: none;
-  // Faint glass reflection.
-  background: linear-gradient(160deg, rgba($white, 0.06) 0%, transparent 35%);
 }
 
 .cutout {
@@ -196,30 +196,31 @@ $key-dark: #3A3937;
   }
 }
 
+// Sizes measured on an iOS 27 Lock Screen.
 .status {
   position: absolute;
-  right: pt(30);
+  top: pt(20);
+  right: pt(28);
   display: flex;
   align-items: center;
-  gap: pt(5);
+  gap: pt(6);
   fill: currentColor;
-
-  .is-island & {
-    top: pt(23);
-  }
-
-  .is-notch & {
-    top: pt(14);
-  }
 }
 
 .status-icon {
-  height: pt(11);
+  height: pt(12);
 
   &--battery {
-    height: pt(12.5);
+    height: pt(13);
   }
 }
+
+.status-network {
+  font-size: pt(15);
+  font-weight: $font-weight-semibold;
+  line-height: 1;
+}
+
 
 .date,
 .clock {
@@ -231,72 +232,89 @@ $key-dark: #3A3937;
 }
 
 .date {
-  font-size: pt(21);
-  font-weight: $font-weight-semibold;
-  opacity: 0.85;
-
-  .is-island & {
-    top: pt(66);
-  }
-
-  .is-notch & {
-    top: pt(56);
-  }
+  top: pt(91);
+  font-size: pt(24);
+  font-weight: $font-weight-medium;
+  line-height: 1;
 }
 
 .date-time {
-  margin-right: pt(8);
+  display: inline-block;
+  overflow: hidden;
+  max-width: 0;
+  vertical-align: bottom;
   font-weight: $font-weight-bold;
+  white-space: nowrap;
+  opacity: 0;
+  transition: max-width 0.4s $ease-out, margin-right 0.4s $ease-out, opacity 0.25s ease;
+
+  .is-compact & {
+    max-width: pt(90);
+    margin-right: pt(8);
+    opacity: 1;
+    transition-delay: 0.1s;
+  }
 }
 
-// Liquid Glass clock (iOS 26+): rounded numerals filled with translucent light, a bright rim and a soft drop shadow.
+// iOS 27 clock: large, heavy, solid white, tight numerals. Sizes are in points (SVG user units).
 .clock {
-  font-size: pt(110);
-  font-weight: $font-weight-bold;
-  line-height: 1;
-  letter-spacing: -0.01em;
-  color: transparent;
-  background: linear-gradient(180deg, rgba($white, 0.92) 0%, rgba($white, 0.55) 55%, rgba($white, 0.75) 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
+  top: pt(110);
+  width: 100%;
+  overflow: visible;
+  font-size: 120px;
+  font-weight: $font-weight-semibold;
+  letter-spacing: -1.5px;
+  font-variant-numeric: proportional-nums; // tabular digits leave a wide gap around the 1
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  transform-origin: 50% 0;
+  transition: transform 0.45s $ease-out, opacity 0.3s ease;
 
-  .is-island & {
-    top: pt(92);
+  // Shrinks up into the date row, as on iOS.
+  .is-compact & {
+    opacity: 0;
+    transform: translateY(pt(-24)) scale(0.6);
   }
+}
 
-  .is-notch & {
-    top: pt(82);
+.date-time,
+.clock {
+  @include reduced-motion {
+    transition: opacity 0.2s ease;
   }
 }
 
 .quick {
   position: absolute;
-  bottom: pt(44);
+  bottom: pt(51);
   display: grid;
   place-items: center;
-  width: pt(50);
-  height: pt(50);
+  width: pt(57);
+  height: pt(57);
   border-radius: $radius-pill;
-  // Liquid Glass control: blurred, saturated backdrop with a specular top edge.
-  background: linear-gradient(180deg, rgba($white, 0.2), rgba($white, 0.08));
+  // Dark Liquid Glass control: smoky blurred fill, light rim brightest at top and bottom.
+  background: rgba($grouped, 0.72);
   box-shadow:
-    inset 0 0.5px 0 rgba($white, 0.55),
-    inset 0 -0.5px 0 rgba($white, 0.15),
-    0 pt(4) pt(12) rgba($black, 0.25);
-  backdrop-filter: blur(12px) saturate(180%);
+    inset 0 pt(1) pt(0.5) rgba($white, 0.22),
+    inset 0 pt(-1) pt(0.5) rgba($white, 0.1),
+    inset 0 0 0 pt(0.5) rgba($white, 0.08);
+  backdrop-filter: blur(20px) saturate(160%);
 
   &--left {
-    left: pt(46);
+    left: pt(47);
   }
 
   &--right {
-    right: pt(46);
+    right: pt(47);
   }
 }
 
 .quick-icon {
-  width: pt(22);
-  height: pt(22);
+  width: pt(30);
+  height: pt(30);
+  fill: currentColor;
 }
 
 .home {

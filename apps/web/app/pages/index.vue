@@ -91,14 +91,14 @@ const compactClock = ref(false)
 				</button>
 			</div>
 			<p class="preview-caption">
-				{{ device.width }} × {{ device.height }} px · Clock position is approximate
+				Clock position is approximate
 			</p>
 		</section>
 
 		<section class="form">
 			<header class="form-header">
 				<h1>Cairn</h1>
-				<p>Your time as a grid of dots, on your Lock Screen.</p>
+				<p>Your time as a path of stones, on your Lock Screen.</p>
 			</header>
 
 			<!-- Segmented control -->
@@ -117,23 +117,23 @@ const compactClock = ref(false)
 					<span>Title</span>
 					<input v-model="form.titles[form.theme]" class="ios-field" maxlength="48" placeholder="Optional">
 				</label>
-				<label v-if="form.theme === 'birthday'" class="ios-row">
+				<div v-if="form.theme === 'birthday'" class="ios-row">
 					<span>Birthday</span>
-					<input v-model="form.birthDate" type="date" class="ios-field">
-				</label>
-				<label v-if="form.theme === 'anniversary'" class="ios-row">
+					<DateField v-model="form.birthDate" />
+				</div>
+				<div v-if="form.theme === 'anniversary'" class="ios-row">
 					<span>Together since</span>
-					<input v-model="form.anniversaryDate" type="date" class="ios-field">
-				</label>
+					<DateField v-model="form.anniversaryDate" />
+				</div>
 				<template v-if="form.theme === 'goal'">
-					<label class="ios-row">
+					<div class="ios-row">
 						<span>Target date</span>
-						<input v-model="form.goalTarget" type="date" class="ios-field">
-					</label>
-					<label class="ios-row">
+						<DateField v-model="form.goalTarget" />
+					</div>
+					<div class="ios-row">
 						<span>Counting from</span>
-						<input v-model="form.goalStart" type="date" class="ios-field">
-					</label>
+						<DateField v-model="form.goalStart" />
+					</div>
 				</template>
 			</div>
 			<p class="ios-footnote">
@@ -220,7 +220,7 @@ const compactClock = ref(false)
 	margin: $spacer-3 $spacer-0 $spacer-0;
 	font-size: $font-size-footnote;
 	text-align: center;
-	color: $label-tertiary;
+	color: $gray;
 }
 
 .form {
