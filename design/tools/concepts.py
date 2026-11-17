@@ -49,38 +49,40 @@ def heart(cx, cy, fill, s=D*1.2): return icon("heart", cx, cy, s, fill)
 def gift(cx, cy, s=D*1.15): return icon("gift", cx, cy, s, ACC)
 def star(cx, cy, fill, s=D*1.3): return icon("star", cx, cy, s, fill)
 
-def grid(n, base, draw, cols=COLS):
+def grid(n, draw, cols=COLS):
     """draw(i, cx, cy) -> svg. Dry-stone wall like render.ts: rows laid bottom-up from `base`,
-    left to right, every other row shifted half a stone. Returns (svg, y of the top row)."""
+    left to right, every other row shifted half a stone, the block centred like render.ts.
+    Returns (svg, y of the top row, y of the base row)."""
     x0 = (W - ((cols-1)*PITCH + PITCH/2)) / 2
     rows = (n + cols - 1)//cols
+    base = round(H*BLOCK_CENTER + ((rows-1)*PITCH + TITLE_GAP + 15*S*0.75 - COUNTER_GAP) / 2)
     top_shift = (cols - (n - (rows-1)*cols)) * PITCH / 2   # incomplete top row centred, like a cairn's peak
     out = []
     for i in range(n):
         r, c = divmod(i, cols)
         out.append(draw(i, x0 + c*PITCH + (r % 2)*PITCH/2 + (top_shift if r == rows-1 else 0), base - r*PITCH))
-    return "".join(out), base - (rows-1)*PITCH
+    return "".join(out), base - (rows-1)*PITCH, base
 
 def page(parts): return f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}"><rect id="background" width="{W}" height="{H}" fill="{BG}"/>{"".join(parts)}</svg>\n'
-BASE_Y, TITLE_GAP, COUNTER_GAP = round(H*0.8), 32*S, 33*S   # mirrors LAYOUT in render.ts
+BLOCK_CENTER, TITLE_GAP, COUNTER_GAP = 0.57, 32*S, 33*S   # mirrors LAYOUT in render.ts
 
 # 1. Goal: one stone per day, target day is a symbol
 n, done = 89, 25
-g, yt = grid(n, BASE_Y, lambda i, x, y: star(x, y, ACC) if i == n-1 else stone(i, x, y, PAST if i <= done else FUT))
+g, yt, yb = grid(n, lambda i, x, y: star(x, y, ACC) if i == n-1 else stone(i, x, y, PAST if i <= done else FUT))
 goal = page([t(yt-TITLE_GAP, "New York City Marathon", 44, LABEL, 700), f'<g id="days">{g}</g>',
-             t(BASE_Y+COUNTER_GAP, "", 34, LABEL, spans=[(f"{n-done-1}d left", ACC), ("28%", LABEL)])])
+             t(yb+COUNTER_GAP, "", 34, LABEL, spans=[(f"{n-done-1}d left", ACC), ("28%", LABEL)])])
 
 # 2. Anniversary: 52 peaks, the weeks toward the next anniversary; years live in the counter
 years, weeks = 8, 29
-g, yt = grid(52, BASE_Y, lambda i, x, y: heart(x, y, ROSE) if i == weeks else stone(i, x, y, PAST if i < weeks else FUT))
+g, yt, yb = grid(52, lambda i, x, y: heart(x, y, ROSE) if i == weeks else stone(i, x, y, PAST if i < weeks else FUT))
 ann = page([t(yt-TITLE_GAP, "In love with Elisa", 44, LABEL, 700), f'<g id="weeks">{g}</g>',
-            t(BASE_Y+COUNTER_GAP, "", 34, LABEL, spans=[("8 years", ROSE), (f"{52-weeks} weeks to the 9th", LABEL)])])
+            t(yb+COUNTER_GAP, "", 34, LABEL, spans=[("8 years", ROSE), (f"{52-weeks} weeks to the 9th", LABEL)])])
 
 # 3. Birthday: one stone per year of a 90-year life, the current year is a gift
 age = 34
-g, yt = grid(90, BASE_Y, lambda i, x, y: gift(x, y) if i == age else stone(i, x, y, PAST if i < age else FUT))
+g, yt, yb = grid(90, lambda i, x, y: gift(x, y) if i == age else stone(i, x, y, PAST if i < age else FUT))
 bday = page([t(yt-TITLE_GAP, "My life in years", 44, LABEL, 700), f'<g id="years">{g}</g>',
-             t(BASE_Y+COUNTER_GAP, "34 years", 34, ACC)])
+             t(yb+COUNTER_GAP, "34 years", 34, ACC)])
 
 for name, s in [("concept-goal", goal), ("concept-anniversary", ann), ("concept-birthday", bday)]:
     open(os.path.join(OUT, name + ".svg"), "w", encoding="utf-8").write(s)

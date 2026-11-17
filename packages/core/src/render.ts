@@ -7,7 +7,9 @@ export const LAYOUT = {
   pitch: 20,
   dot: 12,
   /** Centre of the base row of stones as a fraction of the screen height: the pile grows up from here. Provisional. */
-  blockBottom: 0.8,
+  /** Centre of the whole block (title, pile, counter) as a fraction of the screen height:
+   *  the middle of the free area between the clock and the Lock Screen buttons. Provisional. */
+  blockCenter: 0.57,
   titleGap: 32,
   titleSize: 15,
   counterGap: 33,
@@ -99,8 +101,11 @@ export function render(config: Config, today: string): string {
   const half = pitch / 2
   const gridWidth = (model.columns - 1) * pitch + half
   const x0 = Math.round((W - gridWidth) / 2)
-  const base = Math.round(H * LAYOUT.blockBottom)
   const rows = Math.ceil(model.cells.length / model.columns)
+  // The pile still grows up from its base row; the base is placed so the whole block is centred.
+  const titleTop = (LAYOUT.titleGap + LAYOUT.titleSize * 0.75) * scale // from the top row to the title's cap height
+  const counterBottom = LAYOUT.counterGap * scale // from the base row to the counter's baseline
+  const base = Math.round(H * LAYOUT.blockCenter + ((rows - 1) * pitch + titleTop - counterBottom) / 2)
   const top = base - (rows - 1) * pitch
 
   // An incomplete top row is centred on the row below, like the peak of a cairn.

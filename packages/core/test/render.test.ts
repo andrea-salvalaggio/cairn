@@ -43,6 +43,17 @@ describe('render', () => {
     expect(topStart - rowStart).toBe(5 * 60) // (13 - 3) / 2 stones
   })
 
+    it('centres the whole block vertically, however tall the pile is', () => {
+    const anniversary = parseConfig({ v: 1, theme: 'anniversary', device: 'iphone-6.1', startDate: '2018-04-22' })
+    for (const config of [birthday, anniversary]) {
+      const svg = render(config, TODAY)
+      const titleY = Number(svg.match(/<g id="title"><text x="[\d.]+" y="([\d.]+)"/)![1])
+      const counterY = Number(svg.match(/<g id="counter"><text x="[\d.]+" y="([\d.]+)"/)![1])
+      const capTop = titleY - 15 * 3 * 0.75 // title cap height at 3x
+      expect(Math.abs((capTop + counterY) / 2 - 2556 * 0.57)).toBeLessThan(1)
+    }
+  })
+
     it('escapes user text', () => {
     const svg = render({ ...birthday, title: '<b>"Tom & Jerry"</b>' }, TODAY)
     expect(svg).toContain('&lt;b&gt;&quot;Tom &amp; Jerry&quot;&lt;/b&gt;')
