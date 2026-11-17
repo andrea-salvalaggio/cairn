@@ -22,13 +22,12 @@ const CORNER: Record<string, number> = {
 const width = computed(() => props.device.width / props.device.scale)
 const island = computed(() => props.device.cutout === 'island')
 
+// 24-hour clock with a leading zero (09:06), whatever the browser locale.
 const time = computed(() =>
-  new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit', timeZone: props.timeZone })
-    .formatToParts(props.now)
-    .filter(p => p.type !== 'dayPeriod') // the Lock Screen never shows AM/PM
-    .map(p => p.value)
-    .join('')
-    .trim())
+  new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: props.timeZone }).format(props.now))
+// The large clock spaces the colon apart (dx in the template), so it needs the two halves.
+const hours = computed(() => time.value.slice(0, 2))
+const minutes = computed(() => time.value.slice(-2))
 
 const date = computed(() => {
   const text = new Intl.DateTimeFormat(undefined, { weekday: 'long', day: 'numeric', month: 'long', timeZone: props.timeZone }).format(props.now)
@@ -66,7 +65,7 @@ const date = computed(() => {
           <span class="date-time">{{ time }}</span>{{ date }}
         </p>
         <!-- x offset recentres the -1.5 letter-spacing. SVG text so the numerals get a round-joined stroke: softly rounded corners, like the iOS clock. -->
-        <svg class="clock" :viewBox="`0 0 ${width} 124`"><text :x="width / 2 - 0.75" y="104" text-anchor="middle">{{ time }}</text></svg>
+        <svg class="clock" :viewBox="`0 0 ${width} 124`"><text :x="width / 2 - 0.75" y="104" text-anchor="middle">{{ hours }}<tspan dx="5">:</tspan><tspan dx="5">{{ minutes }}</tspan></text></svg>
 
         <span class="quick quick--left">
           <svg viewBox="0 0 24 24" class="quick-icon"><path fill-rule="evenodd" d="M7.5 1.5h9A1.5 1.5 0 0 1 18 3v2H6V3a1.5 1.5 0 0 1 1.5-1.5M6 6h12l-2.4 5a2.5 2.5 0 0 0-.3 1.1V21a1.5 1.5 0 0 1-1.5 1.5h-3.6A1.5 1.5 0 0 1 8.7 21v-8.9a2.5 2.5 0 0 0-.3-1.1zm6 7.4a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 1 0 0-2.8" /></svg>
