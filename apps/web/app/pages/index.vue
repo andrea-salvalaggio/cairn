@@ -118,58 +118,56 @@ const compactClock = ref(false)
 				</button>
 			</div>
 
-			<h2 class="section-header">Wallpaper</h2>
-			<div class="ios-group">
-				<label class="ios-row">
-					<span>Title</span>
-					<input v-model="form.titles[form.theme]" class="ios-field" maxlength="48" placeholder="Optional">
+			<div class="fields">
+				<label class="field">
+					<span class="field-label">Title</span>
+					<span class="field-box">
+						<input v-model="form.titles[form.theme]" class="field-input" maxlength="48" placeholder="Optional">
+					</span>
 				</label>
-				<div v-if="form.theme === 'birthday'" class="ios-row">
-					<span>Birthday</span>
-					<DateField v-model="form.birthDate" />
+
+				<div v-if="form.theme === 'birthday'" class="field">
+					<span class="field-label">Birthday</span>
+					<span class="field-box"><DateField v-model="form.birthDate" /></span>
+					<p class="field-hint">One stone per year of a 90-year life.</p>
 				</div>
-				<div v-if="form.theme === 'anniversary'" class="ios-row">
-					<span>Together since</span>
-					<DateField v-model="form.anniversaryDate" />
+				<div v-if="form.theme === 'anniversary'" class="field">
+					<span class="field-label">Together since</span>
+					<span class="field-box"><DateField v-model="form.anniversaryDate" /></span>
+					<p class="field-hint">One stone per week, the heart marks this one, until your next anniversary.</p>
 				</div>
 				<template v-if="form.theme === 'goal'">
-					<div class="ios-row">
-						<span>Target date</span>
-						<DateField v-model="form.goalTarget" />
+					<div class="field">
+						<span class="field-label">Target date</span>
+						<span class="field-box"><DateField v-model="form.goalTarget" /></span>
 					</div>
-					<div class="ios-row">
-						<span>Counting from</span>
-						<DateField v-model="form.goalStart" />
+					<div class="field">
+						<span class="field-label">Counting from</span>
+						<span class="field-box"><DateField v-model="form.goalStart" /></span>
+						<p class="field-hint">One stone per day. Longer goals switch to weeks or months.</p>
 					</div>
 				</template>
-			</div>
-			<p class="ios-footnote">
-				<template v-if="form.theme === 'birthday'">One stone per year of a 90-year life.</template>
-				<template v-else-if="form.theme === 'anniversary'">One stone per week, the heart marks this one, until your next
-					anniversary.</template>
-				<template v-else>One stone per day. Longer goals switch to weeks or months.</template>
-			</p>
 
-			<h2 class="section-header">Device</h2>
-			<div class="ios-group">
-				<label class="ios-row">
-					<span>iPhone</span>
-					<select v-model="form.model" class="ios-field">
-						<option v-for="m in models" :key="m.model" :value="m.model">{{ m.model }}</option>
-					</select>
-					<UIcon name="i-lucide-chevrons-up-down" class="ios-chevron" />
+				<label class="field">
+					<span class="field-label">iPhone</span>
+					<span class="field-box">
+						<select v-model="form.model" class="field-input">
+							<option v-for="m in models" :key="m.model" :value="m.model">{{ m.model }}</option>
+						</select>
+						<UIcon name="i-lucide-chevrons-up-down" class="field-icon" />
+					</span>
 				</label>
-				<label class="ios-row">
-					<span>Time zone</span>
-					<select v-model="form.timeZone" class="ios-field">
-						<option v-for="z in timeZones" :key="z.zone" :value="z.zone">{{ z.label }}</option>
-					</select>
-					<UIcon name="i-lucide-chevrons-up-down" class="ios-chevron" />
+				<label class="field">
+					<span class="field-label">Time zone</span>
+					<span class="field-box">
+						<select v-model="form.timeZone" class="field-input">
+							<option v-for="z in timeZones" :key="z.zone" :value="z.zone">{{ z.label }}</option>
+						</select>
+						<UIcon name="i-lucide-chevrons-up-down" class="field-icon" />
+					</span>
+					<p class="field-hint">The wallpaper turns over at midnight in this time zone. Nothing is stored: your settings live in the link.</p>
 				</label>
 			</div>
-			<p class="ios-footnote">The wallpaper turns over at midnight in this time zone. Nothing is stored: your
-				settings live in
-				the link.</p>
 
 			<p v-if="result.error" class="ios-footnote form-error" role="alert">{{ result.error }}</p>
 
@@ -347,12 +345,11 @@ const compactClock = ref(false)
 	}
 }
 
-.section-header {
-	margin: $spacer-5 $spacer $spacer-2;
-	font-size: $font-size-footnote;
-	font-weight: $font-weight-regular;
-	text-transform: uppercase;
-	color: $label-secondary;
+.fields {
+	display: flex;
+	flex-direction: column;
+	gap: $spacer-4;
+	margin-top: $spacer-5;
 }
 
 .form-error {

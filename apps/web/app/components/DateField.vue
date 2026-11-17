@@ -23,13 +23,13 @@ const value = computed({
 })
 
 const input = useTemplateRef('input')
-// The ui prop sets 17px like the other iOS rows: Nuxt UI puts text-base md:text-sm on the base slot.
+// The ui prop sets 17px like the other fields (Nuxt UI puts text-base md:text-sm on the base slot) and drops its padding: .field-box pads.
 // No comments in the template: an extra root node would drop the class and scoped styles.
 </script>
 
 <template>
-  <UInputDate ref="input" v-model="value" locale="it-IT" variant="none" class="date-field" :ui="{ base: 'text-[length:17px] md:text-[length:17px]' }">
-    <template #trailing>
+  <UInputDate ref="input" v-model="value" locale="it-IT" variant="none" class="date-field" :ui="{ base: 'text-[length:17px] md:text-[length:17px] ps-7 pe-0', leading: 'ps-0' }">
+    <template #leading>
       <UPopover :reference="input?.inputsRef[3]?.$el">
         <UButton color="neutral" variant="link" size="sm" icon="i-lucide-calendar" aria-label="Choose from calendar" class="px-0" />
         <template #content>
@@ -43,12 +43,8 @@ const input = useTemplateRef('input')
 <!-- Not scoped: Nuxt UI forwards the class but not the scope attribute. -->
 <style lang="scss">
 .date-field {
-  margin-left: auto;
-  // Grey like the other iOS fields, white while editing. Unlayered, so it beats Nuxt UI's text-highlighted.
-  color: $label-secondary;
-
-  &:focus-within {
-    color: $label;
-  }
+  flex: 1;
+  // Fills the .field-box; the box draws border and focus. Unlayered, so it beats Nuxt UI's text-highlighted.
+  color: $label;
 }
 </style>
