@@ -6,7 +6,6 @@ import { buildModel, type Cell } from './model'
 export const LAYOUT = {
   pitch: 20,
   dot: 12,
-  /** Centre of the base row of stones as a fraction of the screen height: the pile grows up from here. Provisional. */
   /** Centre of the whole block (title, pile, counter) as a fraction of the screen height:
    *  the middle of the free area between the clock and the Lock Screen buttons. Provisional. */
   blockCenter: 0.57,

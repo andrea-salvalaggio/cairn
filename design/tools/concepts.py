@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cairn 'big dot' concepts: fixed dot size, the unit adapts. Sample data only."""
+"""Cairn wallpaper concepts for the three themes, drawn like packages/core render.ts. Sample data only."""
 import sys, os
 OUT = sys.argv[1]
 W, H, S = 1179, 2556, 3            # iPhone 6.1" Dynamic Island

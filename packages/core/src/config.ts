@@ -29,12 +29,10 @@ export interface Config {
   device: DeviceId
   timeZone: string
   title?: string
-  /** Birthday theme. */
   birthDate?: string
   lifespanYears?: number
   /** Anniversary theme; optional start of the countdown for the goal theme. */
   startDate?: string
-  /** Goal theme. */
   targetDate?: string
   colors?: Partial<Colors>
 }

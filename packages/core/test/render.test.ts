@@ -3,7 +3,7 @@ import { DEVICES, parseConfig, render } from '../src'
 
 const TODAY = '2026-11-12'
 const birthday = parseConfig({ v: 1, theme: 'birthday', device: 'iphone-6.1', birthDate: '1992-03-10' })
-/** [x, y] of every cell, in drawing order (only the pile, not the title and counter stones). */
+/** [x, y] of every cell, in drawing order (only the pile, not the title and counter). */
 const cellPositions = (svg: string) => [...svg.split('<g id="dots">')[1]!.split('</g>')[0]!.matchAll(/translate\(([\d.]+) ([\d.]+)\)/g)]
   .map(m => ({ x: Number(m[1]), y: Number(m[2]) }))
 
@@ -26,7 +26,6 @@ describe('render', () => {
   })
 
   it('lays stones bottom-up like a dry-stone wall', () => {
-    // Cell positions in drawing order: [x, y] from each stone's translate().
     const pos = cellPositions(render(birthday, TODAY))
     const first = pos[0]! // cell 0: base row, column 0
     const second = pos[13]! // cell 13: second row, column 0 (13 columns)

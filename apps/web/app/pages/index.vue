@@ -12,9 +12,6 @@ import {
 	todayInTimeZone,
 } from '@cairn/core'
 
-// Milestone 0 editor: enough to exercise the core end to end.
-// The full form (colors, symbols, layout, events) arrives in milestone 2.
-
 // Live clock: the mockup ticks and the wallpaper rolls over at midnight in the chosen time zone.
 const now = ref(new Date())
 const timer = setInterval(() => (now.value = new Date()), 1000)
@@ -109,7 +106,6 @@ const compactClock = ref(false)
 				<p>Your time as a path of stones, on your Lock Screen.</p>
 			</header>
 
-			<!-- Segmented control -->
 			<div class="ios-segmented ios-segmented--pill" role="radiogroup" aria-label="Wallpaper type"
 				:style="{ '--i': themeIndex, '--n': themes.length }">
 				<span class="ios-segmented-thumb" aria-hidden="true" />
@@ -200,10 +196,8 @@ const compactClock = ref(false)
 </template>
 
 <style scoped lang="scss">
-// Columns are sized to their content (form capped at 32rem), so the credits row spans exactly mockup + form.
-// The 1fr row takes the free height and keeps the credits at the bottom of the window.
-// One column as wide as the workspace (mockup + form), so the credits below match it exactly.
-// The workspace is its own box: the sticky mockup stops at its end and never rides over the credits.
+// One column as wide as the workspace (mockup + form), so the credits below match it exactly; the 1fr row keeps
+// them at the bottom of the window. The workspace is its own box, so the sticky mockup never rides over the credits.
 .editor {
 	display: grid;
 	grid-template-rows: 1fr auto;

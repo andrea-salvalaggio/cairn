@@ -1,9 +1,9 @@
 /**
  * iPhone resolution groups. Pixel sizes were cross-checked against Apple's tech specs
- * and two independent references (see PLAN.md, section 8.1).
+ * and two independent references.
  *
  * Safe-area insets are PROVISIONAL estimates, not Apple figures. They must be measured
- * on real devices (PLAN.md, section 8.2) and can be overridden per config.
+ * on real devices and can be overridden per config.
  */
 export interface Device {
   id: string

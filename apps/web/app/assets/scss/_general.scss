@@ -242,8 +242,7 @@ select.field-input {
 	}
 }
 
-// Pill variant (theme switcher): a bordered pill, the active item is a white pill with dark text.
-// Full width, like the fields below it.
+// Pill variant (theme switcher): full width like the fields, the active item is a white pill with dark text.
 .ios-segmented--pill {
 	padding: 4px;
 	border: 1px solid rgba($white, 0.1);

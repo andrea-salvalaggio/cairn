@@ -103,7 +103,6 @@ $key-dark: #3A3937;
   margin: $spacer-0 auto;
   padding: var(--edge);
   border-radius: calc(var(--u) * var(--r) + var(--edge) + var(--bezel));
-  // Titanium band: light catches the top-left edge.
   background: linear-gradient(135deg, $titanium-light 0%, $key-dark 22%, $titanium-mid 50%, $titanium-dark 78%, $titanium-light 100%);
   box-shadow:
     0 0 0 0.5px rgba($white, 0.15) inset,

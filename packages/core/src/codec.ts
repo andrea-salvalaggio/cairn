@@ -1,8 +1,8 @@
 import { type Config, ConfigError, parseConfig } from './config'
 
 /**
- * Config <-> URL segment. Milestone 0 uses base64url(JSON).
- * Milestone 1 adds compression and default-stripping behind the same functions.
+ * Config <-> URL segment, as base64url(JSON) for now.
+ * Compression or default-stripping can come later behind the same two functions.
  */
 
 const MAX_ENCODED_LENGTH = 4000
