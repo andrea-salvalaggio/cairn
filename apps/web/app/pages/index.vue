@@ -93,7 +93,7 @@ const compactClock = ref(false)
 			<div class="ios-segmented clock-toggle" role="radiogroup" aria-label="Lock Screen clock"
 				:style="{ '--i': compactClock ? 1 : 0, '--n': 2 }">
 				<span class="ios-segmented-thumb" aria-hidden="true" />
-				<button v-for="(label, i) in ['Large clock', 'Compact clock']" :key="label" type="button" role="radio"
+				<button v-for="(label, i) in ['Large clock', 'Small clock']" :key="label" type="button" role="radio"
 					:aria-checked="compactClock === (i === 1)" class="ios-segmented-item" @click="compactClock = i === 1">
 					{{ label }}
 				</button>
@@ -246,9 +246,23 @@ const compactClock = ref(false)
 	}
 }
 
+// Same pill shape as the theme switcher, but keeps the quieter iOS grey: it is a secondary control.
 .clock-toggle {
 	max-width: 260px;
 	margin: $spacer-4 auto $spacer-0;
+	padding: 4px;
+	border: 1px solid rgba($white, 0.1);
+	border-radius: $radius-pill;
+
+	.ios-segmented-thumb {
+		inset: 4px auto 4px 4px;
+		width: calc((100% - 8px) / var(--n));
+		border-radius: $radius-pill;
+	}
+
+	.ios-segmented-item {
+		border-radius: $radius-pill;
+	}
 }
 
 .preview-caption {
