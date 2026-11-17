@@ -2,7 +2,7 @@
     "name": "cairn",
     "version": "0.0.0",
     "private": true,
-    "description": "Free, open-source iPhone lock screen wallpapers that show your time as a grid of dots.",
+    "description": "A free, open-source iPhone Lock Screen wallpaper that grows one stone at a time.",
     "license": "MIT",
     "engines": {
         "node": ">=22"

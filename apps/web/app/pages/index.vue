@@ -132,7 +132,7 @@ const backToPreview = () => window.scrollTo({ top: 0, behavior: matchMedia('(pre
         <div class="workspace">
             <header class="intro">
                 <h1><CairnLogo /></h1>
-                <p>Your time as a pile of stones on your Lock Screen.</p>
+                <p>A wallpaper that grows, <span class="intro-line">one stone at a time.</span></p>
             </header>
 
             <div class="ios-segmented ios-segmented--pill themes" role="radiogroup" aria-label="Wallpaper type" @keydown="onRadioKeys"
@@ -314,6 +314,10 @@ const backToPreview = () => window.scrollTo({ top: 0, behavior: matchMedia('(pre
 
     @include down($bp-md) {
         position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $spacer;
         padding: $spacer $spacer-0;
 
         .cairn-logo {
@@ -321,7 +325,14 @@ const backToPreview = () => window.scrollTo({ top: 0, behavior: matchMedia('(pre
         }
 
         p {
-            display: none;
+            margin: $spacer-0;
+            font-size: $font-size-footnote;
+            line-height: $line-height-tight;
+            text-align: right;
+        }
+
+        .intro-line {
+            display: block;
         }
 
         &::after {

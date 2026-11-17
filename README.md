@@ -1,6 +1,6 @@
 # Cairn
 
-Free, open-source iPhone lock screen wallpapers that show your time as a grid of dots.
+A free, open-source iPhone Lock Screen wallpaper that grows one stone at a time.
 
 A cairn is a pile of stones that marks a path. Each dot is a stone; the moment that matters gets a different shape.
 
