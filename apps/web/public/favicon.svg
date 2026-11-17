@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- Top two stones of design/cover/cover.svg, same proportions. -->
-  <rect width="32" height="32" rx="7" fill="#0C0A09"/>
-  <ellipse cx="16" cy="20.3" rx="12" ry="5.85" fill="#E7E5E4"/>
-  <ellipse cx="14.77" cy="9.54" rx="6.15" ry="3.69" fill="#F59E0B"/>
+  <!-- The ochre stone (a printed peak, same shape as the wallpaper's) on the dark ground. -->
+  <rect width="32" height="32" rx="7" fill="#000000"/>
+  <svg x="6" y="6.5" width="20" height="19" viewBox="-66 -68 132 124">
+    <path fill="#FF9F0A" stroke="#FF9F0A" stroke-width="10" stroke-linejoin="round" d="M-53 50L-43 15L-24 -24.4L-14.5 -61.6L5 -21.6L30.7 11.7L53 50L0.1 47.9Z"/>
+  </svg>
 </svg>

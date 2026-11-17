@@ -26,7 +26,10 @@ export default defineNuxtConfig({
     head: {
       title: 'Cairn | Your Time In Stones',
       htmlAttrs: { lang: 'en' },
-      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+      ],
       meta: [
         { name: 'description', content: 'Free iPhone lock screen wallpapers that show your time as a path of stones.' },
         { name: 'theme-color', content: '#000000' },

@@ -1,7 +1,7 @@
 import { type Config, DEFAULT_LIFESPAN } from './config'
 import { addYears, diffDays, fullYears } from './dates'
 
-/** Every cell is a stone (drawn as a printed peak); one marker cell per theme gets a Font Awesome symbol. */
+/** Every cell is a stone (drawn as a printed peak); one marker cell per theme is drawn in the accent color. */
 export type Glyph = 'stone' | 'heart' | 'gift' | 'star'
 export type CellState = 'past' | 'current' | 'future'
 export interface Cell { glyph: Glyph, state: CellState }

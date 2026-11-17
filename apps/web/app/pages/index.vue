@@ -23,7 +23,7 @@ const offsetOf = (timeZone: string) =>
 const timeZones = [...new Set([detectedZone, ...Intl.supportedValuesOf('timeZone')])]
 	.map(zone => ({ zone, label: `${zone.replaceAll('_', ' ')} · ${offsetOf(zone)}` }))
 
-// Icons are the wallpaper's own markers (Font Awesome 6 solid, same paths as packages/core render.ts).
+// Font Awesome 6 solid icons naming each theme; on the wallpaper the marker is an accent-colored stone.
 const themes: { label: string, value: ThemeId, icon: string }[] = [
 	{ label: 'Birthday', value: 'birthday', icon: 'i-fa6-solid-gift' },
 	{ label: 'Anniversary', value: 'anniversary', icon: 'i-fa6-solid-heart' },
@@ -99,7 +99,7 @@ const compactClock = ref(false)
 	<main class="editor">
 		<div class="workspace">
 		<header class="intro">
-			<h1>Cairn</h1>
+			<h1><CairnLogo /></h1>
 			<p>Your time as a path of stones, on your Lock Screen.</p>
 		</header>
 
@@ -264,7 +264,7 @@ const compactClock = ref(false)
 	}
 
 	p {
-		margin: $spacer-1 $spacer-0 $spacer-0;
+		margin: $spacer-2 $spacer-0 $spacer-0;
 		color: $label-secondary;
 	}
 }
