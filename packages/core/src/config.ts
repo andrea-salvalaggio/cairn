@@ -13,10 +13,13 @@ export interface Colors {
   label: string
 }
 
+/** The brand ochre (the logo's top stone and the site's tint): every theme's default accent. */
+export const DEFAULT_ACCENT = '#FF9F0A'
+
 export const DEFAULT_COLORS: Record<ThemeId, Colors> = {
-  birthday: { bg: '#0C0A09', past: '#E7E5E4', future: '#292524', accent: '#F59E0B', label: '#78716C' },
-  anniversary: { bg: '#0C0A09', past: '#E7E5E4', future: '#292524', accent: '#EF4444', label: '#78716C' },
-  goal: { bg: '#0C0A09', past: '#E7E5E4', future: '#292524', accent: '#F59E0B', label: '#78716C' },
+  birthday: { bg: '#0C0A09', past: '#E7E5E4', future: '#292524', accent: DEFAULT_ACCENT, label: '#78716C' },
+  anniversary: { bg: '#0C0A09', past: '#E7E5E4', future: '#292524', accent: DEFAULT_ACCENT, label: '#78716C' },
+  goal: { bg: '#0C0A09', past: '#E7E5E4', future: '#292524', accent: DEFAULT_ACCENT, label: '#78716C' },
 }
 
 export const DEFAULT_LIFESPAN = 90
@@ -101,7 +104,7 @@ export function parseConfig(input: unknown): Config {
     for (const key of ['bg', 'past', 'future', 'accent', 'label'] as const) {
       const value = (raw.colors as Record<string, unknown>)[key]
       if (value === undefined) continue
-      if (typeof value !== 'string' || !HEX.test(value)) fail(`colors.${key} must be a hex color like #F59E0B`)
+      if (typeof value !== 'string' || !HEX.test(value)) fail(`colors.${key} must be a hex color like #FF9F0A`)
       colors[key] = value.toUpperCase()
     }
     if (Object.keys(colors).length) config.colors = colors

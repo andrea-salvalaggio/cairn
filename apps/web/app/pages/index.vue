@@ -2,6 +2,7 @@
 import {
 	type Config,
 	ConfigError,
+	DEFAULT_ACCENT,
 	DEFAULT_DEVICE,
 	type ThemeId,
 	deviceModels,
@@ -43,6 +44,8 @@ const form = reactive({
 	model: models.find(m => m.deviceId === DEFAULT_DEVICE)!.model,
 	timeZone: detectedZone,
 	titles: { ...defaultTitles },
+	// One accent for every theme: switching theme keeps the color.
+	accent: DEFAULT_ACCENT,
 	birthDate: '1995-01-01',
 	anniversaryDate: plusDays(-365 * 3 - 120),
 	goalStart: initialToday,
@@ -71,6 +74,8 @@ const result = computed<{ config?: Config, svg?: string, error?: string }>(() =>
 			device: models.find(m => m.model === form.model)?.deviceId,
 			timeZone: form.timeZone,
 			title: form.titles[form.theme],
+			// Only a custom color goes in the config, so default links stay short.
+			colors: form.accent === DEFAULT_ACCENT ? undefined : { accent: form.accent },
 			birthDate: form.theme === 'birthday' ? form.birthDate : undefined,
 			startDate: form.theme === 'anniversary' ? form.anniversaryDate : form.theme === 'goal' ? form.goalStart : undefined,
 			targetDate: form.theme === 'goal' ? form.goalTarget : undefined,
@@ -139,15 +144,21 @@ const compactClock = ref(false)
 					</span>
 				</label>
 
+				<div class="field">
+					<span id="accent-label" class="field-label">Color</span>
+					<span class="field-box"><ColorField v-model="form.accent" aria-labelledby="accent-label" /></span>
+					<p class="field-hint">Colors the current stone and the counter.</p>
+				</div>
+
 				<div v-if="form.theme === 'birthday'" class="field">
 					<span id="birth-label" class="field-label">Birthday</span>
 					<span class="field-box"><DateField v-model="form.birthDate" aria-labelledby="birth-label" /></span>
-					<p class="field-hint">One stone per year of a 90-year life, the ochre one is this year.</p>
+					<p class="field-hint">One stone per year of a 90-year life, the colored one is this year.</p>
 				</div>
 				<div v-if="form.theme === 'anniversary'" class="field">
 					<span id="anniversary-label" class="field-label">Together since</span>
 					<span class="field-box"><DateField v-model="form.anniversaryDate" aria-labelledby="anniversary-label" /></span>
-					<p class="field-hint">One stone per week until your next anniversary, the ochre one is this week.</p>
+					<p class="field-hint">One stone per week until your next anniversary, the colored one is this week.</p>
 				</div>
 				<template v-if="form.theme === 'goal'">
 					<div class="field">
@@ -157,7 +168,7 @@ const compactClock = ref(false)
 					<div class="field">
 						<span id="start-label" class="field-label">Counting from</span>
 						<span class="field-box"><DateField v-model="form.goalStart" aria-labelledby="start-label" /></span>
-						<p class="field-hint">One stone per day, the ochre one is the target. Longer goals switch to weeks or months.</p>
+						<p class="field-hint">One stone per day, the colored one is the target. Longer goals switch to weeks or months.</p>
 					</div>
 				</template>
 
