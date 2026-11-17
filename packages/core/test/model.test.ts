@@ -12,9 +12,9 @@ describe('birthday theme', () => {
     expect(model.columns).toBe(15)
   })
 
-  it('marks the current year with the flame', () => {
+  it('marks the current year with the gift', () => {
     expect(model.cells.filter(c => c.state === 'past')).toHaveLength(34)
-    expect(model.cells[34]).toEqual({ glyph: 'flame', state: 'current' })
+    expect(model.cells[34]).toEqual({ glyph: 'gift', state: 'current' })
     expect(model.counter).toEqual(['34 years', '56 ahead'])
   })
 })

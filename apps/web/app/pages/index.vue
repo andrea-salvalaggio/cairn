@@ -26,10 +26,11 @@ const offsetOf = (timeZone: string) =>
 const timeZones = [...new Set([detectedZone, ...Intl.supportedValuesOf('timeZone')])]
 	.map(zone => ({ zone, label: `${zone.replaceAll('_', ' ')} · ${offsetOf(zone)}` }))
 
-const themes: { label: string, value: ThemeId }[] = [
-	{ label: 'Birthday', value: 'birthday' },
-	{ label: 'Anniversary', value: 'anniversary' },
-	{ label: 'Goal', value: 'goal' },
+// Icons are the wallpaper's own markers (Font Awesome 6 solid, same paths as packages/core render.ts).
+const themes: { label: string, value: ThemeId, icon: string }[] = [
+	{ label: 'Birthday', value: 'birthday', icon: 'i-fa6-solid-gift' },
+	{ label: 'Anniversary', value: 'anniversary', icon: 'i-fa6-solid-heart' },
+	{ label: 'Goal', value: 'goal', icon: 'i-fa6-solid-star' },
 ]
 const models = deviceModels()
 
@@ -109,12 +110,12 @@ const compactClock = ref(false)
 			</header>
 
 			<!-- Segmented control -->
-			<div class="ios-segmented" role="radiogroup" aria-label="Wallpaper type"
+			<div class="ios-segmented ios-segmented--pill" role="radiogroup" aria-label="Wallpaper type"
 				:style="{ '--i': themeIndex, '--n': themes.length }">
 				<span class="ios-segmented-thumb" aria-hidden="true" />
 				<button v-for="t in themes" :key="t.value" type="button" role="radio"
 					:aria-checked="form.theme === t.value" class="ios-segmented-item" @click="form.theme = t.value">
-					{{ t.label }}
+					<UIcon :name="t.icon" class="ios-segmented-icon" />{{ t.label }}
 				</button>
 			</div>
 

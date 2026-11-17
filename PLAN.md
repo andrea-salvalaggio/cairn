@@ -11,7 +11,7 @@ A free, open-source web app to design a razor-sharp iPhone lock screen wallpaper
 A cairn is a pile of stones that marks a path. Each week is a stone; the moments that matter get a different shape.
 
 - **Editor first**: a live iPhone preview next to a customization form. What you see is exactly what lands on the lock screen.
-- **Three themes, each with its own symbol**: Birthday (a flame, your life in years), Anniversary (hearts, weeks toward the next one), Goal (a symbol you pick, such as a runner for a marathon).
+- **Three themes, each with its own symbol**: Birthday (a gift, your life in years), Anniversary (hearts, weeks toward the next one), Goal (a symbol you pick, such as a runner for a marathon).
 - **Symbols that count**: a label like "8 years in love with Elisa" where the 8 is drawn as eight hearts. Every year adds one more symbol. No competitor found so far does this.
 - **Sharper output**: vector rendering, rasterized at the device's exact native resolution.
 - **Free, with no paywall**: every feature is available to everyone. No accounts, no forced branding.
@@ -117,7 +117,7 @@ The Life grid has one cell per week of life: 52 columns by `lifespanYears` rows.
 | Section | Controls |
 |---|---|
 | Basics | Depends on the theme (see 4.3), plus iPhone model and time zone (auto-detected) |
-| Symbol | Theme default (flame, heart) or an icon from the library; color and size |
+| Symbol | Theme default (gift, heart) or an icon from the library; color and size |
 | Label | Text with placeholders, e.g. `{count} years in love with Elisa`; show the count as a number, as symbols, or both |
 | Text | Title, subtitle, footer (none, numbers "lived / remaining", custom text) |
 | Colors | Preset palettes; pickers for background, past, future, current |
@@ -136,7 +136,7 @@ A theme sets the grid, the default symbol and the default label. Everything stay
 
 | Theme | What the dots show | Default symbol | Inputs | Example title and counter |
 |---|---|---|---|---|
-| **Birthday** (life) | One dot per year of a 90-year life (15 × 6); the current year is the flame | Flame | Birth date, lifespan (default 90) | "My life in years" / "34 years · 56 ahead" |
+| **Birthday** (life) | One dot per year of a 90-year life (15 × 6); the current year is the gift | Gift | Birth date, lifespan (default 90) | "My life in years" / "34 years · 56 ahead" |
 | **Anniversary** | 52 hearts for the weeks toward the next anniversary; the current week is red; completed years live in the counter | Heart | Start date, name or subject | "In love with Elisa" / "8 years · 23 weeks to the 9th" |
 | **Goal** | One dot per day (or week) from a start date to the target; the target is the symbol | Picked by the user (runner, plane, book, trophy...) | Target date, optional start date, event name | "New York City Marathon" / "63d left · 28%" |
 
@@ -145,7 +145,7 @@ Concept drafts for the three themes: `wallpapers/concepts/` in the design kit.
 How symbols are used:
 
 1. **Symbols as units** (Anniversary): every unit of the grid is drawn as the symbol (hearts instead of dots); the current one takes the accent color.
-2. **Marker** (Birthday): the current unit is drawn as the symbol instead of a dot (a flame, not the whole candle).
+2. **Marker** (Birthday): the current unit is drawn as the symbol instead of a dot (a gift).
 3. **Target** (Goal): the last dot is the symbol; the counter shows the time left and the percentage.
 
 Extra events (section 3) can still be added on top of any theme.
@@ -441,7 +441,7 @@ Risks to the "free" goal:
 - Life span: 90 years by default
 - Layout: big dots at a fixed size (about 12 pt), title above, counter below; dots never shrink, the unit adapts or a window is shown
 - No branding on the wallpaper
-- Themes: Birthday (flame), Anniversary (hearts), Goal (custom icon), each with a label
+- Themes: Birthday (gift), Anniversary (hearts), Goal (custom icon), each with a label
 
 **Open**
 1. Repo name and domain for Cairn (check availability, and existing projects with the same name).

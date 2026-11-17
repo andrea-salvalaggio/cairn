@@ -241,3 +241,52 @@ select.field-input {
 		outline-offset: 1px;
 	}
 }
+
+// Pill variant (theme switcher): a bordered pill, the active item is a white pill with dark text.
+// Full width, like the fields below it.
+.ios-segmented--pill {
+	padding: 4px;
+	border: 1px solid rgba($white, 0.1);
+	border-radius: $radius-pill;
+	background-color: rgba($white, 0.05);
+
+	.ios-segmented-thumb {
+		inset: 4px auto 4px 4px;
+		width: calc((100% - 8px) / var(--n));
+		border-radius: $radius-pill;
+		background-color: $white;
+		box-shadow: 0 2px 8px rgba($white, 0.3);
+	}
+
+	.ios-segmented-item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.375rem;
+		height: auto;
+		min-height: $row-height;
+		padding: 0.625rem $spacer-3;
+		font-size: 0.875rem;
+		font-weight: $font-weight-medium;
+		border-radius: $radius-pill;
+		transition: color 250ms $ease-out;
+
+		@include up($bp-sm) {
+			padding-inline: 1.25rem;
+		}
+
+		&[aria-checked="true"] {
+			color: $black;
+		}
+
+		@include reduced-motion {
+			transition: none;
+		}
+	}
+}
+
+.ios-segmented-icon {
+	flex-shrink: 0;
+	width: 0.875rem;
+	height: 0.875rem;
+}

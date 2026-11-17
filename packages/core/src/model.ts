@@ -2,7 +2,7 @@ import { type Config, DEFAULT_LIFESPAN } from './config'
 import { addYears, diffDays, fullYears } from './dates'
 
 /** Every cell is a stone; one marker cell per theme gets a Font Awesome symbol. */
-export type Glyph = 'stone' | 'heart' | 'flame' | 'star'
+export type Glyph = 'stone' | 'heart' | 'gift' | 'star'
 export type CellState = 'past' | 'current' | 'future'
 export interface Cell { glyph: Glyph, state: CellState }
 
@@ -33,7 +33,7 @@ function birthday(config: Config, today: string): Model {
   const lifespan = config.lifespanYears ?? DEFAULT_LIFESPAN
   const age = Math.min(fullYears(config.birthDate!, today), lifespan)
   const cells: Cell[] = Array.from({ length: lifespan }, (_, i) =>
-    i < age ? { glyph: 'stone', state: 'past' } : i === age ? { glyph: 'flame', state: 'current' } : { glyph: 'stone', state: 'future' })
+    i < age ? { glyph: 'stone', state: 'past' } : i === age ? { glyph: 'gift', state: 'current' } : { glyph: 'stone', state: 'future' })
   return {
     title: config.title ?? 'My life in years',
     columns: COLUMNS,
