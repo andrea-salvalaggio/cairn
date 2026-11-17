@@ -345,7 +345,7 @@ const backToPreview = () => window.scrollTo({ top: 0, behavior: matchMedia('(pre
 
     @include down($bp-md) {
         :deep(.phone) {
-            --screen: min(300px, 58vw);
+            --screen: min(300px, 50vw);
         }
     }
 
