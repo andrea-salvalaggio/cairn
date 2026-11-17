@@ -2,6 +2,11 @@
 
 :root {
     color-scheme: dark;
+
+    // Phones: a focused field scrolls in below the WallpaperStrip pinned to the top, not under it.
+    @include down($bp-md) {
+        scroll-padding-top: 7.5rem;
+    }
 }
 
 // Nuxt UI surfaces follow the iOS palette.
