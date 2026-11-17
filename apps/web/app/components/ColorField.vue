@@ -57,7 +57,6 @@ const hex = computed({
   </div>
 </template>
 
-<!-- Not scoped: the popover content is teleported, outside the component's scope. -->
 <style lang="scss">
 .color-field {
   display: flex;
@@ -88,7 +87,6 @@ const hex = computed({
   width: 1.5rem;
   height: 1.5rem;
   border-radius: $radius-pill;
-  // A hairline ring keeps very dark picks visible on the dark field.
   box-shadow: inset 0 0 0 1px rgba($white, 0.2);
 }
 

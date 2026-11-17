@@ -116,8 +116,12 @@ function confetti(from: HTMLElement) {
             <code>{{ url }}</code>
           </div>
           <button type="button" class="ios-button ios-button--tinted" @click="copy">
+                        <Transition name="swap" mode="out-in">
+                            <span :key="copied ? 'done' : 'idle'" class="ios-button-content">
             <UIcon :name="copied ? 'i-lucide-check' : 'i-lucide-copy'" class="ios-icon" />
             {{ copied ? 'Copied' : 'Copy link' }}
+                            </span>
+                        </Transition>
           </button>
         </div>
 
@@ -269,7 +273,6 @@ function confetti(from: HTMLElement) {
   height: 16px;
 }
 
-// Shortcuts shows parameters as tinted tokens.
 .token {
   padding: 1px 6px;
   white-space: nowrap;
@@ -359,7 +362,7 @@ function confetti(from: HTMLElement) {
   &:disabled {
     cursor: not-allowed;
   }
-  transition: width 300ms $ease-out, background-color 300ms;
+    transition: width 250ms $ease-out, background-color 250ms ease;
 
   &--active {
     width: $spacer-4;
@@ -418,7 +421,6 @@ function confetti(from: HTMLElement) {
 }
 </style>
 
-<!-- The sheet is teleported by Nuxt UI, so its frame cannot be scoped. -->
 <style lang="scss">
 .guide-overlay {
   background-color: rgba($black, 0.6);
@@ -448,9 +450,7 @@ function confetti(from: HTMLElement) {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  // Room for the 30px close button plus a gap, so a long title wraps instead of touching it.
   padding-right: 2.75rem;
-  // Two even lines on narrow screens rather than one word left alone.
   text-wrap: balance;
   font-size: $font-size-title-2;
   font-weight: $font-weight-bold;
@@ -465,7 +465,6 @@ function confetti(from: HTMLElement) {
   justify-content: center;
   width: 26px;
   height: 26px;
-  // Centred on the title's first line (33px), like the close button.
   margin-top: 3.5px;
   font-size: $font-size-subhead;
   font-weight: $font-weight-bold;
@@ -477,7 +476,6 @@ function confetti(from: HTMLElement) {
 }
 
 .guide-body {
-  // The progress dots get the same air above (here) and below (.footer gap): 18px each side.
   padding: 1.25rem $spacer-4 1.125rem;
 }
 
@@ -486,7 +484,6 @@ function confetti(from: HTMLElement) {
 }
 
 .guide-close {
-  // Centred on the title's first line (33px tall, the button 30px) and on the content's right edge.
   top: calc(#{$spacer-4} + 1.5px);
   right: $spacer-4;
 }
@@ -502,7 +499,6 @@ function confetti(from: HTMLElement) {
 }
 </style>
 
-<!-- Not scoped: the confetti pieces live on <body>, outside the component. -->
 <style lang="scss">
 .guide-confetti {
   position: fixed;

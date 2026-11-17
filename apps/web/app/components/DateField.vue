@@ -41,11 +41,9 @@ const input = useTemplateRef('input')
   </UInputDate>
 </template>
 
-<!-- Not scoped: Nuxt UI forwards the class but not the scope attribute. -->
 <style lang="scss">
 .date-field {
   flex: 1;
-  // Fills the .field-box; the box draws border and focus. Unlayered, so it beats Nuxt UI's text-highlighted.
   color: $label;
 }
 </style>

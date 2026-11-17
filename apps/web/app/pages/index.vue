@@ -99,6 +99,16 @@ const contacts = [
 	{ label: 'GitHub', icon: 'i-fa7-brands-github', href: 'https://github.com/andrea-salvalaggio' },
 ]
 const compactClock = ref(false)
+
+// The download gives no sign of its own, so the button says it started for a moment.
+const downloaded = ref(false)
+let resetDownloaded: ReturnType<typeof setTimeout> | undefined
+function onDownload() {
+    downloaded.value = true
+    clearTimeout(resetDownloaded)
+    resetDownloaded = setTimeout(() => (downloaded.value = false), 2000)
+}
+onBeforeUnmount(() => clearTimeout(resetDownloaded))
 </script>
 
 <template>
@@ -110,7 +120,7 @@ const compactClock = ref(false)
 		</header>
 
 		<section class="preview" aria-label="Wallpaper preview">
-			<IPhoneMockup :device="device" :svg="result.svg" :time-zone="form.timeZone" :now="now" :compact-clock="compactClock" />
+                <IPhoneMockup :device="device" :svg="result.svg" :theme="form.theme" :time-zone="form.timeZone" :now="now" :compact-clock="compactClock" />
 			<!-- iOS 27 lets each Lock Screen shrink the clock into the top row; preview both to check the wallpaper fits. -->
 			<div class="ios-segmented clock-toggle" role="radiogroup" aria-label="Lock Screen clock" @keydown="onRadioKeys"
 				:style="{ '--i': compactClock ? 1 : 0, '--n': 2 }">
@@ -150,17 +160,19 @@ const compactClock = ref(false)
 					<p class="field-hint">Colors the current stone and the counter.</p>
 				</div>
 
+                    <!-- out-in: the old theme's dates leave before the new ones enter, so the form never holds both. -->
+                    <Transition name="field-swap" mode="out-in">
 				<div v-if="form.theme === 'birthday'" class="field">
 					<span id="birth-label" class="field-label">Birthday</span>
 					<span class="field-box"><DateField v-model="form.birthDate" aria-labelledby="birth-label" /></span>
 					<p class="field-hint">One stone per year of a 90-year life, the colored one is this year.</p>
 				</div>
-				<div v-if="form.theme === 'anniversary'" class="field">
+                        <div v-else-if="form.theme === 'anniversary'" class="field">
 					<span id="anniversary-label" class="field-label">Together since</span>
 					<span class="field-box"><DateField v-model="form.anniversaryDate" aria-labelledby="anniversary-label" /></span>
 					<p class="field-hint">One stone per week until your next anniversary, the colored one is this week.</p>
 				</div>
-				<template v-if="form.theme === 'goal'">
+                        <div v-else class="field-group">
 					<div class="field">
 						<span id="target-label" class="field-label">Target date</span>
 						<span class="field-box"><DateField v-model="form.goalTarget" aria-labelledby="target-label" /></span>
@@ -170,7 +182,8 @@ const compactClock = ref(false)
 						<span class="field-box"><DateField v-model="form.goalStart" aria-labelledby="start-label" /></span>
 						<p class="field-hint">One stone per day, the colored one is the target. Longer goals switch to weeks or months.</p>
 					</div>
-				</template>
+                        </div>
+                    </Transition>
 
 				<label class="field">
 					<span class="field-label">iPhone</span>
@@ -193,7 +206,9 @@ const compactClock = ref(false)
 				</label>
 			</div>
 
+                <Transition name="swap">
 			<p v-if="result.error" class="ios-footnote form-error" role="alert">{{ result.error }}</p>
+                </Transition>
 
 			<div class="actions">
 				<button type="button" class="ios-button ios-button--filled actions-main" :disabled="!pngPath"
@@ -201,8 +216,13 @@ const compactClock = ref(false)
 					<UIcon name="i-heroicons-sparkles-20-solid" class="ios-icon" /> Set up your wallpaper
 				</button>
 				<a :href="pngPath" :aria-disabled="!pngPath" download="cairn-wallpaper.png"
-					class="ios-button ios-button--tinted">
-					<UIcon name="i-lucide-arrow-down-to-line" class="ios-icon" /> Download PNG
+                        class="ios-button ios-button--tinted" @click="onDownload">
+                        <Transition name="swap" mode="out-in">
+                            <span :key="downloaded ? 'done' : 'idle'" class="ios-button-content">
+                                <UIcon :name="downloaded ? 'i-lucide-check' : 'i-lucide-arrow-down-to-line'" class="ios-icon" />
+                                {{ downloaded ? 'Downloaded' : 'Download PNG' }}
+                            </span>
+                        </Transition>
 				</a>
 			</div>
 		</section>
@@ -223,8 +243,6 @@ const compactClock = ref(false)
 </template>
 
 <style scoped lang="scss">
-// One column as wide as the workspace (mockup + form), so the credits below match it exactly; the 1fr row keeps
-// them at the bottom of the window. The workspace is its own box, so the sticky mockup never rides over the credits.
 .editor {
 	display: grid;
 	grid-template-rows: 1fr auto;
@@ -247,8 +265,6 @@ const compactClock = ref(false)
 	}
 }
 
-// Phones: name, then preview, then form, so the first screen says what Cairn is.
-// Desktop: the preview sits in its own column, the name tops the form column.
 .workspace {
 	display: grid;
 	grid-template-areas: "intro" "preview" "form";
@@ -284,7 +300,6 @@ const compactClock = ref(false)
 .preview {
 	grid-area: preview;
 
-	// A smaller phone on phones, so the name, the preview and the clock toggle share the first screen.
 	@include down($bp-md) {
 		:deep(.phone) {
 			--screen: min(300px, 58vw);
@@ -298,7 +313,6 @@ const compactClock = ref(false)
 	}
 }
 
-// Same pill shape as the theme switcher, but keeps the quieter iOS grey: it is a secondary control.
 .clock-toggle {
 	max-width: 260px;
 	margin: $spacer-4 auto $spacer-0;
@@ -341,14 +355,12 @@ const compactClock = ref(false)
 	font-size: $font-size-footnote;
 	color: $label-secondary;
 
-	// Extra air above the credits, on top of the grid gap: a little on mobile, more on desktop.
 	margin-top: $spacer-4;
 
 	@include up($bp-md) {
 		margin-top: $spacer-6;
 	}
 
-	// Edge-to-edge separator: a shadow spread sideways and clipped to the line's height. Shadows never add scroll width.
 	&::before {
 		content: '';
 		position: absolute;
@@ -383,7 +395,6 @@ const compactClock = ref(false)
 
 .credits-links {
 	display: flex;
-	// Pull the 44pt tap targets out so the last icon lines up with the separator's edge.
 	margin-right: -$spacer-3;
 
 	a {
@@ -413,6 +424,68 @@ const compactClock = ref(false)
 	margin-top: $spacer-5;
 }
 
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: $spacer-4;
+}
+
+.field-swap-enter-active {
+    transition: opacity 180ms ease, transform 180ms $ease-out;
+}
+
+.field-swap-leave-active {
+    transition: opacity 120ms ease, transform 120ms $ease-out;
+}
+
+.field-swap-enter-from {
+    opacity: 0;
+    transform: translateY(4px);
+}
+
+.field-swap-leave-to {
+    opacity: 0;
+    transform: translateY(-4px);
+}
+
+@include reduced-motion {
+    .field-swap-enter-from,
+    .field-swap-leave-to {
+        transform: none;
+    }
+}
+
+@keyframes enter {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+@keyframes enter-fade {
+    from {
+        opacity: 0;
+    }
+}
+
+.intro,
+.preview,
+.form {
+    animation: enter 300ms $ease-out backwards;
+
+    @include reduced-motion {
+        animation-name: enter-fade;
+    }
+}
+
+.preview {
+    animation-delay: 60ms;
+}
+
+.form {
+    animation-delay: 120ms;
+}
+
 .form-error {
 	margin-top: $spacer-4;
 	color: $red;
@@ -430,7 +503,6 @@ const compactClock = ref(false)
 }
 
 .actions-main {
-	// A smaller, solid sparkle: a light touch beside the label rather than a full-size glyph.
 	.ios-icon {
 		width: 16px;
 		height: 16px;

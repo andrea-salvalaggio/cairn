@@ -59,7 +59,8 @@ $row-height: 2.75rem;
 $button-height: 3.125rem;
 $segment-height: 2rem;
 
-$ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+// Strong ease-out: moves at once, then settles, so UI motion reads as instant feedback.
+$ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
 $bp-sm: 36rem;
 $bp-md: 48rem;

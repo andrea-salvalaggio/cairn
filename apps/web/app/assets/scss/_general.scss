@@ -176,7 +176,7 @@ select.field-input {
   cursor: pointer;
   border: 0;
   border-radius: $radius;
-  transition: opacity 150ms, transform 150ms;
+    transition: opacity 160ms ease, transform 160ms $ease-out;
 
   &:active {
     opacity: 0.8;
@@ -302,4 +302,26 @@ select.field-input {
 	flex-shrink: 0;
 	width: 0.875rem;
 	height: 0.875rem;
+}
+
+// Content inside a button, so its icon and label can swap together.
+.ios-button-content {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacer-2;
+}
+
+// State swap (Copy → Copied, an error appearing): a little blur blends the two states instead of showing both.
+.swap-enter-active {
+    transition: opacity 180ms ease, filter 180ms ease;
+}
+
+.swap-leave-active {
+    transition: opacity 120ms ease, filter 120ms ease;
+}
+
+.swap-enter-from,
+.swap-leave-to {
+    opacity: 0;
+    filter: blur(2px);
 }

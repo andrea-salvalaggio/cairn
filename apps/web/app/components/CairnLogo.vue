@@ -27,7 +27,6 @@
 .cairn-logo {
   display: block;
   overflow: visible;
-  // 32 units tall for 36-unit letters: this keeps the letters at the large title size.
   height: calc($font-size-large-title * 32 / 36);
   width: auto;
 }

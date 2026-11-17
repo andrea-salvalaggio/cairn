@@ -5,7 +5,8 @@ import type { Device } from '@cairn/core'
  * iPhone with a live Lock Screen. Every size is in iOS points (--u = 1pt on screen),
  * so the frame, island and clock keep real proportions on every model.
  */
-const props = defineProps<{ device: Device, svg?: string, timeZone: string, now: Date, compactClock?: boolean }>()
+// theme keys the wallpaper: a new theme crossfades, while color and date edits update in place.
+const props = defineProps<{ device: Device, svg?: string, theme?: string, timeZone: string, now: Date, compactClock?: boolean }>()
 
 // Display corner radius in points per resolution group (measured values published for each model).
 const CORNER: Record<string, number> = {
@@ -29,10 +30,9 @@ const time = computed(() =>
 const hours = computed(() => time.value.slice(0, 2))
 const minutes = computed(() => time.value.slice(-2))
 
-const date = computed(() => {
-  const text = new Intl.DateTimeFormat(undefined, { weekday: 'long', day: 'numeric', month: 'long', timeZone: props.timeZone }).format(props.now)
-  return text.charAt(0).toLocaleUpperCase() + text.slice(1)
-})
+// English like the rest of the site, whatever the browser locale: "Tuesday, November 17".
+const date = computed(() =>
+    new Intl.DateTimeFormat('en-US', { weekday: 'long', day: 'numeric', month: 'long', timeZone: props.timeZone }).format(props.now))
 </script>
 
 <template>
@@ -48,7 +48,9 @@ const date = computed(() => {
     <span class="key key--side" />
 
     <div class="screen">
-      <div v-if="svg" class="wallpaper" v-html="svg" />
+            <Transition name="wallpaper">
+                <div v-if="svg" :key="theme" class="wallpaper" v-html="svg" />
+            </Transition>
 
       <div class="lock" aria-hidden="true">
         <div class="cutout" />
@@ -80,14 +82,12 @@ const date = computed(() => {
 </template>
 
 <style scoped lang="scss">
-// Titanium frame shades, only used by this mockup.
 $titanium-light: #8D8A86;
 $titanium-mid: #5C5A57;
 $titanium-dark: #2D2C2A;
 $key-light: #6E6B67;
 $key-dark: #3A3937;
 
-// Points to page pixels: 1pt on the device = --u on the page.
 @function pt($value) {
   @return calc(var(--u) * #{$value});
 }
@@ -164,6 +164,17 @@ $key-dark: #3A3937;
   }
 }
 
+.wallpaper-enter-active,
+.wallpaper-leave-active {
+    transition: opacity 200ms ease, filter 200ms ease;
+}
+
+.wallpaper-enter-from,
+.wallpaper-leave-to {
+    opacity: 0;
+    filter: blur(2px);
+}
+
 .lock {
   position: absolute;
   inset: 0;
@@ -194,7 +205,6 @@ $key-dark: #3A3937;
   }
 }
 
-// Sizes measured on an iOS 27 Lock Screen.
 .status {
   position: absolute;
   top: pt(20);
@@ -254,7 +264,6 @@ $key-dark: #3A3937;
   }
 }
 
-// iOS 27 clock: large, heavy, solid white, tight numerals. Sizes are in points (SVG user units).
 .clock {
   top: pt(110);
   width: 100%;
@@ -262,7 +271,7 @@ $key-dark: #3A3937;
   font-size: 120px;
   font-weight: $font-weight-semibold;
   letter-spacing: -1.5px;
-  font-variant-numeric: proportional-nums; // tabular digits leave a wide gap around the 1
+    font-variant-numeric: proportional-nums;
   fill: currentColor;
   stroke: currentColor;
   stroke-width: 3px;
@@ -270,7 +279,6 @@ $key-dark: #3A3937;
   transform-origin: 50% 0;
   transition: transform 0.3s $ease-out, opacity 0.25s ease;
 
-  // Shrinks up into the date row, as on iOS.
   .is-compact & {
     opacity: 0;
     transform: translateY(pt(-24)) scale(0.6);
@@ -292,7 +300,6 @@ $key-dark: #3A3937;
   width: pt(57);
   height: pt(57);
   border-radius: $radius-pill;
-  // Dark Liquid Glass control: smoky blurred fill, light rim brightest at top and bottom.
   background: rgba($grouped, 0.72);
   box-shadow:
     inset 0 pt(1) pt(0.5) rgba($white, 0.22),
