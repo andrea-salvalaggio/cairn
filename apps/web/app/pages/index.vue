@@ -85,6 +85,7 @@ const compactClock = ref(false)
 
 <template>
 	<main class="editor">
+		<div class="workspace">
 		<section class="preview" aria-label="Wallpaper preview">
 			<IPhoneMockup :device="device" :svg="result.svg" :time-zone="form.timeZone" :now="now" :compact-clock="compactClock" />
 			<!-- iOS 27 lets each Lock Screen shrink the clock into the top row; preview both to check the wallpaper fits. -->
@@ -182,40 +183,59 @@ const compactClock = ref(false)
 					<UIcon name="i-lucide-arrow-down-to-line" class="ios-icon" /> Download PNG
 				</a>
 			</div>
-
-			<footer class="credits">
-				<p>Made by <a href="https://andreasalvalaggio.vercel.app/" target="_blank" rel="noopener">Andrea Salvalaggio</a></p>
-				<nav class="credits-links" aria-label="Contact">
-					<a v-for="link in contacts" :key="link.label" :href="link.href" :aria-label="link.label" :title="link.label"
-						:target="link.href.startsWith('mailto:') ? undefined : '_blank'" rel="noopener">
-						<UIcon :name="link.icon" class="credits-icon" />
-					</a>
-				</nav>
-			</footer>
 		</section>
+		</div>
 
 		<SetupGuide v-model:open="guideOpen" :url="liveUrl" />
+
+		<footer class="credits">
+			<p>Made by <a href="https://andreasalvalaggio.vercel.app/" target="_blank" rel="noopener">Andrea Salvalaggio</a></p>
+			<nav class="credits-links" aria-label="Contact">
+				<a v-for="link in contacts" :key="link.label" :href="link.href" :aria-label="link.label" :title="link.label"
+					:target="link.href.startsWith('mailto:') ? undefined : '_blank'" rel="noopener">
+					<UIcon :name="link.icon" class="credits-icon" />
+				</a>
+			</nav>
+		</footer>
 	</main>
 </template>
 
 <style scoped lang="scss">
+// Columns are sized to their content (form capped at 32rem), so the credits row spans exactly mockup + form.
+// The 1fr row takes the free height and keeps the credits at the bottom of the window.
+// One column as wide as the workspace (mockup + form), so the credits below match it exactly.
+// The workspace is its own box: the sticky mockup stops at its end and never rides over the credits.
 .editor {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr);
+	grid-template-rows: 1fr auto;
+	grid-template-columns: minmax(0, max-content);
+	justify-content: center;
 	gap: $spacer-6;
 	max-width: 64rem;
 	min-height: 100dvh;
 	margin: $spacer-0 auto;
-	padding: 2.5rem $spacer;
+	padding: 2.5rem $spacer $spacer-0;
 
 	@include up($bp-sm) {
 		padding-inline: $spacer-4;
 	}
 
 	@include up($bp-md) {
-		grid-template-columns: auto minmax(0, 1fr);
+		justify-content: start;
 		gap: $spacer-8;
-		padding-block: $spacer-7;
+		padding-top: $spacer-7;
+	}
+}
+
+.workspace {
+	display: grid;
+	grid-template-columns: minmax(0, 32rem);
+	gap: $spacer-6;
+	align-self: start;
+
+	@include up($bp-md) {
+		grid-template-columns: auto minmax(0, 32rem);
+		gap: $spacer-8;
 	}
 }
 
@@ -242,24 +262,35 @@ const compactClock = ref(false)
 .form {
 	display: flex;
 	flex-direction: column;
-	max-width: 32rem;
 }
 
 .credits {
 	display: flex;
+	align-self: end;
 	align-items: center;
 	justify-content: space-between;
 	gap: $spacer;
-	// Auto: on desktop the form column stretches to the preview's height, so the credits sit level with the clock toggle.
-	margin-top: auto;
-	padding-top: $spacer-4;
-	border-top: 0.5px solid $separator;
+	padding: $spacer-4 $spacer-0;
+	position: relative;
 	font-size: $font-size-footnote;
 	color: $gray;
 
+	// Extra air above the credits, on top of the grid gap: a little on mobile, more on desktop.
+	margin-top: $spacer-4;
+
 	@include up($bp-md) {
-		// shortcut: measured (~38px) so the separator lines up with the top of the clock toggle; revisit if the caption, toggle or credits change size.
-		margin-bottom: 2.375rem;
+		margin-top: $spacer-6;
+	}
+
+	// Edge-to-edge separator: a shadow spread sideways and clipped to the line's height. Shadows never add scroll width.
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0 0 auto;
+		height: 0.5px;
+		background-color: $separator;
+		box-shadow: 0 0 0 100vmax $separator;
+		clip-path: inset(0 -100vmax);
 	}
 
 	p {
@@ -334,7 +365,6 @@ const compactClock = ref(false)
 	flex-direction: column;
 	gap: $spacer-3;
 	margin-top: $spacer-5;
-	margin-bottom: $spacer-6;
 
 	@include up($bp-sm) {
 		flex-direction: row;
