@@ -142,12 +142,12 @@ const compactClock = ref(false)
 				<div v-if="form.theme === 'birthday'" class="field">
 					<span id="birth-label" class="field-label">Birthday</span>
 					<span class="field-box"><DateField v-model="form.birthDate" aria-labelledby="birth-label" /></span>
-					<p class="field-hint">One stone per year of a 90-year life; the ochre one is this year.</p>
+					<p class="field-hint">One stone per year of a 90-year life, the ochre one is this year.</p>
 				</div>
 				<div v-if="form.theme === 'anniversary'" class="field">
 					<span id="anniversary-label" class="field-label">Together since</span>
 					<span class="field-box"><DateField v-model="form.anniversaryDate" aria-labelledby="anniversary-label" /></span>
-					<p class="field-hint">One stone per week until your next anniversary; the ochre one is this week.</p>
+					<p class="field-hint">One stone per week until your next anniversary, the ochre one is this week.</p>
 				</div>
 				<template v-if="form.theme === 'goal'">
 					<div class="field">
@@ -157,7 +157,7 @@ const compactClock = ref(false)
 					<div class="field">
 						<span id="start-label" class="field-label">Counting from</span>
 						<span class="field-box"><DateField v-model="form.goalStart" aria-labelledby="start-label" /></span>
-						<p class="field-hint">One stone per day; the ochre one is the target. Longer goals switch to weeks or months.</p>
+						<p class="field-hint">One stone per day, the ochre one is the target. Longer goals switch to weeks or months.</p>
 					</div>
 				</template>
 

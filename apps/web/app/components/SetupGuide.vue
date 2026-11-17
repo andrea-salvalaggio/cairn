@@ -4,52 +4,113 @@ const props = defineProps<{ url: string }>()
 const open = defineModel<boolean>('open', { default: false })
 
 const STEPS = [
-  { title: 'Copy your wallpaper link', description: 'This link always returns today’s wallpaper. Your settings live inside it; nothing is stored.' },
-  { title: 'Create the Shortcut', description: 'On your iPhone, open Shortcuts, tap +, then add these two actions.' },
-  { title: 'Run it every morning', description: 'In Shortcuts, open the Automation tab, tap + and choose Time of Day.' },
+  { title: 'Copy your wallpaper link', lead: 'This link always returns today’s wallpaper. Your settings live inside it, nothing is stored.' },
+  // Every step's text sits at the top of the body, so title-to-text spacing is the same on each one.
+  // Steps the user follows on the iPhone are a numbered list, not a sentence of commas.
+  { title: 'Create the Shortcut', instructions: ['Open Shortcuts on your iPhone', 'Tap +', 'Add these two actions'] },
+  { title: 'Run it every morning', instructions: ['In Shortcuts, open the Automation tab', 'Tap +', 'Choose Time of Day and set it like this'] },
 ]
 
 const step = ref(0)
 const direction = ref(1)
 const copied = ref(false)
+// The other steps need the link, so Continue (and the later dots) wait for the first copy.
+const linkCopied = ref(false)
 const onIos = /iPhone|iPad|iPod/.test(navigator.userAgent)
 
+let resetCopied: ReturnType<typeof setTimeout> | undefined
+
 watch(open, (value) => {
-  if (value) { step.value = 0; copied.value = false }
+  if (value) { step.value = 0; copied.value = false; linkCopied.value = false; clearTimeout(resetCopied) }
 })
+onBeforeUnmount(() => clearTimeout(resetCopied))
 
 function go(to: number) {
   direction.value = to > step.value ? 1 : -1
   step.value = to
 }
 
-async function copy() {
+async function copy(event: MouseEvent) {
+  // Read before the await: the browser clears currentTarget once the click has been handled.
+  const button = event.currentTarget as HTMLElement
   await navigator.clipboard.writeText(props.url)
   copied.value = true
+  linkCopied.value = true
+  // Back to "Copy link" on its own, so the link can be copied again.
+  clearTimeout(resetCopied)
+  resetCopied = setTimeout(() => (copied.value = false), 3000)
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) confetti(button)
+}
+
+// A click outside (or Esc) can't close the guide: the sheet swells for a moment to say "in here, use the X".
+function nudge() {
+  const sheet = document.querySelector<HTMLElement>('.guide-sheet')
+  if (!sheet || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  // Soft swell: eases out to the peak, then eases in and out back to rest, so there is no snap at either end.
+  sheet.animate(
+    [
+      { transform: 'scale(1)', easing: 'cubic-bezier(0.33, 1, 0.68, 1)' },
+      { transform: 'scale(1.025)', offset: 0.4, easing: 'cubic-bezier(0.65, 0, 0.35, 1)' },
+      { transform: 'scale(1)' },
+    ],
+    { duration: 520 },
+  )
+}
+
+// Little stones (ochre, white, grey) thrown up from the button, then falling away.
+const CONFETTI_COLORS = ['#FF9F0A', '#F5F5F7', '#8E8E93']
+
+function confetti(from: HTMLElement) {
+  const { left, top, width } = from.getBoundingClientRect()
+  for (let i = 0; i < 28; i++) {
+    const piece = document.createElement('span')
+    piece.className = 'guide-confetti'
+    piece.setAttribute('aria-hidden', 'true')
+    piece.style.left = `${left + width / 2}px`
+    piece.style.top = `${top}px`
+    piece.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length]!
+    document.body.append(piece)
+    // A fan pointing up, wider than it is tall.
+    const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.9
+    const distance = 70 + Math.random() * 90
+    const dx = Math.cos(angle) * distance
+    const dy = Math.sin(angle) * distance
+    const spin = (Math.random() - 0.5) * 720
+    piece.animate([
+      { transform: 'translate(-50%, 0) rotate(0deg)', opacity: 1 },
+      { transform: `translate(calc(-50% + ${dx}px), ${dy}px) rotate(${spin / 2}deg)`, opacity: 1, offset: 0.55 },
+      { transform: `translate(calc(-50% + ${dx * 1.2}px), ${dy + 70}px) rotate(${spin}deg)`, opacity: 0 },
+    ], { duration: 1300 + Math.random() * 500, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' }).finished.then(() => piece.remove())
+  }
 }
 </script>
 
 <template>
   <UModal
     v-model:open="open"
+    :dismissible="false"
+    @close:prevent="nudge"
     :title="STEPS[step]!.title"
-    :description="STEPS[step]!.description"
     :ui="{
       overlay: 'guide-overlay',
       content: 'guide-sheet',
       header: 'guide-header',
       title: 'guide-title',
-      description: 'guide-description',
       body: 'guide-body',
       footer: 'guide-footer',
       close: 'guide-close',
     }"
     :close="{ color: 'neutral', variant: 'soft', class: 'guide-close-button' }"
   >
+    <template #title>
+      <span class="step-number">{{ step + 1 }}</span>{{ STEPS[step]!.title }}
+    </template>
+
     <template #body>
       <Transition :name="direction > 0 ? 'next' : 'prev'" mode="out-in">
         <!-- 1. Link -->
         <div v-if="step === 0" key="0" class="step">
+          <p class="lead">{{ STEPS[0]!.lead }}</p>
           <div class="ios-group ios-group--elevated link">
             <UIcon name="i-lucide-link" class="ios-icon link-icon" />
             <code>{{ url }}</code>
@@ -62,6 +123,9 @@ async function copy() {
 
         <!-- 2. Shortcut: a miniature of the two actions as they look in the Shortcuts app -->
         <div v-else-if="step === 1" key="1" class="step step--tight">
+          <ol class="instructions">
+            <li v-for="line in STEPS[1]!.instructions" :key="line">{{ line }}</li>
+          </ol>
           <div class="action">
             <span class="action-icon action-icon--blue"><UIcon name="i-lucide-globe" class="action-glyph" /></span>
             <p>Get contents of <span class="token">your link</span></p>
@@ -81,6 +145,9 @@ async function copy() {
 
         <!-- 3. Automation -->
         <div v-else key="2" class="step">
+          <ol class="instructions">
+            <li v-for="line in STEPS[2]!.instructions" :key="line">{{ line }}</li>
+          </ol>
           <ol class="ios-group ios-group--elevated">
             <li class="ios-row"><span>Time</span><span class="ios-value">6:00 AM</span></li>
             <li class="ios-row"><span>Repeat</span><span class="ios-value">Daily</span></li>
@@ -109,6 +176,7 @@ async function copy() {
             :aria-label="`Step ${i + 1} of ${STEPS.length}: ${s.title}`"
             class="dot"
             :class="{ 'dot--active': i === step }"
+            :disabled="i > 0 && !linkCopied"
             @click="go(i)"
           />
         </div>
@@ -117,6 +185,7 @@ async function copy() {
           <button
             type="button"
             class="ios-button ios-button--filled nav-next"
+            :disabled="step === 0 && !linkCopied"
             @click="step < STEPS.length - 1 ? go(step + 1) : (open = false)"
           >
             {{ step < STEPS.length - 1 ? 'Continue' : 'Done' }}
@@ -216,6 +285,23 @@ async function copy() {
   background-color: $separator;
 }
 
+.lead,
+.instructions {
+  margin: $spacer-0 $spacer-0 $spacer-2;
+  font-size: $font-size-subhead;
+  line-height: $line-height-base;
+  color: $label-secondary;
+}
+
+.instructions {
+  padding-left: 1.25rem;
+  list-style: decimal;
+
+  li::marker {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
 .hint {
   margin: $spacer-2 $spacer-0 $spacer-0;
 
@@ -251,7 +337,7 @@ async function copy() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $spacer;
+  gap: 1.125rem;
   width: 100%;
 }
 
@@ -269,6 +355,10 @@ async function copy() {
   border: 0;
   border-radius: $radius-pill;
   background-color: $label-tertiary;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
   transition: width 300ms $ease-out, background-color 300ms;
 
   &--active {
@@ -355,22 +445,40 @@ async function copy() {
 }
 
 .guide-title {
-  padding-right: $spacer-5;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  // Room for the 30px close button plus a gap, so a long title wraps instead of touching it.
+  padding-right: 2.75rem;
+  // Two even lines on narrow screens rather than one word left alone.
+  text-wrap: balance;
   font-size: $font-size-title-2;
   font-weight: $font-weight-bold;
   letter-spacing: -0.02em;
   color: $label;
 }
 
-.guide-description {
-  margin-top: 6px;
+.step-number {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  // Centred on the title's first line (33px), like the close button.
+  margin-top: 3.5px;
   font-size: $font-size-subhead;
-  line-height: $line-height-base;
-  color: $label-secondary;
+  font-weight: $font-weight-bold;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  color: $black;
+  border-radius: $radius-pill;
+  background-color: $tint;
 }
 
 .guide-body {
-  padding: 1.25rem $spacer-4;
+  // The progress dots get the same air above (here) and below (.footer gap): 18px each side.
+  padding: 1.25rem $spacer-4 1.125rem;
 }
 
 .guide-footer {
@@ -378,8 +486,9 @@ async function copy() {
 }
 
 .guide-close {
-  top: 1.25rem;
-  right: 1.25rem;
+  // Centred on the title's first line (33px tall, the button 30px) and on the content's right edge.
+  top: calc(#{$spacer-4} + 1.5px);
+  right: $spacer-4;
 }
 
 .guide-close-button {
@@ -389,5 +498,18 @@ async function copy() {
   color: $label-secondary;
   border-radius: $radius-pill;
   background-color: $fill;
+  cursor: pointer;
+}
+</style>
+
+<!-- Not scoped: the confetti pieces live on <body>, outside the component. -->
+<style lang="scss">
+.guide-confetti {
+  position: fixed;
+  z-index: 1000;
+  width: 8px;
+  height: 7px;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  pointer-events: none;
 }
 </style>
