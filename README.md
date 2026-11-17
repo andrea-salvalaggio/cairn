@@ -38,9 +38,8 @@ npm run build
 ```
 apps/web        Nuxt app: editor UI and the /w/<config>.png route
 packages/core   Config schema, date math, layout, SVG renderer, tests
-design          Design kit: tokens, concept wallpapers, shapes, generators
+design          Design kit: concept wallpapers, cover, concept generator
 docs/adr        Architecture Decision Records
-PLAN.md         Product plan and roadmap
 ```
 
 ## Known limits

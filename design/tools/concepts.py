@@ -5,8 +5,7 @@ OUT = sys.argv[1]
 W, H, S = 1179, 2556, 3            # iPhone 6.1" Dynamic Island
 BG, PAST, FUT, ACC, LABEL, ROSE = "#0C0A09", "#E7E5E4", "#292524", "#F59E0B", "#78716C", "#EF4444"
 FONT = "Geist, Inter, sans-serif"
-COLS, PITCH, D = 15, 20*S, 12*S    # 20 pt pitch, 12 pt dot
-X0 = (W - ((COLS-1)*PITCH + D)) / 2 + D/2
+COLS, PITCH, D = 13, 20*S, 12*S    # 20 pt pitch, 12 pt dot
 # Font Awesome Free 6 solid (CC BY 4.0, https://fontawesome.com/license/free): (viewBox w, h, path). Mirrors packages/core/src/render.ts.
 ICONS = {
     "heart": (512, 512, "m47.6 300.4l180.7 168.7c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9l180.7-168.7c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141c-45.6-7.6-92 7.3-124.6 39.9l-12 12l-12-12c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5"),
@@ -25,53 +24,63 @@ def t(y, s, size, fill, weight=400, spans=None):
                 f'<text x="{W/2}" y="{y}" font-family="{FONT}" font-size="{size}" fill="{cb}" text-anchor="middle">·</text>'
                 f'<text x="{W/2+gap}" y="{y}" font-family="{FONT}" font-size="{size}" fill="{cb}" text-anchor="start">{b}</text>')
     return f'<text x="{W/2}" y="{y}" font-family="{FONT}" font-size="{size}" font-weight="{weight}" fill="{fill}" text-anchor="middle">{s}</text>'
-# Hand-drawn stones, 100 wide centered on 0,0. Mirrors STONES in packages/core/src/render.ts.
-STONES = [
-    "M-50 8C-51-10-30-27 0-28S50-14 50 6 28 27 0 27-49 24-50 8Z",
-    "M-48 12C-50-6-34-30-6-31S47-24 49-6 36 26 8 27-46 28-48 12Z",
-    "M-50 4C-47-13-22-23 6-23S50-12 50 6 34 24 0 24-52 18-50 4Z",
-    "M-44 10C-48-12-26-32 2-31S45-14 46 4 30 30 0 29-42 28-44 10Z",
-    "M-50 10C-50-4-38-22-12-26S42-22 49-2 40 25 6 27-50 24-50 10Z",
-]
-def stone(i, cx, cy, fill): return f'<path d="{STONES[(i*3 + (i >> 2)) % len(STONES)]}" transform="translate({cx:g} {cy:g}) scale({D*1.2/100:g})" fill="{fill}"/>'
+# Hand-printed peaks, one per cell. Mirrors peak() in packages/core/src/render.ts (same seed, same sequence).
+def stone(i, cx, cy, fill):
+    seed = (i * 2654435761 + 12345) % 4294967296
+    def rnd():
+        nonlocal seed
+        seed = (seed * 1664525 + 1013904223) % 4294967296
+        return seed / 4294967296
+    w, h, lean, base = D * (0.95 + 0.35 * rnd()), D * (0.8 + 0.35 * rnd()), D * (rnd() - 0.5) * 0.45, D * 0.5
+    left, right, apex = (-w / 2, base), (w / 2, base), (lean, base - h)
+    def edge(a, b, parts):
+        out = []
+        for t in range(1, parts):
+            u = t / parts
+            x = a[0] + (b[0] - a[0]) * u + (rnd() - 0.5) * D * 0.07
+            y = a[1] + (b[1] - a[1]) * u + (rnd() - 0.5) * D * 0.07
+            out.append((x, y))
+        return out
+    pts = [left, *edge(left, apex, 3), apex, *edge(apex, right, 3), right, *edge(right, left, 2)]
+    d = "M" + "L".join(f"{x:.2f} {y:.2f}" for x, y in pts) + "Z"
+    return f'<path d="{d}" transform="translate({cx:g} {cy:g})" fill="{fill}" stroke="{fill}" stroke-width="{D * 0.05:g}" stroke-linejoin="round"/>'
+
 def heart(cx, cy, fill, s=D*1.2): return icon("heart", cx, cy, s, fill)
 def gift(cx, cy, s=D*1.15): return icon("gift", cx, cy, s, ACC)
 def star(cx, cy, fill, s=D*1.3): return icon("star", cx, cy, s, fill)
 
-def grid(n, y0, draw, cols=COLS):
-    """draw(i, cx, cy) -> svg. Last row is left aligned like the reference."""
+def grid(n, base, draw, cols=COLS):
+    """draw(i, cx, cy) -> svg. Dry-stone wall like render.ts: rows laid bottom-up from `base`,
+    left to right, every other row shifted half a stone. Returns (svg, y of the top row)."""
+    x0 = (W - ((cols-1)*PITCH + PITCH/2)) / 2
+    rows = (n + cols - 1)//cols
+    top_shift = (cols - (n - (rows-1)*cols)) * PITCH / 2   # incomplete top row centred, like a cairn's peak
     out = []
     for i in range(n):
         r, c = divmod(i, cols)
-        out.append(draw(i, X0 + c*PITCH, y0 + r*PITCH))
-    rows = (n + cols - 1)//cols
-    return "".join(out), y0 + (rows-1)*PITCH
+        out.append(draw(i, x0 + c*PITCH + (r % 2)*PITCH/2 + (top_shift if r == rows-1 else 0), base - r*PITCH))
+    return "".join(out), base - (rows-1)*PITCH
 
 def page(parts): return f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}"><rect id="background" width="{W}" height="{H}" fill="{BG}"/>{"".join(parts)}</svg>\n'
-TITLE_Y, GRID_Y = 1105, 1200
+BASE_Y, TITLE_GAP, COUNTER_GAP = round(H*0.8), 32*S, 33*S   # mirrors LAYOUT in render.ts
 
 # 1. Goal: one stone per day, target day is a symbol
 n, done = 89, 25
-g, yb = grid(n, GRID_Y, lambda i, x, y: star(x, y, ACC) if i == n-1 else stone(i, x, y, PAST if i <= done else FUT))
-goal = page([t(TITLE_Y, "New York City Marathon", 44, LABEL), f'<g id="days">{g}</g>',
-             t(yb+100, "", 34, LABEL, spans=[(f"{n-done-1}d left", ACC), ("28%", LABEL)])])
+g, yt = grid(n, BASE_Y, lambda i, x, y: star(x, y, ACC) if i == n-1 else stone(i, x, y, PAST if i <= done else FUT))
+goal = page([t(yt-TITLE_GAP, "New York City Marathon", 44, LABEL, 700), f'<g id="days">{g}</g>',
+             t(BASE_Y+COUNTER_GAP, "", 34, LABEL, spans=[(f"{n-done-1}d left", ACC), ("28%", LABEL)])])
 
-# 2. Anniversary: 52 stones, the weeks toward the next anniversary; years live in the counter
+# 2. Anniversary: 52 peaks, the weeks toward the next anniversary; years live in the counter
 years, weeks = 8, 29
-hy = GRID_Y
-hx0 = W/2 - (years-1)*PITCH*1.15/2
-hearts = "".join(heart(hx0 + i*PITCH*1.15, hy, ROSE, D*1.5) for i in range(years))
-g, yb = grid(52, GRID_Y, lambda i, x, y: heart(x, y, ROSE) if i == weeks else stone(i, x, y, PAST if i < weeks else FUT), cols=13)
-# centre a 13-column block
-shift = (COLS-13)*PITCH/2
-ann = page([t(TITLE_Y, "In love with Elisa", 44, LABEL), f'<g id="weeks" transform="translate({shift:g} 0)">{g}</g>',
-            t(yb+100, "", 34, LABEL, spans=[("8 years", ROSE), (f"{52-weeks} weeks to the 9th", LABEL)])])
+g, yt = grid(52, BASE_Y, lambda i, x, y: heart(x, y, ROSE) if i == weeks else stone(i, x, y, PAST if i < weeks else FUT))
+ann = page([t(yt-TITLE_GAP, "In love with Elisa", 44, LABEL, 700), f'<g id="weeks">{g}</g>',
+            t(BASE_Y+COUNTER_GAP, "", 34, LABEL, spans=[("8 years", ROSE), (f"{52-weeks} weeks to the 9th", LABEL)])])
 
 # 3. Birthday: one stone per year of a 90-year life, the current year is a gift
 age = 34
-g, yb = grid(90, GRID_Y, lambda i, x, y: gift(x, y) if i == age else stone(i, x, y, PAST if i < age else FUT))
-bday = page([t(TITLE_Y, "My life in years", 44, LABEL), f'<g id="years">{g}</g>',
-             t(yb+100, "", 34, LABEL, spans=[("34 years", ACC), ("56 ahead", LABEL)])])
+g, yt = grid(90, BASE_Y, lambda i, x, y: gift(x, y) if i == age else stone(i, x, y, PAST if i < age else FUT))
+bday = page([t(yt-TITLE_GAP, "My life in years", 44, LABEL, 700), f'<g id="years">{g}</g>',
+             t(BASE_Y+COUNTER_GAP, "34 years", 34, ACC)])
 
 for name, s in [("concept-goal", goal), ("concept-anniversary", ann), ("concept-birthday", bday)]:
     open(os.path.join(OUT, name + ".svg"), "w", encoding="utf-8").write(s)

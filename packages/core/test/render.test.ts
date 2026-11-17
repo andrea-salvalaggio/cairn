@@ -3,6 +3,9 @@ import { DEVICES, parseConfig, render } from '../src'
 
 const TODAY = '2026-11-12'
 const birthday = parseConfig({ v: 1, theme: 'birthday', device: 'iphone-6.1', birthDate: '1992-03-10' })
+/** [x, y] of every cell, in drawing order (only the pile, not the title and counter stones). */
+const cellPositions = (svg: string) => [...svg.split('<g id="dots">')[1]!.split('</g>')[0]!.matchAll(/translate\(([\d.]+) ([\d.]+)\)/g)]
+  .map(m => ({ x: Number(m[1]), y: Number(m[2]) }))
 
 describe('render', () => {
   it('is deterministic', () => {
@@ -18,11 +21,29 @@ describe('render', () => {
 
   it('keeps the dot size fixed in points, whatever the amount of data', () => {
     const goal = parseConfig({ v: 1, theme: 'goal', device: 'iphone-6.1', startDate: '2026-01-01', targetDate: '2040-01-01' })
-    expect(render(birthday, TODAY)).toContain('scale(0.432)" fill')
-    expect(render(goal, TODAY)).toContain('scale(0.432)" fill')
+    expect(render(birthday, TODAY)).toContain('stroke-width="1.8"')
+    expect(render(goal, TODAY)).toContain('stroke-width="1.8"')
   })
 
-  it('escapes user text', () => {
+  it('lays stones bottom-up like a dry-stone wall', () => {
+    // Cell positions in drawing order: [x, y] from each stone's translate().
+    const pos = cellPositions(render(birthday, TODAY))
+    const first = pos[0]! // cell 0: base row, column 0
+    const second = pos[13]! // cell 13: second row, column 0 (13 columns)
+    expect(second.y).toBeLessThan(first.y) // the second row sits above the first
+    expect(second.x - first.x).toBe(30) // and is shifted by half a stone (60 px pitch at 3x)
+  })
+
+    it('centres an incomplete top row on the row below', () => {
+    // 106 days = 107 cells: 8 full rows of 13 and 3 on top (two stones, then the star).
+    const goal = parseConfig({ v: 1, theme: 'goal', device: 'iphone-6.1', startDate: '2026-10-01', targetDate: '2027-01-15' })
+    const pos = cellPositions(render(goal, '2026-10-01')).map(p => p.x)
+    const rowStart = pos[78]! // row 6 (even, not shifted), column 0
+    const topStart = pos[104]! // row 8 (even), first of the 3 top cells
+    expect(topStart - rowStart).toBe(5 * 60) // (13 - 3) / 2 stones
+  })
+
+    it('escapes user text', () => {
     const svg = render({ ...birthday, title: '<b>"Tom & Jerry"</b>' }, TODAY)
     expect(svg).toContain('&lt;b&gt;&quot;Tom &amp; Jerry&quot;&lt;/b&gt;')
     expect(svg).not.toContain('<b>')

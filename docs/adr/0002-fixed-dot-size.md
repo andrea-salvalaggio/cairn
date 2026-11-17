@@ -8,7 +8,7 @@ Earlier drafts drew a dense 52 × 80 weekly grid (4,160 dots). On a lock screen 
 
 ## Decision
 
-Dots keep a fixed size (12 pt on a 20 pt pitch, 15 columns) and the block holds at most about 120 dots. When the data does not fit, the unit grows (days, weeks, months, years) or only a window is shown. A counter line under the grid states what the dots cannot show.
+Dots keep a fixed size (12 pt on a 20 pt pitch, 13 columns for every theme) and the block holds at most about 120 dots. When the data does not fit, the unit grows (days, weeks, months, years) or only a window is shown. A counter line under the grid states what the dots cannot show.
 
 ## Consequences
 

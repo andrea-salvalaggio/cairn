@@ -9,17 +9,19 @@ import { Resvg } from '@resvg/resvg-js'
  * The wallpaper image the iOS Shortcut fetches every day. Stateless: everything comes from the URL.
  */
 
-// resvg only loads fonts from file paths, so the bundled font is written to the temp dir once per instance.
-let fontPath: Promise<string> | undefined
-function ensureFont(): Promise<string> {
-  fontPath ??= (async () => {
-    const font = await useStorage('assets:server').getItemRaw<Uint8Array>('fonts/Geist-Regular.ttf')
-    if (!font) throw new Error('Bundled font not found')
-    const path = join(tmpdir(), 'cairn-Geist-Regular.ttf')
+// resvg only loads fonts from file paths, so the bundled fonts are written to the temp dir once per instance.
+// Regular for the counter, Bold for the title.
+const FONT_FILES = ['Geist-Regular.ttf', 'Geist-Bold.ttf']
+let fontPaths: Promise<string[]> | undefined
+function ensureFonts(): Promise<string[]> {
+  fontPaths ??= Promise.all(FONT_FILES.map(async (name) => {
+    const font = await useStorage('assets:server').getItemRaw<Uint8Array>(`fonts/${name}`)
+    if (!font) throw new Error(`Bundled font not found: ${name}`)
+    const path = join(tmpdir(), `cairn-${name}`)
     await writeFile(path, font)
     return path
-  })()
-  return fontPath
+  }))
+  return fontPaths
 }
 
 export default defineEventHandler(async (event) => {
@@ -37,7 +39,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const png = new Resvg(svg, {
-    font: { loadSystemFonts: false, fontFiles: [await ensureFont()], defaultFontFamily: FONT_FAMILY },
+    font: { loadSystemFonts: false, fontFiles: await ensureFonts(), defaultFontFamily: FONT_FAMILY },
   }).render().asPng()
 
   setHeader(event, 'Content-Type', 'image/png')

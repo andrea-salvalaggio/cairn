@@ -12,3 +12,9 @@ dist
 .DS_Store
 *.log
 coverage
+
+# Python
+__pycache__/
+
+# Local planning notes, not published
+PLAN.md

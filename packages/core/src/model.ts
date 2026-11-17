@@ -1,7 +1,7 @@
 import { type Config, DEFAULT_LIFESPAN } from './config'
 import { addYears, diffDays, fullYears } from './dates'
 
-/** Every cell is a stone; one marker cell per theme gets a Font Awesome symbol. */
+/** Every cell is a stone (drawn as a printed peak); one marker cell per theme gets a Font Awesome symbol. */
 export type Glyph = 'stone' | 'heart' | 'gift' | 'star'
 export type CellState = 'past' | 'current' | 'future'
 export interface Cell { glyph: Glyph, state: CellState }
@@ -11,13 +11,14 @@ export interface Model {
   title: string
   columns: number
   cells: Cell[]
-  /** [key number, context]. The first part takes the accent color. */
-  counter: [string, string]
+  /** [key number, context?]. The first part takes the accent color; without context it stands alone, centred. */
+  counter: [string, string?]
 }
 
 /** Dots never shrink: when a count exceeds the budget, the unit grows instead. */
 export const DOT_BUDGET = 120
-export const COLUMNS = 15
+/** Stones per row, the same for every theme: the pile only grows in height. */
+export const COLUMNS = 13
 
 function ordinal(n: number): string {
   const rem100 = n % 100
@@ -38,7 +39,8 @@ function birthday(config: Config, today: string): Model {
     title: config.title ?? 'My life in years',
     columns: COLUMNS,
     cells,
-    counter: [plural(age, 'year'), `${Math.max(0, lifespan - age)} ahead`],
+    // Only the years lived: the lifespan is an assumption, so the wallpaper never shows years 'left'.
+    counter: [plural(age, 'year')],
   }
 }
 
@@ -51,7 +53,7 @@ function anniversary(config: Config, today: string): Model {
     ({ glyph: i === week ? 'heart' : 'stone', state: i < week ? 'past' : i === week ? 'current' : 'future' }))
   return {
     title: config.title ?? 'Together',
-    columns: 13,
+    columns: COLUMNS,
     cells,
     counter: [plural(years, 'year'), `${plural(52 - Math.max(0, week), 'week')} to the ${ordinal(years + 1)}`],
   }

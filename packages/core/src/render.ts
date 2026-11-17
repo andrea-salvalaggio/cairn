@@ -2,12 +2,12 @@ import { type Colors, type Config, resolveColors } from './config'
 import { getDevice } from './devices'
 import { buildModel, type Cell } from './model'
 
-/** Layout constants in points. Dot size is fixed by design (PLAN.md, section 8.3). */
+/** Layout constants in points. Dot size is fixed by design (docs/adr/0002-fixed-dot-size.md). */
 export const LAYOUT = {
   pitch: 20,
   dot: 12,
-  /** Top of the dot block as a fraction of the screen height. Provisional. */
-  blockTop: 0.47,
+  /** Centre of the base row of stones as a fraction of the screen height: the pile grows up from here. Provisional. */
+  blockBottom: 0.8,
   titleGap: 32,
   titleSize: 15,
   counterGap: 33,
@@ -23,14 +23,6 @@ const ICONS = {
   star: [576, 512, 'M316.9 18c-5.3-11-16.5-18-28.8-18s-23.4 7-28.8 18L195 150.3L51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329l-24.6 145.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5l128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329l104.2-103.1c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7l-143.7-21.2z'],
 } as const
 
-// Hand-drawn stones, 100 wide and centered on 0,0, flatter at the base like the stones of a cairn.
-const STONES = [
-  'M-50 8C-51-10-30-27 0-28S50-14 50 6 28 27 0 27-49 24-50 8Z',
-  'M-48 12C-50-6-34-30-6-31S47-24 49-6 36 26 8 27-46 28-48 12Z',
-  'M-50 4C-47-13-22-23 6-23S50-12 50 6 34 24 0 24-52 18-50 4Z',
-  'M-44 10C-48-12-26-32 2-31S45-14 46 4 30 30 0 29-42 28-44 10Z',
-  'M-50 10C-50-4-38-22-12-26S42-22 49-2 40 25 6 27-50 24-50 10Z',
-] as const
 
 /** Width of each symbol relative to the dot diameter, tuned so they read as the same optical size. */
 const ICON_WIDTH = { heart: 1.2, gift: 1.15, star: 1.3 } as const
@@ -52,14 +44,42 @@ function icon(name: keyof typeof ICONS, cx: number, cy: number, d: number, color
   return `<path d="${path}" transform="translate(${n(cx - (w * k) / 2)} ${n(cy - (h * k) / 2)}) scale(${Number(k.toFixed(5))})" fill="${color}"/>`
 }
 
-/** Stone 1.2 × the dot size wide, to keep the weight of the old 12 pt dot. Shape picked by index: varied but deterministic. */
-function stone(i: number, cx: number, cy: number, d: number, color: string): string {
-  const k = (d * 1.2) / 100
-  return `<path d="${STONES[(i * 3 + (i >> 2)) % STONES.length]}" transform="translate(${n(cx)} ${n(cy)}) scale(${Number(k.toFixed(5))})" fill="${color}"/>`
+/**
+ * A hand-printed peak: each cell gets its own width, height and lean plus a few small notches along the edges,
+ * like a block print. The values come from the cell index alone, so the same day always draws the same wallpaper.
+ * The peak sits on the row line and is drawn around 0,0, then moved into place with translate().
+ */
+function peak(i: number, cx: number, cy: number, d: number, color: string): string {
+  let seed = (i * 2654435761 + 12345) % 4294967296
+  const rnd = () => {
+    seed = (seed * 1664525 + 1013904223) % 4294967296
+    return seed / 4294967296
+  }
+  const w = d * (0.95 + 0.35 * rnd())
+  const h = d * (0.8 + 0.35 * rnd())
+  const lean = d * (rnd() - 0.5) * 0.45
+  const base = d * 0.5
+  const left: [number, number] = [-w / 2, base]
+  const right: [number, number] = [w / 2, base]
+  const apex: [number, number] = [lean, base - h]
+  const notch = d * 0.07
+  const edge = (a: [number, number], b: [number, number], parts: number) =>
+    Array.from({ length: parts - 1 }, (_, t): [number, number] => {
+      const u = (t + 1) / parts
+      const x = a[0] + (b[0] - a[0]) * u + (rnd() - 0.5) * notch
+      const y = a[1] + (b[1] - a[1]) * u + (rnd() - 0.5) * notch
+      return [x, y]
+    })
+  const points = [left, ...edge(left, apex, 3), apex, ...edge(apex, right, 3), right, ...edge(right, left, 2)]
+  const path = `M${points.map(([x, y]) => `${n(x)} ${n(y)}`).join('L')}Z`
+  return `<path d="${path}" transform="translate(${n(cx)} ${n(cy)})" fill="${color}" stroke="${color}" stroke-width="${n(d * 0.05)}" stroke-linejoin="round"/>`
 }
 
+/** Rough Geist advance width per character, in ems (bold): the renderer has no font metrics. */
+const CHAR_EM = 0.62
+
 function glyph(cell: Cell, i: number, cx: number, cy: number, d: number, colors: Colors): string {
-  if (cell.glyph === 'stone') return stone(i, cx, cy, d, fill(cell, colors))
+  if (cell.glyph === 'stone') return peak(i, cx, cy, d, fill(cell, colors))
   return icon(cell.glyph, cx, cy, d, colors.accent)
 }
 
@@ -75,34 +95,52 @@ export function render(config: Config, today: string): string {
 
   const pitch = Math.round(LAYOUT.pitch * scale)
   const dot = Math.round(LAYOUT.dot * scale)
-  const gridWidth = (model.columns - 1) * pitch
+  // Dry-stone wall: rows are laid from the bottom up, left to right, every other row shifted by half a stone.
+  const half = pitch / 2
+  const gridWidth = (model.columns - 1) * pitch + half
   const x0 = Math.round((W - gridWidth) / 2)
-  const y0 = Math.round(H * LAYOUT.blockTop)
+  const base = Math.round(H * LAYOUT.blockBottom)
   const rows = Math.ceil(model.cells.length / model.columns)
-  const gridBottom = y0 + (rows - 1) * pitch
+  const top = base - (rows - 1) * pitch
+
+  // An incomplete top row is centred on the row below, like the peak of a cairn.
+  const topCount = model.cells.length - (rows - 1) * model.columns
+  const topShift = ((model.columns - topCount) * pitch) / 2
 
   const cells = model.cells
-    .map((cell, i) => glyph(cell, i, x0 + (i % model.columns) * pitch, y0 + Math.floor(i / model.columns) * pitch, dot, colors))
+    .map((cell, i) => {
+      const row = Math.floor(i / model.columns)
+      const x = x0 + (i % model.columns) * pitch + (row % 2) * half + (row === rows - 1 ? topShift : 0)
+      return glyph(cell, i, x, base - row * pitch, dot, colors)
+    })
     .join('')
 
-  const titleSize = n(LAYOUT.titleSize * scale)
+  const maxWidth = W * 0.86
+  const estimate = (chars: number, size: number) => chars * CHAR_EM * size
+  // Long titles shrink to fit the screen instead of running off it.
+  const titleSize = Math.min(LAYOUT.titleSize * scale, maxWidth / (Math.max(1, model.title.length) * CHAR_EM))
   const counterSize = LAYOUT.counterSize * scale
-  const titleY = n(y0 - LAYOUT.titleGap * scale)
-  const counterY = n(gridBottom + LAYOUT.counterGap * scale)
-  const gap = n(counterSize * 0.4)
+  const gap = counterSize * 0.4
   const cx = W / 2
-  const text = (x: number | string, y: string, size: string, color: string, anchor: string, value: string) =>
-    `<text x="${x}" y="${y}" font-family="${FONT_FAMILY}, sans-serif" font-size="${size}" fill="${color}" text-anchor="${anchor}">${escapeXml(value)}</text>`
+  const text = (x: number, y: number, size: number, color: string, anchor: string, value: string, weight = 400) =>
+    `<text x="${n(x)}" y="${n(y)}" font-family="${FONT_FAMILY}, sans-serif" font-size="${n(size)}" font-weight="${weight}" fill="${color}" text-anchor="${anchor}">${escapeXml(value)}</text>`
+
+  const [lead, rest] = model.counter
+  // The phrase "lead · rest" is centred as a whole, so the dot shifts towards the shorter side.
+  const dotX = cx + (estimate(lead.length, counterSize) - estimate(rest?.length ?? 0, counterSize)) / 2
+  const counterY = base + LAYOUT.counterGap * scale
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`,
     `<rect id="background" width="${W}" height="${H}" fill="${colors.bg}"/>`,
-    `<g id="title">${text(cx, titleY, titleSize, colors.label, 'middle', model.title)}</g>`,
+    `<g id="title">${text(cx, top - LAYOUT.titleGap * scale, titleSize, colors.label, 'middle', model.title, 700)}</g>`,
     `<g id="dots">${cells}</g>`,
     `<g id="counter">`,
-    text(n(cx - Number(gap)), counterY, n(counterSize), colors.accent, 'end', model.counter[0]),
-    text(cx, counterY, n(counterSize), colors.label, 'middle', '·'),
-    text(n(cx + Number(gap)), counterY, n(counterSize), colors.label, 'start', model.counter[1]),
+    rest === undefined
+      ? text(cx, counterY, counterSize, colors.accent, 'middle', lead)
+      : text(dotX - gap, counterY, counterSize, colors.accent, 'end', lead)
+        + text(dotX, counterY, counterSize, colors.label, 'middle', '·')
+        + text(dotX + gap, counterY, counterSize, colors.label, 'start', rest),
     `</g>`,
     `</svg>`,
   ].join('')

@@ -9,13 +9,13 @@ describe('birthday theme', () => {
 
   it('shows one dot per year of a 90-year life', () => {
     expect(model.cells).toHaveLength(90)
-    expect(model.columns).toBe(15)
+    expect(model.columns).toBe(13)
   })
 
   it('marks the current year with the gift', () => {
     expect(model.cells.filter(c => c.state === 'past')).toHaveLength(34)
     expect(model.cells[34]).toEqual({ glyph: 'gift', state: 'current' })
-    expect(model.counter).toEqual(['34 years', '56 ahead'])
+    expect(model.counter).toEqual(['34 years']) // no years 'left': the lifespan is only an assumption
   })
 })
 
