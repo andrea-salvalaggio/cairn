@@ -29,7 +29,7 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
       meta: [
         { name: 'description', content: 'Free iPhone lock screen wallpapers that show your time as a path of stones.' },
-        { name: 'theme-color', content: '#0C0A09' },
+        { name: 'theme-color', content: '#000000' },
       ],
     },
   },

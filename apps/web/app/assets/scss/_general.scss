@@ -13,6 +13,15 @@
   --ui-primary: #{$tint};
 }
 
+// Controls behave like app controls: a long press doesn't select their label or open the link callout.
+button,
+[role="button"],
+.ios-button {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
 body {
   margin: $spacer-0;
   font-family: $font-sans;
@@ -235,6 +244,11 @@ select.field-input {
 	border: 0;
 	border-radius: $radius-2;
 	background: transparent;
+	transition: transform 120ms $ease-out;
+
+	&:active {
+		transform: scale(0.97);
+	}
 
 	&:focus-visible {
 		outline: 2px solid $tint;
@@ -268,7 +282,7 @@ select.field-input {
 		font-size: 0.875rem;
 		font-weight: $font-weight-medium;
 		border-radius: $radius-pill;
-		transition: color 250ms $ease-out;
+		transition: color 250ms $ease-out, transform 120ms $ease-out;
 
 		@include up($bp-sm) {
 			padding-inline: 1.25rem;

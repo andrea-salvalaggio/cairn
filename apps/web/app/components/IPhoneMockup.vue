@@ -244,13 +244,13 @@ $key-dark: #3A3937;
   font-weight: $font-weight-bold;
   white-space: nowrap;
   opacity: 0;
-  transition: max-width 0.4s $ease-out, margin-right 0.4s $ease-out, opacity 0.25s ease;
+  transition: max-width 0.3s $ease-out, margin-right 0.3s $ease-out, opacity 0.2s ease;
 
   .is-compact & {
     max-width: pt(90);
     margin-right: pt(8);
     opacity: 1;
-    transition-delay: 0.1s;
+    transition-delay: 0.05s;
   }
 }
 
@@ -268,7 +268,7 @@ $key-dark: #3A3937;
   stroke-width: 3px;
   stroke-linejoin: round;
   transform-origin: 50% 0;
-  transition: transform 0.45s $ease-out, opacity 0.3s ease;
+  transition: transform 0.3s $ease-out, opacity 0.25s ease;
 
   // Shrinks up into the date row, as on iOS.
   .is-compact & {

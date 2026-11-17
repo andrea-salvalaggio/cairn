@@ -34,16 +34,30 @@ const models = deviceModels()
 const initialToday = todayInTimeZone(detectedZone)
 const plusDays = (days: number) => todayInTimeZone('UTC', new Date(Date.parse(`${initialToday}T12:00:00Z`) + days * 86_400_000))
 
+// Same defaults as packages/core model.ts, which also uses them when the title is left empty.
+const defaultTitles: Record<ThemeId, string> = { birthday: 'My life in years', anniversary: 'Together', goal: 'My goal' }
+
 const form = reactive({
 	theme: 'birthday' as ThemeId,
 	model: models.find(m => m.deviceId === DEFAULT_DEVICE)!.model,
 	timeZone: detectedZone,
-	titles: { birthday: 'My life in years', anniversary: 'Together', goal: 'My goal' } as Record<ThemeId, string>,
+	titles: { ...defaultTitles },
 	birthDate: '1995-01-01',
 	anniversaryDate: plusDays(-365 * 3 - 120),
 	goalStart: initialToday,
 	goalTarget: plusDays(88),
 })
+
+// ARIA radio group: Tab reaches only the checked item, arrows move and select.
+function onRadioKeys(e: KeyboardEvent) {
+	const step = ({ ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 } as Record<string, number>)[e.key]
+	if (!step) return
+	e.preventDefault()
+	const items = [...(e.currentTarget as HTMLElement).querySelectorAll<HTMLButtonElement>('[role="radio"]')]
+	const next = items[(items.indexOf(e.target as HTMLButtonElement) + step + items.length) % items.length]
+	next?.focus()
+	next?.click()
+}
 
 const today = computed(() => todayInTimeZone(form.timeZone, now.value))
 const themeIndex = computed(() => themes.findIndex(t => t.value === form.theme))
@@ -84,33 +98,34 @@ const compactClock = ref(false)
 <template>
 	<main class="editor">
 		<div class="workspace">
+		<header class="intro">
+			<h1>Cairn</h1>
+			<p>Your time as a path of stones, on your Lock Screen.</p>
+		</header>
+
 		<section class="preview" aria-label="Wallpaper preview">
 			<IPhoneMockup :device="device" :svg="result.svg" :time-zone="form.timeZone" :now="now" :compact-clock="compactClock" />
 			<!-- iOS 27 lets each Lock Screen shrink the clock into the top row; preview both to check the wallpaper fits. -->
-			<div class="ios-segmented clock-toggle" role="radiogroup" aria-label="Lock Screen clock"
+			<div class="ios-segmented clock-toggle" role="radiogroup" aria-label="Lock Screen clock" @keydown="onRadioKeys"
 				:style="{ '--i': compactClock ? 1 : 0, '--n': 2 }">
 				<span class="ios-segmented-thumb" aria-hidden="true" />
 				<button v-for="(label, i) in ['Large clock', 'Small clock']" :key="label" type="button" role="radio"
-					:aria-checked="compactClock === (i === 1)" class="ios-segmented-item" @click="compactClock = i === 1">
+					:aria-checked="compactClock === (i === 1)" :tabindex="compactClock === (i === 1) ? 0 : -1" class="ios-segmented-item" @click="compactClock = i === 1">
 					{{ label }}
 				</button>
 			</div>
 			<p class="preview-caption">
-				Clock position is approximate
+				Your iPhone may place the clock slightly differently.
 			</p>
 		</section>
 
 		<section class="form">
-			<header class="form-header">
-				<h1>Cairn</h1>
-				<p>Your time as a path of stones, on your Lock Screen.</p>
-			</header>
 
-			<div class="ios-segmented ios-segmented--pill" role="radiogroup" aria-label="Wallpaper type"
+			<div class="ios-segmented ios-segmented--pill" role="radiogroup" aria-label="Wallpaper type" @keydown="onRadioKeys"
 				:style="{ '--i': themeIndex, '--n': themes.length }">
 				<span class="ios-segmented-thumb" aria-hidden="true" />
 				<button v-for="t in themes" :key="t.value" type="button" role="radio"
-					:aria-checked="form.theme === t.value" class="ios-segmented-item" @click="form.theme = t.value">
+					:aria-checked="form.theme === t.value" :tabindex="form.theme === t.value ? 0 : -1" class="ios-segmented-item" @click="form.theme = t.value">
 					<UIcon :name="t.icon" class="ios-segmented-icon" />{{ t.label }}
 				</button>
 			</div>
@@ -119,28 +134,28 @@ const compactClock = ref(false)
 				<label class="field">
 					<span class="field-label">Title</span>
 					<span class="field-box">
-						<input v-model="form.titles[form.theme]" class="field-input" maxlength="48" placeholder="Optional">
+						<input v-model="form.titles[form.theme]" class="field-input" maxlength="48" :placeholder="defaultTitles[form.theme]">
 					</span>
 				</label>
 
 				<div v-if="form.theme === 'birthday'" class="field">
-					<span class="field-label">Birthday</span>
-					<span class="field-box"><DateField v-model="form.birthDate" /></span>
+					<span id="birth-label" class="field-label">Birthday</span>
+					<span class="field-box"><DateField v-model="form.birthDate" aria-labelledby="birth-label" /></span>
 					<p class="field-hint">One stone per year of a 90-year life.</p>
 				</div>
 				<div v-if="form.theme === 'anniversary'" class="field">
-					<span class="field-label">Together since</span>
-					<span class="field-box"><DateField v-model="form.anniversaryDate" /></span>
+					<span id="anniversary-label" class="field-label">Together since</span>
+					<span class="field-box"><DateField v-model="form.anniversaryDate" aria-labelledby="anniversary-label" /></span>
 					<p class="field-hint">One stone per week, the heart marks this one, until your next anniversary.</p>
 				</div>
 				<template v-if="form.theme === 'goal'">
 					<div class="field">
-						<span class="field-label">Target date</span>
-						<span class="field-box"><DateField v-model="form.goalTarget" /></span>
+						<span id="target-label" class="field-label">Target date</span>
+						<span class="field-box"><DateField v-model="form.goalTarget" aria-labelledby="target-label" /></span>
 					</div>
 					<div class="field">
-						<span class="field-label">Counting from</span>
-						<span class="field-box"><DateField v-model="form.goalStart" /></span>
+						<span id="start-label" class="field-label">Counting from</span>
+						<span class="field-box"><DateField v-model="form.goalStart" aria-labelledby="start-label" /></span>
 						<p class="field-hint">One stone per day. Longer goals switch to weeks or months.</p>
 					</div>
 				</template>
@@ -220,19 +235,50 @@ const compactClock = ref(false)
 	}
 }
 
+// Phones: name, then preview, then form, so the first screen says what Cairn is.
+// Desktop: the preview sits in its own column, the name tops the form column.
 .workspace {
 	display: grid;
+	grid-template-areas: "intro" "preview" "form";
 	grid-template-columns: minmax(0, 32rem);
 	gap: $spacer-6;
 	align-self: start;
 
 	@include up($bp-md) {
+		grid-template-areas: "preview intro" "preview form";
+		grid-template-rows: auto 1fr;
 		grid-template-columns: auto minmax(0, 32rem);
-		gap: $spacer-8;
+		gap: $spacer-5 $spacer-8;
+	}
+}
+
+.intro {
+	grid-area: intro;
+
+	h1 {
+		margin: $spacer-0;
+		font-size: $font-size-large-title;
+		font-weight: $font-weight-bold;
+		line-height: $line-height-tight;
+		letter-spacing: -0.025em;
+	}
+
+	p {
+		margin: $spacer-1 $spacer-0 $spacer-0;
+		color: $label-secondary;
 	}
 }
 
 .preview {
+	grid-area: preview;
+
+	// A smaller phone on phones, so the name, the preview and the clock toggle share the first screen.
+	@include down($bp-md) {
+		:deep(.phone) {
+			--screen: min(300px, 58vw);
+		}
+	}
+
 	@include up($bp-md) {
 		position: sticky;
 		top: $spacer-7;
@@ -263,11 +309,12 @@ const compactClock = ref(false)
 	margin: $spacer-3 $spacer-0 $spacer-0;
 	font-size: $font-size-footnote;
 	text-align: center;
-	color: $gray;
+	color: $label-secondary;
 }
 
 .form {
 	display: flex;
+	grid-area: form;
 	flex-direction: column;
 }
 
@@ -280,7 +327,7 @@ const compactClock = ref(false)
 	padding: $spacer-4 $spacer-0;
 	position: relative;
 	font-size: $font-size-footnote;
-	color: $gray;
+	color: $label-secondary;
 
 	// Extra air above the credits, on top of the grid gap: a little on mobile, more on desktop.
 	margin-top: $spacer-4;
@@ -306,13 +353,18 @@ const compactClock = ref(false)
 	}
 
 	a {
-		color: $label-secondary;
+		color: $label;
 		text-decoration: none;
-		transition: color 0.2s ease;
+		transition: color 0.2s ease, transform 120ms $ease-out;
 
-		&:hover,
 		&:focus-visible {
 			color: $tint;
+		}
+
+		@media (hover: hover) and (pointer: fine) {
+			&:hover {
+				color: $tint;
+			}
 		}
 	}
 }
@@ -329,6 +381,10 @@ const compactClock = ref(false)
 		height: $row-height;
 		margin: -$spacer-3 0;
 		border-radius: $radius-pill;
+
+		&:active {
+			transform: scale(0.94);
+		}
 	}
 }
 
@@ -337,22 +393,6 @@ const compactClock = ref(false)
 	height: 1.25rem;
 }
 
-.form-header {
-	margin-bottom: $spacer-5;
-
-	h1 {
-		margin: $spacer-0;
-		font-size: $font-size-large-title;
-		font-weight: $font-weight-bold;
-		line-height: $line-height-tight;
-		letter-spacing: -0.025em;
-	}
-
-	p {
-		margin: $spacer-1 $spacer-0 $spacer-0;
-		color: $label-secondary;
-	}
-}
 
 .fields {
 	display: flex;
