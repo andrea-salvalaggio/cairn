@@ -67,19 +67,19 @@ $bp-md: 48rem;
 $bp-lg: 62rem;
 
 @mixin up($bp) {
-  @media (min-width: $bp) {
-    @content;
-  }
+    @media (min-width: $bp) {
+        @content;
+    }
 }
 
 @mixin down($bp) {
-  @media (max-width: $bp - .00125rem) {
-    @content;
-  }
+    @media (max-width: $bp - .00125rem) {
+        @content;
+    }
 }
 
 @mixin reduced-motion {
-  @media (prefers-reduced-motion: reduce) {
-    @content;
-  }
+    @media (prefers-reduced-motion: reduce) {
+        @content;
+    }
 }

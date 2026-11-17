@@ -1,27 +1,27 @@
 {
-  "name": "@cairn/web",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "nuxt dev",
-    "build": "nuxt build",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "typecheck": "nuxt typecheck"
-  },
-  "dependencies": {
-    "@cairn/core": "*",
-    "@internationalized/date": "^3.12.4",
-    "@nuxt/ui": "^4.12.0",
-    "@resvg/resvg-js": "^2.6.2",
-    "nuxt": "^4.6.4",
-    "tailwindcss": "^4.3.5"
-  },
-  "devDependencies": {
-    "@types/node": "^22.20.5",
-    "sass": "^1.108.2",
-    "typescript": "~5.9.3",
-    "vue-tsc": "^3.3.14"
-  }
+    "name": "@cairn/web",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "nuxt dev",
+        "build": "nuxt build",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "typecheck": "nuxt typecheck"
+    },
+    "dependencies": {
+        "@cairn/core": "*",
+        "@internationalized/date": "^3.12.4",
+        "@nuxt/ui": "^4.12.0",
+        "@resvg/resvg-js": "^2.6.2",
+        "nuxt": "^4.6.4",
+        "tailwindcss": "^4.3.5"
+    },
+    "devDependencies": {
+        "@types/node": "^22.20.5",
+        "sass": "^1.108.2",
+        "typescript": "~5.9.3",
+        "vue-tsc": "^3.3.14"
+    }
 }
