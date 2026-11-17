@@ -31,7 +31,7 @@ export default defineNuxtConfig({
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
       ],
       meta: [
-        { name: 'description', content: 'Free iPhone lock screen wallpapers that show your time as a path of stones.' },
+        { name: 'description', content: 'Free iPhone lock screen wallpapers that show your time as a pile of stones.' },
         { name: 'theme-color', content: '#000000' },
       ],
     },

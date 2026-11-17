@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <!-- The ochre stone (a printed peak, same shape as the wallpaper's) on the dark ground. -->
   <rect width="32" height="32" rx="7" fill="#000000"/>
-  <svg x="6" y="6.5" width="20" height="19" viewBox="-66 -68 132 124">
+  <svg x="8" y="8.5" width="16" height="15" viewBox="-66 -68 132 124">
     <path fill="#FF9F0A" stroke="#FF9F0A" stroke-width="10" stroke-linejoin="round" d="M-53 50L-43 15L-24 -24.4L-14.5 -61.6L5 -21.6L30.7 11.7L53 50L0.1 47.9Z"/>
   </svg>
 </svg>

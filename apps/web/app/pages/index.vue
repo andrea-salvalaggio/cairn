@@ -20,7 +20,8 @@ onBeforeUnmount(() => clearInterval(timer))
 const detectedZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
 const offsetOf = (timeZone: string) =>
 	new Intl.DateTimeFormat('en-US', { timeZone, timeZoneName: 'shortOffset' }).formatToParts(now.value).find(p => p.type === 'timeZoneName')?.value ?? ''
-const timeZones = [...new Set([detectedZone, ...Intl.supportedValuesOf('timeZone')])]
+// Alphabetical, the detected zone included (it can be an alias the list lacks, like Europe/Kiev); it stays preselected.
+const timeZones = [...new Set([detectedZone, ...Intl.supportedValuesOf('timeZone')])].sort()
 	.map(zone => ({ zone, label: `${zone.replaceAll('_', ' ')} · ${offsetOf(zone)}` }))
 
 // Font Awesome 6 solid icons naming each theme; on the wallpaper the marker is an accent-colored stone.
@@ -100,7 +101,7 @@ const compactClock = ref(false)
 		<div class="workspace">
 		<header class="intro">
 			<h1><CairnLogo /></h1>
-			<p>Your time as a path of stones, on your Lock Screen.</p>
+			<p>Your time as a pile of stones, on your Lock Screen.</p>
 		</header>
 
 		<section class="preview" aria-label="Wallpaper preview">
@@ -141,12 +142,12 @@ const compactClock = ref(false)
 				<div v-if="form.theme === 'birthday'" class="field">
 					<span id="birth-label" class="field-label">Birthday</span>
 					<span class="field-box"><DateField v-model="form.birthDate" aria-labelledby="birth-label" /></span>
-					<p class="field-hint">One stone per year of a 90-year life.</p>
+					<p class="field-hint">One stone per year of a 90-year life; the ochre one is this year.</p>
 				</div>
 				<div v-if="form.theme === 'anniversary'" class="field">
 					<span id="anniversary-label" class="field-label">Together since</span>
 					<span class="field-box"><DateField v-model="form.anniversaryDate" aria-labelledby="anniversary-label" /></span>
-					<p class="field-hint">One stone per week, the heart marks this one, until your next anniversary.</p>
+					<p class="field-hint">One stone per week until your next anniversary; the ochre one is this week.</p>
 				</div>
 				<template v-if="form.theme === 'goal'">
 					<div class="field">
@@ -156,7 +157,7 @@ const compactClock = ref(false)
 					<div class="field">
 						<span id="start-label" class="field-label">Counting from</span>
 						<span class="field-box"><DateField v-model="form.goalStart" aria-labelledby="start-label" /></span>
-						<p class="field-hint">One stone per day. Longer goals switch to weeks or months.</p>
+						<p class="field-hint">One stone per day; the ochre one is the target. Longer goals switch to weeks or months.</p>
 					</div>
 				</template>
 
@@ -186,7 +187,7 @@ const compactClock = ref(false)
 			<div class="actions">
 				<button type="button" class="ios-button ios-button--filled actions-main" :disabled="!pngPath"
 					@click="guideOpen = true">
-					Set up your wallpaper
+					<UIcon name="i-heroicons-sparkles-20-solid" class="ios-icon" /> Set up your wallpaper
 				</button>
 				<a :href="pngPath" :aria-disabled="!pngPath" download="cairn-wallpaper.png"
 					class="ios-button ios-button--tinted">
@@ -418,6 +419,12 @@ const compactClock = ref(false)
 }
 
 .actions-main {
+	// A smaller, solid sparkle: a light touch beside the label rather than a full-size glyph.
+	.ios-icon {
+		width: 16px;
+		height: 16px;
+	}
+
 	@include up($bp-sm) {
 		flex: 1;
 	}

@@ -38,6 +38,16 @@ export function getDevice(id: string): Device {
 }
 
 /** Flat list of model names for the device picker. */
+// Within a generation: the base model, then mini, Plus/Air, Pro, Pro Max.
+const VARIANT_ORDER = ['', 'mini', 'Plus', 'Air', 'Pro', 'Pro Max']
+
+/** Every model, grouped by generation (12, 12 mini, 12 Pro, 12 Pro Max, 13…). */
 export function deviceModels(): { model: string, deviceId: DeviceId }[] {
+  const key = (model: string) => {
+    // iPhone Air has no number: it came out with the 17 and sits in that group.
+    const [, number = '17', variant = ''] = model.match(/^iPhone (?:(\d+) ?)?(.*)$/)!
+    return Number(number) * 10 + VARIANT_ORDER.indexOf(variant)
+  }
   return DEVICES.flatMap(d => d.models.map(model => ({ model, deviceId: d.id })))
+    .sort((a, b) => key(a.model) - key(b.model))
 }
