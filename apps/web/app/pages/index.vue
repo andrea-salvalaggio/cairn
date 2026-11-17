@@ -109,22 +109,6 @@ function onDownload() {
     resetDownloaded = setTimeout(() => (downloaded.value = false), 2000)
 }
 onBeforeUnmount(() => clearTimeout(resetDownloaded))
-
-// Phones: once the mockup has scrolled up out of view, the strip keeps the stones visible while the user edits.
-const phone = useTemplateRef('phone')
-const stripShown = ref(false)
-let observer: IntersectionObserver | undefined
-onMounted(() => {
-    const el = phone.value?.$el as Element | undefined
-    if (!el) return
-    // The top margin matches the strip's height: it shows as soon as what is left of the phone would sit under it.
-    observer = new IntersectionObserver(([entry]) => {
-        stripShown.value = !entry!.isIntersecting && entry!.boundingClientRect.top < 0
-    }, { rootMargin: '-120px 0px 0px 0px' })
-    observer.observe(el)
-})
-onBeforeUnmount(() => observer?.disconnect())
-const backToPreview = () => window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
 </script>
 
 <template>
@@ -145,7 +129,7 @@ const backToPreview = () => window.scrollTo({ top: 0, behavior: matchMedia('(pre
             </div>
 
             <section class="preview" aria-label="Wallpaper preview">
-                <IPhoneMockup ref="phone" :device="device" :svg="result.svg" :theme="form.theme" :time-zone="form.timeZone" :now="now" :compact-clock="compactClock" />
+                <IPhoneMockup :device="device" :svg="result.svg" :theme="form.theme" :time-zone="form.timeZone" :now="now" :compact-clock="compactClock" />
                 <!-- iOS 27 lets each Lock Screen shrink the clock into the top row; preview both to check the wallpaper fits. -->
                 <div class="ios-segmented clock-toggle" role="radiogroup" aria-label="Lock Screen clock" @keydown="onRadioKeys"
                     :style="{ '--i': compactClock ? 1 : 0, '--n': 2 }">
@@ -243,7 +227,6 @@ const backToPreview = () => window.scrollTo({ top: 0, behavior: matchMedia('(pre
             </section>
         </div>
 
-        <WallpaperStrip :svg="result.svg" :title="form.titles[form.theme] || defaultTitles[form.theme]" :shown="stripShown" @reveal="backToPreview" />
         <SetupGuide v-model:open="guideOpen" :url="liveUrl" />
 
         <footer class="credits">
