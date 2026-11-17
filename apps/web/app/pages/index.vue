@@ -101,7 +101,7 @@ const compactClock = ref(false)
 		<div class="workspace">
 		<header class="intro">
 			<h1><CairnLogo /></h1>
-			<p>Your time as a pile of stones, on your Lock Screen.</p>
+			<p>Your time as a pile of stones on your Lock Screen.</p>
 		</header>
 
 		<section class="preview" aria-label="Wallpaper preview">
