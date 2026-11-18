@@ -9,7 +9,7 @@ A cairn is a pile of stones that marks a path. Each dot is a stone; the moment t
 | Theme | Dots | Symbol | Counter |
 |---|---|---|---|
 | Birthday | One per year of a 90-year life | The current year is a flame | `34 years · 56 ahead` |
-| Anniversary | One stone per anniversary reached, the row completed with empty stones | The latest anniversary is in the accent color | `8 years · 5 months to the 9th` |
+| Anniversary | One stone per anniversary reached, the row completed with empty stones | The latest anniversary is in the accent color | `8 years · April 22, 2018` |
 | Goal | One per day until the target | The target is a star | `64d left · 27%` |
 
 Dots have a fixed size. When the data does not fit, the unit grows (days, weeks, months, years) and the dots stay the same.

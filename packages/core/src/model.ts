@@ -1,5 +1,5 @@
 import { type Config, DEFAULT_LIFESPAN } from './config'
-import { addYears, diffDays, fullYears } from './dates'
+import { diffDays, fullYears } from './dates'
 
 /** Every cell is a stone (drawn as a printed peak); one marker cell per theme is drawn in the accent color. */
 export type Glyph = 'stone' | 'heart' | 'gift' | 'star'
@@ -20,12 +20,6 @@ export const DOT_BUDGET = 120
 /** Stones per row, the same for every theme: the pile only grows in height. */
 export const COLUMNS = 13
 
-function ordinal(n: number): string {
-    const rem100 = n % 100
-    if (rem100 >= 11 && rem100 <= 13) return `${n}th`
-    return `${n}${['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'}`
-}
-
 function plural(n: number, word: string): string {
     return `${n} ${word}${n === 1 ? '' : 's'}`
 }
@@ -44,11 +38,12 @@ function birthday(config: Config, today: string): Model {
     }
 }
 
-/** Whole calendar months from `from` to a later `to`. */
-function fullMonths(from: string, to: string): number {
-    const [fy, fm, fd] = from.split('-').map(Number) as [number, number, number]
-    const [ty, tm, td] = to.split('-').map(Number) as [number, number, number]
-    return (ty - fy) * 12 + (tm - fm) - (td < fd ? 1 : 0)
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+/** "April 22, 2018". Spelled out here, not with Intl, so the server and every browser print the same text. */
+function longDate(iso: string): string {
+    const [y, m, d] = iso.split('-').map(Number) as [number, number, number]
+    return `${MONTHS[m - 1]} ${d}, ${y}`
 }
 
 function anniversary(config: Config, today: string): Model {
@@ -61,15 +56,12 @@ function anniversary(config: Config, today: string): Model {
     const length = Math.max(1, Math.ceil(years / COLUMNS)) * COLUMNS
     const cells: Cell[] = Array.from({ length }, (_, i) =>
         ({ glyph: i === current ? 'heart' : 'stone', state: i < current ? 'past' : i === current ? 'current' : 'future' }))
-    const next = started ? addYears(start, years + 1) : start
-    const months = fullMonths(today, next)
-    // Under a month away, the counter switches to days so it never reads "0 months".
-    const left = months > 0 ? plural(months, 'month') : plural(diffDays(today, next), 'day')
     return {
         title: config.title ?? 'Together',
         columns: COLUMNS,
         cells,
-        counter: [plural(years, 'year'), `${left} to the ${ordinal(years + 1)}`],
+        // The day it all started, as the context for the years.
+        counter: [plural(years, 'year'), longDate(start)],
     }
 }
 
