@@ -4,6 +4,9 @@ import {
     ConfigError,
     DEFAULT_ACCENT,
     DEFAULT_DEVICE,
+    DEFAULT_TITLE_FONT,
+    TITLE_FONTS,
+    type TitleFontId,
     type ThemeId,
     deviceModels,
     encodeConfig,
@@ -44,6 +47,7 @@ const form = reactive({
     model: models.find(m => m.deviceId === DEFAULT_DEVICE)!.model,
     timeZone: detectedZone,
     titles: { ...defaultTitles },
+    font: DEFAULT_TITLE_FONT as TitleFontId,
     // One accent for every theme: switching theme keeps the color.
     accent: DEFAULT_ACCENT,
     birthDate: '1995-01-01',
@@ -68,6 +72,24 @@ const themeIndex = computed(() => themes.findIndex(t => t.value === form.theme))
 
 const PREVIEW_BG = '#0C0A09'
 
+// The style row fades at an edge only while there is more to scroll that way, so a cut-off chip reads as "more".
+const picker = useTemplateRef<HTMLElement>('picker')
+const fade = reactive({ start: false, end: false })
+function updateFade() {
+    const el = picker.value
+    if (!el) return
+    // A couple of pixels of slack: high-density screens report fractional scroll positions.
+    fade.start = el.scrollLeft > 2
+    fade.end = el.scrollLeft + el.clientWidth < el.scrollWidth - 2
+}
+onMounted(() => {
+    updateFade()
+    // Chip widths change once the web fonts arrive.
+    document.fonts.ready.then(updateFade)
+    window.addEventListener('resize', updateFade)
+})
+onBeforeUnmount(() => window.removeEventListener('resize', updateFade))
+
 const titleHasEmoji = computed(() => stripEmoji(form.titles[form.theme]) !== form.titles[form.theme])
 
 const result = computed<{ config?: Config, svg?: string, error?: ConfigError }>(() => {
@@ -78,6 +100,7 @@ const result = computed<{ config?: Config, svg?: string, error?: ConfigError }>(
             device: models.find(m => m.model === form.model)?.deviceId,
             timeZone: form.timeZone,
             title: form.titles[form.theme],
+            font: form.font,
             // Only a custom color goes in the config, so default links stay short.
             colors: form.accent === DEFAULT_ACCENT ? undefined : { accent: form.accent },
             birthDate: form.theme === 'birthday' ? form.birthDate : undefined,
@@ -161,6 +184,20 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
                         </span>
                         <p v-if="titleHasEmoji" class="field-hint" role="status">Emoji aren’t supported: they won’t appear in the preview or on your wallpaper.</p>
                     </label>
+
+                    <div class="field">
+                        <span id="style-label" class="field-label">Style</span>
+                        <!-- Each name is set in its own font, like Instagram's text styles; the row scrolls sideways on phones. -->
+                        <div ref="picker" class="font-picker" :class="{ 'fade-start': fade.start, 'fade-end': fade.end }" role="radiogroup" aria-labelledby="style-label"
+                            @keydown="onRadioKeys" @scroll.passive="updateFade">
+                            <button v-for="f in TITLE_FONTS" :key="f.id" type="button" role="radio"
+                                :aria-checked="form.font === f.id" :tabindex="form.font === f.id ? 0 : -1"
+                                class="font-chip" :style="{ fontFamily: `'${f.family}', sans-serif`, fontWeight: f.weight, fontStyle: 'italic' in f ? 'italic' : 'normal' }"
+                                @click="form.font = f.id">
+                                {{ f.label }}
+                            </button>
+                        </div>
+                    </div>
 
                     <div class="field">
                         <span id="accent-label" class="field-label">Color</span>
@@ -491,6 +528,87 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     display: flex;
     flex-direction: column;
     gap: $spacer-4;
+}
+
+.font-picker {
+    display: flex;
+    gap: $spacer-2;
+    // Room for the focus ring, which the scroll container would otherwise clip.
+    padding: 4px;
+    margin: -4px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    // Matches the padding, so the first chip snaps back to scroll position 0 and the start fade clears.
+    scroll-padding-inline: 4px;
+    scrollbar-width: none;
+    // The mask fades chips into whatever dark surface sits behind the row.
+    --fade-start: 0px;
+    --fade-end: 0px;
+    mask-image: linear-gradient(to right, transparent, #000 var(--fade-start), #000 calc(100% - var(--fade-end)), transparent);
+    transition: --fade-start 200ms ease, --fade-end 200ms ease;
+
+    &.fade-start {
+        --fade-start: 2.5rem;
+    }
+
+    &.fade-end {
+        --fade-end: 2.5rem;
+    }
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    @include reduced-motion {
+        transition: none;
+    }
+}
+
+// Registered, so the fade width can transition instead of jumping.
+@property --fade-start {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+
+@property --fade-end {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+
+.font-chip {
+    flex-shrink: 0;
+    height: $segment-height + 0.25rem;
+    padding: $spacer-0 $spacer-3 + 0.125rem;
+    font-size: $font-size-subhead;
+    color: $label;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 1px solid rgba($white, 0.1);
+    border-radius: $radius-pill;
+    background-color: rgba($white, 0.05);
+    scroll-snap-align: start;
+    transition: background-color 150ms ease, color 150ms ease, transform 120ms $ease-out;
+
+    &[aria-checked="true"] {
+        border-color: $white;
+        color: $black;
+        background-color: $white;
+    }
+
+    &:active {
+        transform: scale(0.97);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $tint;
+        outline-offset: 2px;
+    }
+
+    @include reduced-motion {
+        transition: none;
+    }
 }
 
 .field-group {

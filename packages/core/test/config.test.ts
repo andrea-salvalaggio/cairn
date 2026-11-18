@@ -31,6 +31,12 @@ describe('config', () => {
         expect(parseConfig({ ...base, title: '𝒜'.repeat(60) }).title).toBe('𝒜'.repeat(48))
     })
 
+    it('keeps the title style, Classic implicit', () => {
+        expect(parseConfig({ ...base, font: 'signature' }).font).toBe('signature')
+        expect(parseConfig({ ...base, font: 'classic' })).toEqual(base)
+        expect(() => parseConfig({ ...base, font: 'comic' })).toThrow(expect.objectContaining({ field: 'font' }))
+    })
+
     it('drops emoji from the title', () => {
         expect(parseConfig({ ...base, title: 'Us 👩‍❤️‍👨 since 2018 🇮🇹 👍🏽 1️⃣ ❤️' }).title).toBe('Us since 2018 1')
         expect(parseConfig({ ...base, title: 'Cairn™ © ®' }).title).toBe('Cairn™ © ®')

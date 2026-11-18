@@ -1,7 +1,7 @@
 import { writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { ConfigError, decodeConfig, FONT_FAMILY, render, todayInTimeZone } from '@cairn/core'
+import { ConfigError, decodeConfig, FONT_FAMILY, render, TITLE_FONTS, todayInTimeZone } from '@cairn/core'
 import { Resvg } from '@resvg/resvg-js'
 
 /**
@@ -10,8 +10,8 @@ import { Resvg } from '@resvg/resvg-js'
  */
 
 // resvg only loads fonts from file paths, so the bundled fonts are written to the temp dir once per instance.
-// Regular for the counter, Bold for the title.
-const FONT_FILES = ['Geist-Regular.ttf', 'Geist-Bold.ttf']
+// Geist Regular for the counter, plus one file per title style (Classic is Geist Bold).
+const FONT_FILES = ['Geist-Regular.ttf', ...new Set(TITLE_FONTS.map(f => f.file))]
 let fontPaths: Promise<string[]> | undefined
 function ensureFonts(): Promise<string[]> {
     fontPaths ??= Promise.all(FONT_FILES.map(async (name) => {

@@ -1,4 +1,5 @@
 import { type Colors, type Config, resolveColors } from './config'
+import { getTitleFont } from './fonts'
 import { getDevice } from './devices'
 import { buildModel, type Cell } from './model'
 
@@ -104,12 +105,13 @@ export function render(config: Config, today: string): string {
     const maxWidth = W * 0.86
     const estimate = (chars: number, size: number) => chars * CHAR_EM * size
     // Long titles shrink to fit the screen instead of running off it.
-    const titleSize = Math.min(LAYOUT.titleSize * scale, maxWidth / (Math.max(1, model.title.length) * CHAR_EM))
+    const font = getTitleFont(config.font)
+    const titleSize = Math.min(LAYOUT.titleSize * scale * font.scale, maxWidth / (Math.max(1, model.title.length) * font.charEm))
     const counterSize = LAYOUT.counterSize * scale
     const gap = counterSize * 0.4
     const cx = W / 2
-    const text = (x: number, y: number, size: number, color: string, anchor: string, value: string, weight = 400) =>
-        `<text x="${n(x)}" y="${n(y)}" font-family="${FONT_FAMILY}, sans-serif" font-size="${n(size)}" font-weight="${weight}" fill="${color}" text-anchor="${anchor}">${escapeXml(value)}</text>`
+    const text = (x: number, y: number, size: number, color: string, anchor: string, value: string, weight = 400, family = FONT_FAMILY, italic = false) =>
+        `<text x="${n(x)}" y="${n(y)}" font-family="${family}, sans-serif" font-size="${n(size)}" font-weight="${weight}"${italic ? ' font-style="italic"' : ''} fill="${color}" text-anchor="${anchor}">${escapeXml(value)}</text>`
 
     const [lead, rest] = model.counter
     // The phrase "lead · rest" is centred as a whole, so the dot shifts towards the shorter side.
@@ -119,7 +121,7 @@ export function render(config: Config, today: string): string {
     return [
         `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`,
         `<rect id="background" width="${W}" height="${H}" fill="${colors.bg}"/>`,
-        `<g id="title">${text(cx, top - LAYOUT.titleGap * scale, titleSize, colors.label, 'middle', model.title, 700)}</g>`,
+        `<g id="title">${text(cx, top - LAYOUT.titleGap * scale, titleSize, colors.label, 'middle', model.title, font.weight, font.family, font.italic)}</g>`,
         `<g id="dots">${cells}</g>`,
         `<g id="counter">`,
         rest === undefined

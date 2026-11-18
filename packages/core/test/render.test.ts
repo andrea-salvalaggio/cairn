@@ -53,6 +53,13 @@ describe('render', () => {
         }
     })
 
+        it('sets the title in the chosen style', () => {
+        const poster = render({ ...birthday, font: 'poster' }, TODAY)
+        expect(poster).toContain('font-family="Gravitas One, sans-serif"')
+        expect(poster).toContain('>My life in years</text>')
+        expect(render({ ...birthday, font: 'elegant' }, TODAY)).toContain('font-family="Bodoni Moda, sans-serif" font-size="54" font-weight="500" font-style="italic"')
+    })
+
         it('escapes user text', () => {
         const svg = render({ ...birthday, title: '<b>"Tom & Jerry"</b>' }, TODAY)
         expect(svg).toContain('&lt;b&gt;&quot;Tom &amp; Jerry&quot;&lt;/b&gt;')

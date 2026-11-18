@@ -1,5 +1,6 @@
 import { isIsoDate, isTimeZone } from './dates'
 import { DEFAULT_DEVICE, DEVICES, type DeviceId } from './devices'
+import { DEFAULT_TITLE_FONT, TITLE_FONTS, type TitleFontId } from './fonts'
 
 export type ThemeId = 'birthday' | 'anniversary' | 'goal'
 export const THEMES: readonly ThemeId[] = ['birthday', 'anniversary', 'goal']
@@ -35,6 +36,8 @@ export interface Config {
     device: DeviceId
     timeZone: string
     title?: string
+    /** Title style. Absent means Classic. */
+    font?: TitleFontId
     birthDate?: string
     lifespanYears?: number
     /** Anniversary theme; optional start of the countdown for the goal theme. */
@@ -98,6 +101,11 @@ export function parseConfig(input: unknown): Config {
         // Spaces an emoji leaves behind collapse; the cap counts code points so no character is cut in half.
         const title = [...stripEmoji(raw.title).replace(/\s{2,}/g, ' ').trim()].slice(0, MAX_TITLE_LENGTH).join('')
         if (title) config.title = title
+    }
+    if (raw.font !== undefined) {
+        if (!TITLE_FONTS.some(f => f.id === raw.font)) fail('Unknown title style', 'font')
+        // Classic stays implicit, so default links stay short.
+        if (raw.font !== DEFAULT_TITLE_FONT) config.font = raw.font as TitleFontId
     }
 
     const birthDate = optionalDate(raw.birthDate, 'birthDate')

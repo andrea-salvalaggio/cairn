@@ -1,3 +1,5 @@
+import { TITLE_FONTS } from '@cairn/core'
+
 export default defineNuxtConfig({
     compatibilityDate: '2026-11-01',
     modules: ['@nuxt/ui'],
@@ -20,12 +22,16 @@ export default defineNuxtConfig({
     // The editor depends on the visitor's clock and time zone, so it renders on the client.
     routeRules: { '/': { ssr: false } },
 
-    // The preview draws the wallpaper SVG in the browser: load the font the server renders with, so the two match.
+    // The preview draws the wallpaper SVG in the browser: load the fonts the server renders with, so the two match.
+    // Global, so the style picker can show each name in its own font before the style is chosen.
     fonts: {
         families: [
             { name: 'Geist', provider: 'google', weights: [400, 700], global: true },
+            ...TITLE_FONTS.filter(f => f.family !== 'Geist').map(f => ({ name: f.family, provider: 'google' as const, weights: [f.weight], styles: ['italic' in f ? 'italic' as const : 'normal' as const], global: true })),
         ],
     },
+    // The font list above is read from core once, at startup: restart the dev server when it changes.
+    watch: ['../../packages/core/src/fonts.ts'],
 
     colorMode: { preference: 'dark', fallback: 'dark' },
 
