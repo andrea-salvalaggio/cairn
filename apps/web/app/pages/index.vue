@@ -65,6 +65,8 @@ function onRadioKeys(e: KeyboardEvent) {
 const today = computed(() => todayInTimeZone(form.timeZone, now.value))
 const themeIndex = computed(() => themes.findIndex(t => t.value === form.theme))
 
+const PREVIEW_BG = '#0C0A09'
+
 const result = computed<{ config?: Config, svg?: string, error?: ConfigError }>(() => {
     try {
         const config = parseConfig({
@@ -79,7 +81,8 @@ const result = computed<{ config?: Config, svg?: string, error?: ConfigError }>(
             startDate: form.theme === 'anniversary' ? form.anniversaryDate : form.theme === 'goal' ? form.goalStart : undefined,
             targetDate: form.theme === 'goal' ? form.goalTarget : undefined,
         })
-        return { config, svg: render(config, today.value) }
+        // The preview keeps its warm near-black inside the phone frame; the real wallpaper is pure black.
+        return { config, svg: render({ ...config, colors: { bg: PREVIEW_BG, ...config.colors } }, today.value) }
     }
     catch (error) {
         if (error instanceof ConfigError) return { error }

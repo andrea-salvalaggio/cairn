@@ -16,10 +16,13 @@ export interface Colors {
 /** The brand ochre (the logo's top stone and the site's tint): every theme's default accent. */
 export const DEFAULT_ACCENT = '#FF9F0A'
 
+/** Pure black, so the wallpaper melts into the OLED screen around it. */
+export const DEFAULT_BG = '#000000'
+
 export const DEFAULT_COLORS: Record<ThemeId, Colors> = {
-    birthday: { bg: '#0C0A09', past: '#E7E5E4', future: '#292524', accent: DEFAULT_ACCENT, label: '#78716C' },
-    anniversary: { bg: '#0C0A09', past: '#E7E5E4', future: '#292524', accent: DEFAULT_ACCENT, label: '#78716C' },
-    goal: { bg: '#0C0A09', past: '#E7E5E4', future: '#292524', accent: DEFAULT_ACCENT, label: '#78716C' },
+    birthday: { bg: DEFAULT_BG, past: '#E7E5E4', future: '#292524', accent: DEFAULT_ACCENT, label: '#78716C' },
+    anniversary: { bg: DEFAULT_BG, past: '#E7E5E4', future: '#292524', accent: DEFAULT_ACCENT, label: '#78716C' },
+    goal: { bg: DEFAULT_BG, past: '#E7E5E4', future: '#292524', accent: DEFAULT_ACCENT, label: '#78716C' },
 }
 
 export const DEFAULT_LIFESPAN = 90
