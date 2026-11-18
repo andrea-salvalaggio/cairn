@@ -84,7 +84,8 @@ export function parseConfig(input: unknown): Config {
 
     if (raw.title !== undefined) {
         if (typeof raw.title !== 'string') fail('title must be text')
-        const title = raw.title.trim().slice(0, MAX_TITLE_LENGTH)
+        // By code point, so an emoji is never cut in half.
+        const title = [...raw.title.trim()].slice(0, MAX_TITLE_LENGTH).join('')
         if (title) config.title = title
     }
 

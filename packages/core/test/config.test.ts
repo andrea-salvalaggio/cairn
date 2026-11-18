@@ -27,6 +27,8 @@ describe('config', () => {
 
     it('trims and caps the title', () => {
         expect(parseConfig({ ...base, title: `  ${'x'.repeat(100)}  ` }).title).toHaveLength(48)
+        // 48 emoji, never a lone half of a surrogate pair.
+        expect(parseConfig({ ...base, title: '💍'.repeat(60) }).title).toBe('💍'.repeat(48))
     })
 
     it('round-trips through the URL codec', () => {

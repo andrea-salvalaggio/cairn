@@ -53,6 +53,12 @@ describe('render', () => {
         }
     })
 
+        it('reduces emoji sequences to glyphs the renderer can draw', () => {
+        const svg = render({ ...birthday, title: 'Us 👩‍❤️‍👨 👍🏽 🇮🇹 1️⃣' }, TODAY)
+        expect(svg).toContain('Noto Emoji')
+        expect(svg).toContain('Us 👩❤️👨 👍 🏳 1️</text>')
+    })
+
         it('escapes user text', () => {
         const svg = render({ ...birthday, title: '<b>"Tom & Jerry"</b>' }, TODAY)
         expect(svg).toContain('&lt;b&gt;&quot;Tom &amp; Jerry&quot;&lt;/b&gt;')

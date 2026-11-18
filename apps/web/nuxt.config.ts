@@ -20,6 +20,14 @@ export default defineNuxtConfig({
     // The editor depends on the visitor's clock and time zone, so it renders on the client.
     routeRules: { '/': { ssr: false } },
 
+    // The preview draws the wallpaper SVG in the browser: load the fonts the server renders with, so the two match.
+    fonts: {
+        families: [
+            { name: 'Geist', provider: 'google', weights: [400, 700], global: true },
+            { name: 'Noto Emoji', provider: 'google', weights: [500], global: true },
+        ],
+    },
+
     colorMode: { preference: 'dark', fallback: 'dark' },
 
     app: {
