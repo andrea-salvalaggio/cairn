@@ -168,7 +168,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
                         <div v-else-if="form.theme === 'anniversary'" class="field">
                             <span id="anniversary-label" class="field-label">Together since</span>
                             <span class="field-box"><DateField v-model="form.anniversaryDate" aria-labelledby="anniversary-label" /></span>
-                            <p class="field-hint">One stone per week until your next anniversary, the colored one is this week.</p>
+                            <p class="field-hint">One stone per year together, the colored one is the year you are in.</p>
                         </div>
                         <div v-else class="field-group">
                             <div class="field">

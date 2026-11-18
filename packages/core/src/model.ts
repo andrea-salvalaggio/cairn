@@ -45,17 +45,22 @@ function birthday(config: Config, today: string): Model {
 }
 
 function anniversary(config: Config, today: string): Model {
-    const years = fullYears(config.startDate!, today)
-    const last = addYears(config.startDate!, years)
-    const started = diffDays(config.startDate!, today) >= 0
-    const week = started ? Math.min(51, Math.floor(diffDays(last, today) / 7)) : -1
-    const cells: Cell[] = Array.from({ length: 52 }, (_, i) =>
-        ({ glyph: i === week ? 'heart' : 'stone', state: i < week ? 'past' : i === week ? 'current' : 'future' }))
+    const start = config.startDate!
+    const started = diffDays(start, today) >= 0
+    const years = started ? fullYears(start, today) : 0
+    const current = started ? years : -1
+    // One stone per year together. Future stones only complete the current row: a relationship has no forecast.
+    const length = Math.max(1, Math.ceil((current + 1) / COLUMNS)) * COLUMNS
+    const cells: Cell[] = Array.from({ length }, (_, i) =>
+        ({ glyph: i === current ? 'heart' : 'stone', state: i < current ? 'past' : i === current ? 'current' : 'future' }))
+    const next = started ? addYears(start, years + 1) : start
+    const weeks = Math.ceil(diffDays(today, next) / 7)
     return {
         title: config.title ?? 'Together',
         columns: COLUMNS,
         cells,
-        counter: [plural(years, 'year'), `${plural(52 - Math.max(0, week), 'week')} to the ${ordinal(years + 1)}`],
+        // Capped at 52: on the anniversary day the year ahead is 365 or 366 days, which would round up to 53.
+        counter: [plural(years, 'year'), `${plural(started ? Math.min(52, weeks) : weeks, 'week')} to the ${ordinal(years + 1)}`],
     }
 }
 
