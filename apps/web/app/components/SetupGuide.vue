@@ -421,6 +421,7 @@ function confetti(from: HTMLElement) {
 }
 </style>
 
+<!-- Global: UModal renders its parts outside this component, and the script appends the confetti to <body>. -->
 <style lang="scss">
 .guide-overlay {
     background-color: rgba($black, 0.6);
@@ -497,9 +498,7 @@ function confetti(from: HTMLElement) {
     background-color: $fill;
     cursor: pointer;
 }
-</style>
 
-<style lang="scss">
 .guide-confetti {
     position: fixed;
     z-index: 1000;
