@@ -23,34 +23,46 @@ describe('anniversary theme', () => {
     const config = parseConfig({ v: 1, theme: 'anniversary', startDate: '2018-04-22', title: 'In love with Elisa' })
     const model = buildModel(config, TODAY)
 
-    it('shows one stone per year, the current year as the heart, and completes only that row', () => {
+    it('shows one stone per anniversary reached, the latest as the heart, and completes only that row', () => {
         expect(model.cells).toHaveLength(13)
         expect(model.cells.filter(c => c.glyph === 'heart')).toEqual([{ glyph: 'heart', state: 'current' }])
-        expect(model.cells.findIndex(c => c.state === 'current')).toBe(8)
-        expect(model.cells.filter(c => c.state === 'past')).toHaveLength(8)
+        expect(model.cells.findIndex(c => c.state === 'current')).toBe(7) // the 8th anniversary
+        expect(model.cells.filter(c => c.state === 'past')).toHaveLength(7)
     })
 
-    it('counts years and weeks to the next anniversary', () => {
+    it('counts years and months to the next anniversary', () => {
         expect(model.title).toBe('In love with Elisa')
-        expect(model.counter).toEqual(['8 years', '23 weeks to the 9th'])
+        expect(model.counter).toEqual(['8 years', '5 months to the 9th'])
     })
 
     it('handles the anniversary day itself', () => {
         const onTheDay = buildModel(config, '2026-04-22')
-        expect(onTheDay.counter).toEqual(['8 years', '52 weeks to the 9th'])
-        expect(onTheDay.cells[8]!.state).toBe('current')
+        expect(onTheDay.counter).toEqual(['8 years', '12 months to the 9th'])
+        expect(onTheDay.cells[7]!.state).toBe('current')
     })
 
-    it('adds a row only when the years fill the current one', () => {
+    it('moves the heart forward on each anniversary', () => {
+        const couple = parseConfig({ v: 1, theme: 'anniversary', startDate: '2025-09-21' })
+        const states = (today: string) => buildModel(couple, today).cells.slice(0, 2).map(c => c.state)
+        expect(states('2026-11-18')).toEqual(['current', 'future'])
+        expect(buildModel(couple, '2026-11-18').counter).toEqual(['1 year', '10 months to the 2nd'])
+        expect(states('2027-09-21')).toEqual(['past', 'current'])
+    })
+
+    it('counts days in the last month', () => {
+        expect(buildModel(config, '2027-04-10').counter).toEqual(['8 years', '12 days to the 9th'])
+    })
+
+    it('adds a row only when the anniversaries fill the current one', () => {
         const long = parseConfig({ v: 1, theme: 'anniversary', startDate: '2000-01-01' })
-        expect(buildModel(long, '2012-06-01').cells).toHaveLength(13) // 12 years, the 13th is current
-        expect(buildModel(long, '2013-06-01').cells).toHaveLength(26) // 13 years, the 14th starts a new row
+        expect(buildModel(long, '2013-06-01').cells).toHaveLength(13) // 13 anniversaries fill the row
+        expect(buildModel(long, '2014-06-01').cells).toHaveLength(26) // the 14th starts a new one
     })
 
-    it('shows an empty row before the start date', () => {
-        const future = buildModel(parseConfig({ v: 1, theme: 'anniversary', startDate: '2027-01-14' }), TODAY)
-        expect(future.cells.every(c => c.state === 'future')).toBe(true)
-        expect(future.counter).toEqual(['0 years', '9 weeks to the 1st'])
+    it('shows an empty row before the first anniversary', () => {
+        const fresh = buildModel(parseConfig({ v: 1, theme: 'anniversary', startDate: '2026-06-01' }), TODAY)
+        expect(fresh.cells.every(c => c.state === 'future')).toBe(true)
+        expect(fresh.counter).toEqual(['0 years', '6 months to the 1st'])
     })
 })
 

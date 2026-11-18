@@ -44,23 +44,32 @@ function birthday(config: Config, today: string): Model {
     }
 }
 
+/** Whole calendar months from `from` to a later `to`. */
+function fullMonths(from: string, to: string): number {
+    const [fy, fm, fd] = from.split('-').map(Number) as [number, number, number]
+    const [ty, tm, td] = to.split('-').map(Number) as [number, number, number]
+    return (ty - fy) * 12 + (tm - fm) - (td < fd ? 1 : 0)
+}
+
 function anniversary(config: Config, today: string): Model {
     const start = config.startDate!
     const started = diffDays(start, today) >= 0
     const years = started ? fullYears(start, today) : 0
-    const current = started ? years : -1
-    // One stone per year together. Future stones only complete the current row: a relationship has no forecast.
-    const length = Math.max(1, Math.ceil((current + 1) / COLUMNS)) * COLUMNS
+    // One stone per anniversary reached, the latest in the accent color; before the first, the row is empty.
+    const current = years - 1
+    // Future stones only complete the current row: a relationship has no forecast.
+    const length = Math.max(1, Math.ceil(years / COLUMNS)) * COLUMNS
     const cells: Cell[] = Array.from({ length }, (_, i) =>
         ({ glyph: i === current ? 'heart' : 'stone', state: i < current ? 'past' : i === current ? 'current' : 'future' }))
     const next = started ? addYears(start, years + 1) : start
-    const weeks = Math.ceil(diffDays(today, next) / 7)
+    const months = fullMonths(today, next)
+    // Under a month away, the counter switches to days so it never reads "0 months".
+    const left = months > 0 ? plural(months, 'month') : plural(diffDays(today, next), 'day')
     return {
         title: config.title ?? 'Together',
         columns: COLUMNS,
         cells,
-        // Capped at 52: on the anniversary day the year ahead is 365 or 366 days, which would round up to 53.
-        counter: [plural(years, 'year'), `${plural(started ? Math.min(52, weeks) : weeks, 'week')} to the ${ordinal(years + 1)}`],
+        counter: [plural(years, 'year'), `${left} to the ${ordinal(years + 1)}`],
     }
 }
 
