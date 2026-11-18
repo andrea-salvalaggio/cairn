@@ -50,11 +50,26 @@ const form = reactive({
     font: DEFAULT_TITLE_FONT as TitleFontId,
     // One accent for every theme: switching theme keeps the color.
     accent: DEFAULT_ACCENT,
+    // Dates start empty so nobody ships a wallpaper with a made-up date; the preview fills the gaps from EXAMPLE_DATES.
+    birthDate: '',
+    anniversaryDate: '',
+    goalStart: '',
+    goalTarget: '',
+})
+
+// Only ever drawn in the preview, picked so the sample pile looks good.
+const EXAMPLE_DATES = {
     birthDate: '1995-01-01',
     anniversaryDate: plusDays(-365 * 3 - 120),
     goalStart: initialToday,
     goalTarget: plusDays(88),
-})
+}
+const REQUIRED_DATES: Record<ThemeId, (keyof typeof EXAMPLE_DATES)[]> = {
+    birthday: ['birthDate'],
+    anniversary: ['anniversaryDate'],
+    goal: ['goalTarget', 'goalStart'],
+}
+const missingDate = computed(() => REQUIRED_DATES[form.theme].some(key => !form[key]))
 
 // ARIA radio group: Tab reaches only the checked item, arrows move and select.
 function onRadioKeys(e: KeyboardEvent) {
@@ -93,6 +108,7 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateFade))
 const titleHasEmoji = computed(() => stripEmoji(form.titles[form.theme]) !== form.titles[form.theme])
 
 const result = computed<{ config?: Config, svg?: string, error?: ConfigError }>(() => {
+    const date = (key: keyof typeof EXAMPLE_DATES) => form[key] || EXAMPLE_DATES[key]
     try {
         const config = parseConfig({
             v: 1,
@@ -103,12 +119,13 @@ const result = computed<{ config?: Config, svg?: string, error?: ConfigError }>(
             font: form.font,
             // Only a custom color goes in the config, so default links stay short.
             colors: form.accent === DEFAULT_ACCENT ? undefined : { accent: form.accent },
-            birthDate: form.theme === 'birthday' ? form.birthDate : undefined,
-            startDate: form.theme === 'anniversary' ? form.anniversaryDate : form.theme === 'goal' ? form.goalStart : undefined,
-            targetDate: form.theme === 'goal' ? form.goalTarget : undefined,
+            birthDate: form.theme === 'birthday' ? date('birthDate') : undefined,
+            startDate: form.theme === 'anniversary' ? date('anniversaryDate') : form.theme === 'goal' ? date('goalStart') : undefined,
+            targetDate: form.theme === 'goal' ? date('goalTarget') : undefined,
         })
         // The preview keeps its warm near-black inside the phone frame; the real wallpaper is pure black.
-        return { config, svg: render({ ...config, colors: { bg: PREVIEW_BG, ...config.colors } }, today.value) }
+        const svg = render({ ...config, colors: { bg: PREVIEW_BG, ...config.colors } }, today.value)
+        return { config, svg }
     }
     catch (error) {
         if (error instanceof ConfigError) return { error }
@@ -117,10 +134,12 @@ const result = computed<{ config?: Config, svg?: string, error?: ConfigError }>(
 })
 
 // The message for one config key, shown under its field in place of the hint.
-const fieldError = (field: keyof Config) => (result.value.error?.field === field ? result.value.error.message : undefined)
+// Hidden while a date is missing: the error could come from an example date the user never typed.
+const fieldError = (field: keyof Config) => (!missingDate.value && result.value.error?.field === field ? result.value.error.message : undefined)
 
 const device = computed(() => getDevice(result.value.config?.device ?? DEFAULT_DEVICE))
-const pngPath = computed(() => (result.value.config ? `/w/${encodeConfig(result.value.config)}.png` : undefined))
+// An example date makes a preview, never a link or a download.
+const pngPath = computed(() => (result.value.config && !missingDate.value ? `/w/${encodeConfig(result.value.config)}.png` : undefined))
 const liveUrl = computed(() => (pngPath.value ? new URL(pngPath.value, window.location.origin).toString() : ''))
 const guideOpen = ref(false)
 
@@ -129,7 +148,6 @@ const contacts = [
     { label: 'LinkedIn', icon: 'i-fa7-brands-linkedin-in', href: 'https://linkedin.com/in/andrea-salvalaggio' },
     { label: 'GitHub', icon: 'i-fa7-brands-github', href: 'https://github.com/andrea-salvalaggio' },
 ]
-const compactClock = ref(false)
 
 // The download gives no sign of its own, so the button says it started for a moment.
 const downloaded = ref(false)
@@ -160,19 +178,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
             </div>
 
             <section class="preview" aria-label="Wallpaper preview">
-                <IPhoneMockup :device="device" :svg="result.svg" :theme="form.theme" :time-zone="form.timeZone" :now="now" :compact-clock="compactClock" />
-                <!-- iOS 27 lets each Lock Screen shrink the clock into the top row; preview both to check the wallpaper fits. -->
-                <div class="ios-segmented clock-toggle" role="radiogroup" aria-label="Lock Screen clock" @keydown="onRadioKeys"
-                    :style="{ '--i': compactClock ? 1 : 0, '--n': 2 }">
-                    <span class="ios-segmented-thumb" aria-hidden="true" />
-                    <button v-for="(label, i) in ['Large clock', 'Small clock']" :key="label" type="button" role="radio"
-                        :aria-checked="compactClock === (i === 1)" :tabindex="compactClock === (i === 1) ? 0 : -1" class="ios-segmented-item" @click="compactClock = i === 1">
-                        {{ label }}
-                    </button>
-                </div>
-                <p class="preview-caption">
-                    Your iPhone may place the clock slightly differently.
-                </p>
+                <IPhoneMockup :device="device" :svg="result.svg" :theme="form.theme" :time-zone="form.timeZone" :now="now" />
             </section>
 
             <section class="form">
@@ -322,8 +328,9 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     align-self: start;
 
     @include up($bp-md) {
-        grid-template-areas: "preview intro" "preview themes" "preview form";
-        grid-template-rows: auto auto 1fr;
+        // Tabs over the phone, logo over the form: the phone and the first field start on the same line.
+        grid-template-areas: "themes intro" "preview form";
+        grid-template-rows: auto 1fr;
         grid-template-columns: auto minmax(0, 32rem);
         gap: $spacer-5 $spacer-8;
     }
@@ -382,6 +389,10 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 
 .themes {
     grid-area: themes;
+
+    @include up($bp-md) {
+        align-self: end;
+    }
 }
 
 .preview {
@@ -397,51 +408,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
         position: sticky;
         top: $spacer-7;
         align-self: start;
-    }
-}
-
-.clock-toggle {
-    max-width: 260px;
-    margin: $spacer-4 auto $spacer-0;
-    padding: 4px;
-    border: 1px solid rgba($white, 0.1);
-    border-radius: $radius-pill;
-
-    .ios-segmented-thumb {
-        inset: 4px auto 4px 4px;
-        width: calc((100% - 8px) / var(--n));
-        border-radius: $radius-pill;
-    }
-
-    .ios-segmented-item {
-        border-radius: $radius-pill;
-    }
-
-    @include down($bp-md) {
-        max-width: 220px;
-        margin-top: $spacer;
-        padding: 3px;
-
-        .ios-segmented-thumb {
-            inset: 3px auto 3px 3px;
-            width: calc((100% - 6px) / var(--n));
-        }
-
-        .ios-segmented-item {
-            height: 1.75rem;
-            font-size: 0.75rem;
-        }
-    }
-}
-
-.preview-caption {
-    margin: $spacer-3 $spacer-0 $spacer-0;
-    font-size: $font-size-footnote;
-    text-align: center;
-    color: $label-secondary;
-
-    @include down($bp-md) {
-        display: none;
     }
 }
 
@@ -466,8 +432,9 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 
     @include up($bp-md) {
         margin-top: $spacer-6;
+        padding-left: $spacer-5;
     }
-
+    
     &::before {
         content: '';
         position: absolute;

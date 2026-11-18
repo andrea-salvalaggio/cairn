@@ -6,7 +6,7 @@ import type { Device } from '@cairn/core'
  * so the frame, island and clock keep real proportions on every model.
  */
 // theme keys the wallpaper: a new theme crossfades, while color and date edits update in place.
-const props = defineProps<{ device: Device, svg?: string, theme?: string, timeZone: string, now: Date, compactClock?: boolean }>()
+const props = defineProps<{ device: Device, svg?: string, theme?: string, timeZone: string, now: Date }>()
 
 // Display corner radius in points per resolution group (measured values published for each model).
 const CORNER: Record<string, number> = {
@@ -38,7 +38,7 @@ const date = computed(() =>
 <template>
     <figure
         class="phone"
-        :class="[island ? 'is-island' : 'is-notch', { 'is-compact': compactClock }]"
+        :class="island ? 'is-island' : 'is-notch'"
         :style="{ '--w': width, '--h': device.height / device.scale, '--r': CORNER[device.id] ?? 55 }"
         :aria-label="`Lock Screen preview: ${date}, ${time}`"
     >
@@ -62,9 +62,8 @@ const date = computed(() =>
                     <svg viewBox="0 0 29 13" class="status-icon status-icon--battery"><rect width="26" height="13" rx="4" opacity=".35" /><path d="M4 0h16.8v13H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4" /><path d="M27.3 4.5v4a2 2 0 0 0 0-4" opacity=".35" /></svg>
                 </div>
 
-                <!-- iOS 27 compact clock: the time moves into the date row. Both clocks stay mounted so the switch can animate. -->
                 <p class="date">
-                    <span class="date-time">{{ time }}</span>{{ date }}
+                    {{ date }}
                 </p>
                 <!-- x offset recentres the -1.5 letter-spacing. SVG text so the numerals get a round-joined stroke: softly rounded corners, like the iOS clock. -->
                 <svg class="clock" :viewBox="`0 0 ${width} 124`"><text :x="width / 2 - 0.75" y="104" text-anchor="middle">{{ hours }}<tspan dx="5">:</tspan><tspan dx="5">{{ minutes }}</tspan></text></svg>
@@ -246,24 +245,6 @@ $key-dark: #3A3937;
     line-height: 1;
 }
 
-.date-time {
-    display: inline-block;
-    overflow: hidden;
-    max-width: 0;
-    vertical-align: bottom;
-    font-weight: $font-weight-bold;
-    white-space: nowrap;
-    opacity: 0;
-    transition: max-width 0.3s $ease-out, margin-right 0.3s $ease-out, opacity 0.2s ease;
-
-    .is-compact & {
-        max-width: pt(90);
-        margin-right: pt(8);
-        opacity: 1;
-        transition-delay: 0.05s;
-    }
-}
-
 .clock {
     top: pt(110);
     width: 100%;
@@ -276,20 +257,6 @@ $key-dark: #3A3937;
     stroke: currentColor;
     stroke-width: 3px;
     stroke-linejoin: round;
-    transform-origin: 50% 0;
-    transition: transform 0.3s $ease-out, opacity 0.25s ease;
-
-    .is-compact & {
-        opacity: 0;
-        transform: translateY(pt(-24)) scale(0.6);
-    }
-}
-
-.date-time,
-.clock {
-    @include reduced-motion {
-        transition: opacity 0.2s ease;
-    }
 }
 
 .quick {
