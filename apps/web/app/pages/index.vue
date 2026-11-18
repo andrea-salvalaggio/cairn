@@ -7,6 +7,7 @@ import {
     type ThemeId,
     deviceModels,
     encodeConfig,
+    stripEmoji,
     getDevice,
     parseConfig,
     render,
@@ -66,6 +67,8 @@ const today = computed(() => todayInTimeZone(form.timeZone, now.value))
 const themeIndex = computed(() => themes.findIndex(t => t.value === form.theme))
 
 const PREVIEW_BG = '#0C0A09'
+
+const titleHasEmoji = computed(() => stripEmoji(form.titles[form.theme]) !== form.titles[form.theme])
 
 const result = computed<{ config?: Config, svg?: string, error?: ConfigError }>(() => {
     try {
@@ -156,6 +159,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
                         <span class="field-box">
                             <input v-model="form.titles[form.theme]" class="field-input" maxlength="48" :placeholder="defaultTitles[form.theme]">
                         </span>
+                        <p v-if="titleHasEmoji" class="field-hint" role="status">Emoji aren’t supported: they won’t appear in the preview or on your wallpaper.</p>
                     </label>
 
                     <div class="field">

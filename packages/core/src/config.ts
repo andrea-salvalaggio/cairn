@@ -53,6 +53,14 @@ export class ConfigError extends Error {
 
 const HEX = /^#[0-9a-fA-F]{6}$/
 
+// Emoji plus the joiners, skin tones, variation selectors and keycap marks that build them. ©, ® and ™ stay: Geist has them.
+const EMOJI = /(?![\u00A9\u00AE\u2122])\p{Extended_Pictographic}|\p{Regional_Indicator}|[\u{1F3FB}-\u{1F3FF}\u200D\uFE0F\u20E3]/gu
+
+/** The wallpaper font has no emoji, so titles drop them. The editor compares against this to warn the user. */
+export function stripEmoji(text: string): string {
+    return text.replace(EMOJI, '')
+}
+
 function fail(message: string, field?: keyof Config): never {
     throw new ConfigError(message, field)
 }
@@ -87,8 +95,8 @@ export function parseConfig(input: unknown): Config {
 
     if (raw.title !== undefined) {
         if (typeof raw.title !== 'string') fail('title must be text')
-        // By code point, so an emoji is never cut in half.
-        const title = [...raw.title.trim()].slice(0, MAX_TITLE_LENGTH).join('')
+        // Spaces an emoji leaves behind collapse; the cap counts code points so no character is cut in half.
+        const title = [...stripEmoji(raw.title).replace(/\s{2,}/g, ' ').trim()].slice(0, MAX_TITLE_LENGTH).join('')
         if (title) config.title = title
     }
 

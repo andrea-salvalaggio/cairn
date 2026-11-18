@@ -27,8 +27,14 @@ describe('config', () => {
 
     it('trims and caps the title', () => {
         expect(parseConfig({ ...base, title: `  ${'x'.repeat(100)}  ` }).title).toHaveLength(48)
-        // 48 emoji, never a lone half of a surrogate pair.
-        expect(parseConfig({ ...base, title: '💍'.repeat(60) }).title).toBe('💍'.repeat(48))
+        // Code points, so a non-BMP character is never cut in half.
+        expect(parseConfig({ ...base, title: '𝒜'.repeat(60) }).title).toBe('𝒜'.repeat(48))
+    })
+
+    it('drops emoji from the title', () => {
+        expect(parseConfig({ ...base, title: 'Us 👩‍❤️‍👨 since 2018 🇮🇹 👍🏽 1️⃣ ❤️' }).title).toBe('Us since 2018 1')
+        expect(parseConfig({ ...base, title: 'Cairn™ © ®' }).title).toBe('Cairn™ © ®')
+        expect(parseConfig({ ...base, title: '🎂🎉' }).title).toBeUndefined()
     })
 
     it('round-trips through the URL codec', () => {

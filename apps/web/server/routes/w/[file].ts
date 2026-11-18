@@ -10,8 +10,8 @@ import { Resvg } from '@resvg/resvg-js'
  */
 
 // resvg only loads fonts from file paths, so the bundled fonts are written to the temp dir once per instance.
-// Regular for the counter, Bold for the title, Noto Emoji for emoji in the title.
-const FONT_FILES = ['Geist-Regular.ttf', 'Geist-Bold.ttf', 'NotoEmoji-Medium.ttf']
+// Regular for the counter, Bold for the title.
+const FONT_FILES = ['Geist-Regular.ttf', 'Geist-Bold.ttf']
 let fontPaths: Promise<string[]> | undefined
 function ensureFonts(): Promise<string[]> {
     fontPaths ??= Promise.all(FONT_FILES.map(async (name) => {

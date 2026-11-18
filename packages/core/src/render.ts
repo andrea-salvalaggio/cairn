@@ -16,8 +16,6 @@ export const LAYOUT = {
 } as const
 
 export const FONT_FAMILY = 'Geist'
-/** Monochrome emoji, so a title emoji renders on the server like the text around it (resvg cannot draw color fonts). */
-export const EMOJI_FONT_FAMILY = 'Noto Emoji'
 
 const n = (value: number) => Number(value.toFixed(2)).toString()
 
@@ -63,24 +61,6 @@ function peak(i: number, cx: number, cy: number, d: number, color: string): stri
 
 /** Rough Geist advance width per character, in ems (bold): the renderer has no font metrics. */
 const CHAR_EM = 0.62
-/** Noto Emoji advance width, in ems. */
-const EMOJI_EM = 1.25
-
-/**
- * resvg falls back to the emoji font one code point at a time, so multi-code-point emoji break the line.
- * Reduce them to single glyphs: skin tones and keycaps are dropped, ZWJ sequences show their parts, flags a plain flag.
- */
-function simplifyEmoji(text: string): string {
-    return text.replace(/\p{Regional_Indicator}{2}/gu, '\u{1F3F3}').replace(/[\u{1F3FB}-\u{1F3FF}\u200D\u20E3]/gu, '')
-}
-
-/** Width of a line in ems, emoji counted wider than letters. */
-function widthEm(text: string): number {
-    const emoji = text.match(/\p{Extended_Pictographic}/gu)?.length ?? 0
-    const letters = [...text.replace(/\p{Extended_Pictographic}|\uFE0F/gu, '')].length
-    return letters * CHAR_EM + emoji * EMOJI_EM
-}
-
 function glyph(cell: Cell, i: number, cx: number, cy: number, d: number, colors: Colors): string {
     // The marker (birthday, this week, the target) is a stone too, in the accent color, like the logo's top stone.
     return peak(i, cx, cy, d, cell.glyph === 'stone' ? fill(cell, colors) : colors.accent)
@@ -124,13 +104,12 @@ export function render(config: Config, today: string): string {
     const maxWidth = W * 0.86
     const estimate = (chars: number, size: number) => chars * CHAR_EM * size
     // Long titles shrink to fit the screen instead of running off it.
-    const title = simplifyEmoji(model.title)
-    const titleSize = Math.min(LAYOUT.titleSize * scale, maxWidth / Math.max(CHAR_EM, widthEm(title)))
+    const titleSize = Math.min(LAYOUT.titleSize * scale, maxWidth / (Math.max(1, model.title.length) * CHAR_EM))
     const counterSize = LAYOUT.counterSize * scale
     const gap = counterSize * 0.4
     const cx = W / 2
     const text = (x: number, y: number, size: number, color: string, anchor: string, value: string, weight = 400) =>
-        `<text x="${n(x)}" y="${n(y)}" font-family="${FONT_FAMILY}, ${EMOJI_FONT_FAMILY}, sans-serif" font-size="${n(size)}" font-weight="${weight}" fill="${color}" text-anchor="${anchor}">${escapeXml(value)}</text>`
+        `<text x="${n(x)}" y="${n(y)}" font-family="${FONT_FAMILY}, sans-serif" font-size="${n(size)}" font-weight="${weight}" fill="${color}" text-anchor="${anchor}">${escapeXml(value)}</text>`
 
     const [lead, rest] = model.counter
     // The phrase "lead · rest" is centred as a whole, so the dot shifts towards the shorter side.
@@ -140,7 +119,7 @@ export function render(config: Config, today: string): string {
     return [
         `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`,
         `<rect id="background" width="${W}" height="${H}" fill="${colors.bg}"/>`,
-        `<g id="title">${text(cx, top - LAYOUT.titleGap * scale, titleSize, colors.label, 'middle', title, 700)}</g>`,
+        `<g id="title">${text(cx, top - LAYOUT.titleGap * scale, titleSize, colors.label, 'middle', model.title, 700)}</g>`,
         `<g id="dots">${cells}</g>`,
         `<g id="counter">`,
         rest === undefined
