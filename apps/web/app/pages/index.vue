@@ -25,11 +25,10 @@ const offsetOf = (timeZone: string) =>
 const timeZones = [...new Set([detectedZone, ...Intl.supportedValuesOf('timeZone')])].sort()
     .map(zone => ({ zone, label: `${zone.replaceAll('_', ' ')} · ${offsetOf(zone)}` }))
 
-// Font Awesome 6 solid icons naming each theme; on the wallpaper the marker is an accent-colored stone.
-const themes: { label: string, value: ThemeId, icon: string }[] = [
-    { label: 'Birthday', value: 'birthday', icon: 'i-fa6-solid-gift' },
-    { label: 'Anniversary', value: 'anniversary', icon: 'i-fa6-solid-heart' },
-    { label: 'Goal', value: 'goal', icon: 'i-fa6-solid-star' },
+const themes: { label: string, value: ThemeId }[] = [
+    { label: 'Birthday', value: 'birthday' },
+    { label: 'Anniversary', value: 'anniversary' },
+    { label: 'Goal', value: 'goal' },
 ]
 const models = deviceModels()
 
@@ -124,7 +123,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
                 <span class="ios-segmented-thumb" aria-hidden="true" />
                 <button v-for="t in themes" :key="t.value" type="button" role="radio"
                     :aria-checked="form.theme === t.value" :tabindex="form.theme === t.value ? 0 : -1" class="ios-segmented-item" @click="form.theme = t.value">
-                    <UIcon :name="t.icon" class="ios-segmented-icon" />{{ t.label }}
+                    {{ t.label }}
                 </button>
             </div>
 

@@ -19,6 +19,8 @@ describe('config', () => {
         expect(() => parseConfig({ ...base, device: 'pixel' })).toThrow(/device/)
         expect(() => parseConfig({ ...base, timeZone: 'Mars/Olympus' })).toThrow(/time zone/)
         expect(() => parseConfig({ ...base, birthDate: '1992-13-40' })).toThrow(/birthDate/)
+        expect(() => parseConfig({ ...base, birthDate: '1899-12-31' })).toThrow(/between/)
+        expect(() => parseConfig({ v: 1, theme: 'goal', targetDate: '9999-12-31' })).toThrow(/between/)
         expect(() => parseConfig({ ...base, colors: { accent: 'red' } })).toThrow(/hex/)
         expect(() => parseConfig({ ...base, lifespanYears: 500 })).toThrow(/lifespanYears/)
     })

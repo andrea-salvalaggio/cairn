@@ -53,9 +53,15 @@ function fail(message: string): never {
     throw new ConfigError(message)
 }
 
+// Bounds the goal grid: a span of centuries would render thousands of stones per request.
+const MIN_YEAR = 1900
+const MAX_YEAR = 2200
+
 function optionalDate(value: unknown, field: string): string | undefined {
     if (value === undefined || value === null || value === '') return undefined
-    return isIsoDate(value) ? value : fail(`${field} must be a valid date (YYYY-MM-DD)`)
+    if (!isIsoDate(value)) fail(`${field} must be a valid date (YYYY-MM-DD)`)
+    const year = Number(value.slice(0, 4))
+    return year >= MIN_YEAR && year <= MAX_YEAR ? value : fail(`${field} must be between ${MIN_YEAR} and ${MAX_YEAR}`)
 }
 
 /**
