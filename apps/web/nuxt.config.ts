@@ -24,14 +24,14 @@ export default defineNuxtConfig({
 
     app: {
         head: {
-            title: 'Cairn | Your Time In Stones',
+            title: 'Cairn | A Wallpaper That Grows',
             htmlAttrs: { lang: 'en' },
             link: [
                 { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
                 { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
             ],
             meta: [
-                { name: 'description', content: 'Free iPhone lock screen wallpapers that show your time as a pile of stones.' },
+                { name: 'description', content: 'A free iPhone Lock Screen wallpaper that grows one stone at a time: for your life, your anniversary or your goal.' },
                 { name: 'theme-color', content: '#000000' },
             ],
         },

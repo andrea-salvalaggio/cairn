@@ -116,8 +116,17 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
         <div class="workspace">
             <header class="intro">
                 <h1><CairnLogo /></h1>
-                <p>Your time as a pile of stones on your Lock Screen.</p>
+                <p>A wallpaper that grows, <span class="intro-line">one stone at a time.</span></p>
             </header>
+
+            <div class="ios-segmented ios-segmented--pill themes" role="radiogroup" aria-label="Wallpaper type" @keydown="onRadioKeys"
+                :style="{ '--i': themeIndex, '--n': themes.length }">
+                <span class="ios-segmented-thumb" aria-hidden="true" />
+                <button v-for="t in themes" :key="t.value" type="button" role="radio"
+                    :aria-checked="form.theme === t.value" :tabindex="form.theme === t.value ? 0 : -1" class="ios-segmented-item" @click="form.theme = t.value">
+                    <UIcon :name="t.icon" class="ios-segmented-icon" />{{ t.label }}
+                </button>
+            </div>
 
             <section class="preview" aria-label="Wallpaper preview">
                 <IPhoneMockup :device="device" :svg="result.svg" :theme="form.theme" :time-zone="form.timeZone" :now="now" :compact-clock="compactClock" />
@@ -136,16 +145,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
             </section>
 
             <section class="form">
-
-                <div class="ios-segmented ios-segmented--pill" role="radiogroup" aria-label="Wallpaper type" @keydown="onRadioKeys"
-                    :style="{ '--i': themeIndex, '--n': themes.length }">
-                    <span class="ios-segmented-thumb" aria-hidden="true" />
-                    <button v-for="t in themes" :key="t.value" type="button" role="radio"
-                        :aria-checked="form.theme === t.value" :tabindex="form.theme === t.value ? 0 : -1" class="ios-segmented-item" @click="form.theme = t.value">
-                        <UIcon :name="t.icon" class="ios-segmented-icon" />{{ t.label }}
-                    </button>
-                </div>
-
                 <div class="fields">
                     <label class="field">
                         <span class="field-label">Title</span>
@@ -252,7 +251,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     max-width: 64rem;
     min-height: 100dvh;
     margin: $spacer-0 auto;
-    padding: 2.5rem $spacer $spacer-0;
+    padding: $spacer-0 $spacer;
 
     @include up($bp-sm) {
         padding-inline: $spacer-4;
@@ -267,14 +266,14 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 
 .workspace {
     display: grid;
-    grid-template-areas: "intro" "preview" "form";
+    grid-template-areas: "intro" "themes" "preview" "form";
     grid-template-columns: minmax(0, 32rem);
-    gap: $spacer-6;
+    gap: $spacer-4;
     align-self: start;
 
     @include up($bp-md) {
-        grid-template-areas: "preview intro" "preview form";
-        grid-template-rows: auto 1fr;
+        grid-template-areas: "preview intro" "preview themes" "preview form";
+        grid-template-rows: auto auto 1fr;
         grid-template-columns: auto minmax(0, 32rem);
         gap: $spacer-5 $spacer-8;
     }
@@ -295,6 +294,44 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
         margin: $spacer-2 $spacer-0 $spacer-0;
         color: $label-secondary;
     }
+
+    @include down($bp-md) {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $spacer;
+        padding: $spacer $spacer-0;
+
+        .cairn-logo {
+            height: 1.25rem;
+        }
+
+        p {
+            margin: $spacer-0;
+            font-size: $font-size-footnote;
+            line-height: $line-height-tight;
+            text-align: right;
+        }
+
+        .intro-line {
+            display: block;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            inset: auto 0 0;
+            height: 0.5px;
+            background-color: $separator;
+            box-shadow: 0 0 0 100vmax $separator;
+            clip-path: inset(0 -100vmax);
+        }
+    }
+}
+
+.themes {
+    grid-area: themes;
 }
 
 .preview {
@@ -302,7 +339,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 
     @include down($bp-md) {
         :deep(.phone) {
-            --screen: min(300px, 58vw);
+            --screen: min(300px, 50vw);
         }
     }
 
@@ -329,6 +366,22 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     .ios-segmented-item {
         border-radius: $radius-pill;
     }
+
+    @include down($bp-md) {
+        max-width: 220px;
+        margin-top: $spacer;
+        padding: 3px;
+
+        .ios-segmented-thumb {
+            inset: 3px auto 3px 3px;
+            width: calc((100% - 6px) / var(--n));
+        }
+
+        .ios-segmented-item {
+            height: 1.75rem;
+            font-size: 0.75rem;
+        }
+    }
 }
 
 .preview-caption {
@@ -336,6 +389,10 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     font-size: $font-size-footnote;
     text-align: center;
     color: $label-secondary;
+
+    @include down($bp-md) {
+        display: none;
+    }
 }
 
 .form {
@@ -421,7 +478,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     display: flex;
     flex-direction: column;
     gap: $spacer-4;
-    margin-top: $spacer-5;
 }
 
 .field-group {
