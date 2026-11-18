@@ -10,17 +10,17 @@ describe('config', () => {
 
     it('requires the date each theme needs', () => {
         expect(() => parseConfig({ v: 1, theme: 'birthday' })).toThrow(ConfigError)
-        expect(() => parseConfig({ v: 1, theme: 'anniversary' })).toThrow(/startDate/)
-        expect(() => parseConfig({ v: 1, theme: 'goal' })).toThrow(/targetDate/)
+        expect(() => parseConfig({ v: 1, theme: 'anniversary' })).toThrow(expect.objectContaining({ field: 'startDate' }))
+        expect(() => parseConfig({ v: 1, theme: 'goal' })).toThrow(expect.objectContaining({ field: 'targetDate' }))
     })
 
     it('rejects bad values', () => {
         expect(() => parseConfig({ ...base, v: 2 })).toThrow(/version/)
         expect(() => parseConfig({ ...base, device: 'pixel' })).toThrow(/device/)
         expect(() => parseConfig({ ...base, timeZone: 'Mars/Olympus' })).toThrow(/time zone/)
-        expect(() => parseConfig({ ...base, birthDate: '1992-13-40' })).toThrow(/birthDate/)
-        expect(() => parseConfig({ ...base, birthDate: '1899-12-31' })).toThrow(/between/)
-        expect(() => parseConfig({ v: 1, theme: 'goal', targetDate: '9999-12-31' })).toThrow(/between/)
+        expect(() => parseConfig({ ...base, birthDate: '1992-13-40' })).toThrow(expect.objectContaining({ field: 'birthDate', message: expect.stringMatching(/complete date/) }))
+        expect(() => parseConfig({ ...base, birthDate: '1899-12-31' })).toThrow(expect.objectContaining({ field: 'birthDate', message: 'Choose a year between 1900 and 2200.' }))
+        expect(() => parseConfig({ v: 1, theme: 'goal', targetDate: '9999-12-31' })).toThrow(expect.objectContaining({ field: 'targetDate' }))
         expect(() => parseConfig({ ...base, colors: { accent: 'red' } })).toThrow(/hex/)
         expect(() => parseConfig({ ...base, lifespanYears: 500 })).toThrow(/lifespanYears/)
     })

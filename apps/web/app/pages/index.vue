@@ -65,7 +65,7 @@ function onRadioKeys(e: KeyboardEvent) {
 const today = computed(() => todayInTimeZone(form.timeZone, now.value))
 const themeIndex = computed(() => themes.findIndex(t => t.value === form.theme))
 
-const result = computed<{ config?: Config, svg?: string, error?: string }>(() => {
+const result = computed<{ config?: Config, svg?: string, error?: ConfigError }>(() => {
     try {
         const config = parseConfig({
             v: 1,
@@ -82,10 +82,13 @@ const result = computed<{ config?: Config, svg?: string, error?: string }>(() =>
         return { config, svg: render(config, today.value) }
     }
     catch (error) {
-        if (error instanceof ConfigError) return { error: error.message }
+        if (error instanceof ConfigError) return { error }
         throw error
     }
 })
+
+// The message for one config key, shown under its field in place of the hint.
+const fieldError = (field: keyof Config) => (result.value.error?.field === field ? result.value.error.message : undefined)
 
 const device = computed(() => getDevice(result.value.config?.device ?? DEFAULT_DEVICE))
 const pngPath = computed(() => (result.value.config ? `/w/${encodeConfig(result.value.config)}.png` : undefined))
@@ -162,23 +165,27 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
                     <Transition name="field-swap" mode="out-in">
                         <div v-if="form.theme === 'birthday'" class="field">
                             <span id="birth-label" class="field-label">Birthday</span>
-                            <span class="field-box"><DateField v-model="form.birthDate" aria-labelledby="birth-label" /></span>
-                            <p class="field-hint">One stone per year of a 90-year life, the colored one is this year.</p>
+                            <span class="field-box" :class="{ 'is-invalid': fieldError('birthDate') }"><DateField v-model="form.birthDate" aria-labelledby="birth-label" /></span>
+                            <p v-if="fieldError('birthDate')" class="field-hint field-error" role="alert">{{ fieldError('birthDate') }}</p>
+                            <p v-else class="field-hint">One stone per year of a 90-year life, the colored one is this year.</p>
                         </div>
                         <div v-else-if="form.theme === 'anniversary'" class="field">
                             <span id="anniversary-label" class="field-label">Together since</span>
-                            <span class="field-box"><DateField v-model="form.anniversaryDate" aria-labelledby="anniversary-label" /></span>
-                            <p class="field-hint">One stone per anniversary, the colored one is the latest.</p>
+                            <span class="field-box" :class="{ 'is-invalid': fieldError('startDate') }"><DateField v-model="form.anniversaryDate" aria-labelledby="anniversary-label" /></span>
+                            <p v-if="fieldError('startDate')" class="field-hint field-error" role="alert">{{ fieldError('startDate') }}</p>
+                            <p v-else class="field-hint">One stone per anniversary, the colored one is the latest.</p>
                         </div>
                         <div v-else class="field-group">
                             <div class="field">
                                 <span id="target-label" class="field-label">Target date</span>
-                                <span class="field-box"><DateField v-model="form.goalTarget" aria-labelledby="target-label" /></span>
+                                <span class="field-box" :class="{ 'is-invalid': fieldError('targetDate') }"><DateField v-model="form.goalTarget" aria-labelledby="target-label" /></span>
+                                <p v-if="fieldError('targetDate')" class="field-hint field-error" role="alert">{{ fieldError('targetDate') }}</p>
                             </div>
                             <div class="field">
                                 <span id="start-label" class="field-label">Counting from</span>
-                                <span class="field-box"><DateField v-model="form.goalStart" aria-labelledby="start-label" /></span>
-                                <p class="field-hint">One stone per day, the colored one is the target. Longer goals switch to weeks or months.</p>
+                                <span class="field-box" :class="{ 'is-invalid': fieldError('startDate') }"><DateField v-model="form.goalStart" aria-labelledby="start-label" /></span>
+                                <p v-if="fieldError('startDate')" class="field-hint field-error" role="alert">{{ fieldError('startDate') }}</p>
+                                <p v-else class="field-hint">One stone per day, the colored one is the target. Longer goals switch to weeks or months.</p>
                             </div>
                         </div>
                     </Transition>
@@ -205,7 +212,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
                 </div>
 
                 <Transition name="swap">
-                    <p v-if="result.error" class="ios-footnote form-error" role="alert">{{ result.error }}</p>
+                    <p v-if="result.error && !result.error.field" class="ios-footnote form-error" role="alert">{{ result.error.message }}</p>
                 </Transition>
 
                 <div class="actions">

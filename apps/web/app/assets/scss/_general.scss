@@ -108,6 +108,12 @@ body {
         box-shadow: 0 0 0 3px rgba($tint, 0.2);
     }
 
+    &.is-invalid,
+    &.is-invalid:focus-within {
+        border-color: $red;
+        box-shadow: 0 0 0 3px rgba($red, 0.2);
+    }
+
     @include reduced-motion {
         transition: none;
     }
@@ -148,6 +154,10 @@ select.field-input {
     font-size: $font-size-footnote;
     line-height: $line-height-base;
     color: $label-secondary;
+}
+
+.field-error {
+    color: $red;
 }
 
 .ios-footnote {

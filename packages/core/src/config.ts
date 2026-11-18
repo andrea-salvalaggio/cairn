@@ -41,7 +41,8 @@ export interface Config {
 }
 
 export class ConfigError extends Error {
-    constructor(message: string) {
+    /** The config key at fault, so the editor can show the message under that field. */
+    constructor(message: string, readonly field?: keyof Config) {
         super(message)
         this.name = 'ConfigError'
     }
@@ -49,19 +50,19 @@ export class ConfigError extends Error {
 
 const HEX = /^#[0-9a-fA-F]{6}$/
 
-function fail(message: string): never {
-    throw new ConfigError(message)
+function fail(message: string, field?: keyof Config): never {
+    throw new ConfigError(message, field)
 }
 
 // Bounds the goal grid: a span of centuries would render thousands of stones per request.
 const MIN_YEAR = 1900
 const MAX_YEAR = 2200
 
-function optionalDate(value: unknown, field: string): string | undefined {
+function optionalDate(value: unknown, field: keyof Config): string | undefined {
     if (value === undefined || value === null || value === '') return undefined
-    if (!isIsoDate(value)) fail(`${field} must be a valid date (YYYY-MM-DD)`)
+    if (!isIsoDate(value)) fail('Enter a complete date: day, month and year.', field)
     const year = Number(value.slice(0, 4))
-    return year >= MIN_YEAR && year <= MAX_YEAR ? value : fail(`${field} must be between ${MIN_YEAR} and ${MAX_YEAR}`)
+    return year >= MIN_YEAR && year <= MAX_YEAR ? value : fail(`Choose a year between ${MIN_YEAR} and ${MAX_YEAR}.`, field)
 }
 
 /**
@@ -100,9 +101,9 @@ export function parseConfig(input: unknown): Config {
         config.lifespanYears = years
     }
 
-    if (theme === 'birthday' && !config.birthDate) fail('birthDate is required for the birthday theme')
-    if (theme === 'anniversary' && !config.startDate) fail('startDate is required for the anniversary theme')
-    if (theme === 'goal' && !config.targetDate) fail('targetDate is required for the goal theme')
+    if (theme === 'birthday' && !config.birthDate) fail('Enter your date of birth.', 'birthDate')
+    if (theme === 'anniversary' && !config.startDate) fail('Enter the date you got together.', 'startDate')
+    if (theme === 'goal' && !config.targetDate) fail('Enter the target date.', 'targetDate')
 
     if (raw.colors !== undefined) {
         if (typeof raw.colors !== 'object' || raw.colors === null) fail('colors must be an object')

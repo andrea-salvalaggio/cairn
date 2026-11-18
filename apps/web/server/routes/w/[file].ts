@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
         svg = render(config, todayInTimeZone(config.timeZone))
     }
     catch (error) {
-        if (error instanceof ConfigError) throw createError({ statusCode: 400, statusMessage: error.message })
+        if (error instanceof ConfigError) throw createError({ statusCode: 400, statusMessage: error.field ? `${error.field}: ${error.message}` : error.message })
         throw error
     }
 
