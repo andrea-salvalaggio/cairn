@@ -48,7 +48,7 @@ describe('render', () => {
             const svg = render(config, TODAY)
             const titleY = Number(svg.match(/<g id="title"><text x="[\d.]+" y="([\d.]+)"/)![1])
             const counterY = Number(svg.match(/<g id="counter"><text x="[\d.]+" y="([\d.]+)"/)![1])
-            const capTop = titleY - 15 * 3 * 0.75 // title cap height at 3x
+            const capTop = titleY - 17 * 3 * 0.75 // title cap height at 3x
             expect(Math.abs((capTop + counterY) / 2 - 2556 * 0.57)).toBeLessThan(1)
         }
     })
@@ -57,7 +57,7 @@ describe('render', () => {
         const poster = render({ ...birthday, font: 'poster' }, TODAY)
         expect(poster).toContain('font-family="Gravitas One, sans-serif"')
         expect(poster).toContain('>My life in years</text>')
-        expect(render({ ...birthday, font: 'elegant' }, TODAY)).toContain('font-family="Bodoni Moda, sans-serif" font-size="54" font-weight="500" font-style="italic"')
+        expect(render({ ...birthday, font: 'elegant' }, TODAY)).toContain('font-family="Bodoni Moda, sans-serif" font-size="61.2" font-weight="500" font-style="italic"')
     })
 
         it('escapes user text', () => {

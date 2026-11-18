@@ -23,8 +23,9 @@ describe('anniversary theme', () => {
     const config = parseConfig({ v: 1, theme: 'anniversary', startDate: '2018-04-22', title: 'In love with Elisa' })
     const model = buildModel(config, TODAY)
 
-    it('shows one stone per anniversary reached, the latest as the heart, and completes only that row', () => {
-        expect(model.cells).toHaveLength(13)
+    it('shows one stone per anniversary reached, the latest as the heart, plus the next one', () => {
+        expect(model.cells).toHaveLength(9)
+        expect(model.cells.at(-1)!.state).toBe('future')
         expect(model.cells.filter(c => c.glyph === 'heart')).toEqual([{ glyph: 'heart', state: 'current' }])
         expect(model.cells.findIndex(c => c.state === 'current')).toBe(7) // the 8th anniversary
         expect(model.cells.filter(c => c.state === 'past')).toHaveLength(7)
@@ -49,15 +50,15 @@ describe('anniversary theme', () => {
         expect(states('2027-09-21')).toEqual(['past', 'current'])
     })
 
-    it('adds a row only when the anniversaries fill the current one', () => {
+    it('grows by one stone a year, with no row to fill', () => {
         const long = parseConfig({ v: 1, theme: 'anniversary', startDate: '2000-01-01' })
-        expect(buildModel(long, '2013-06-01').cells).toHaveLength(13) // 13 anniversaries fill the row
-        expect(buildModel(long, '2014-06-01').cells).toHaveLength(26) // the 14th starts a new one
+        expect(buildModel(long, '2012-06-01').cells).toHaveLength(13) // 12 anniversaries and the next one fill the row
+        expect(buildModel(long, '2013-06-01').cells).toHaveLength(14) // the next one starts a new row
     })
 
-    it('shows an empty row before the first anniversary', () => {
+    it('shows only the coming stone before the first anniversary', () => {
         const fresh = buildModel(parseConfig({ v: 1, theme: 'anniversary', startDate: '2026-06-01' }), TODAY)
-        expect(fresh.cells.every(c => c.state === 'future')).toBe(true)
+        expect(fresh.cells).toEqual([{ glyph: 'stone', state: 'future' }])
         expect(fresh.counter).toEqual(['0 years', 'June 1, 2026'])
         const future = buildModel(parseConfig({ v: 1, theme: 'anniversary', startDate: '2027-01-04' }), TODAY)
         expect(future.counter).toEqual(['0 years', 'January 4, 2027'])

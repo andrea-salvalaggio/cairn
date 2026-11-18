@@ -11,9 +11,9 @@ export const LAYOUT = {
      *  the middle of the free area between the clock and the Lock Screen buttons. Provisional. */
     blockCenter: 0.57,
     titleGap: 32,
-    titleSize: 15,
+    titleSize: 17,
     counterGap: 33,
-    counterSize: 11.5,
+    counterSize: 13,
 } as const
 
 export const FONT_FAMILY = 'Geist'

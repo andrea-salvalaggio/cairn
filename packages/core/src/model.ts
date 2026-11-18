@@ -50,10 +50,10 @@ function anniversary(config: Config, today: string): Model {
     const start = config.startDate!
     const started = diffDays(start, today) >= 0
     const years = started ? fullYears(start, today) : 0
-    // One stone per anniversary reached, the latest in the accent color; before the first, the row is empty.
+    // One stone per anniversary reached, the latest in the accent color.
     const current = years - 1
-    // Future stones only complete the current row: a relationship has no forecast.
-    const length = Math.max(1, Math.ceil(years / COLUMNS)) * COLUMNS
+    // Plus only the next one: a relationship has no end, so there is no row to fill.
+    const length = years + 1
     const cells: Cell[] = Array.from({ length }, (_, i) =>
         ({ glyph: i === current ? 'heart' : 'stone', state: i < current ? 'past' : i === current ? 'current' : 'future' }))
     return {
