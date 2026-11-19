@@ -430,16 +430,24 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
         z-index: 10;
         width: min(32rem, calc(100% - 2 * #{$spacer}));
         margin-inline: auto;
-        // iOS tab bar: a glass capsule, icon over a small label, the selected tab tinted on a soft lighter pill.
-        border-color: rgba($white, 0.14);
-        background-color: rgba(40, 40, 44, 0.55);
-        box-shadow: 0 8px 32px rgba($black, 0.4), inset 0 1px 0 rgba($white, 0.08);
-        -webkit-backdrop-filter: blur(24px) saturate(180%);
-        backdrop-filter: blur(24px) saturate(180%);
+        // Dark Liquid Glass: a see-through capsule lit by a bright top rim and a faint bottom one, over a deep drop shadow.
+        border-color: rgba($white, 0.22);
+        background: linear-gradient(to bottom, rgba($white, 0.1), rgba($white, 0.03)), rgba(28, 28, 30, 0.42);
+        box-shadow:
+            0 12px 40px rgba($black, 0.6),
+            0 2px 6px rgba($black, 0.35),
+            inset 0 1px 0 rgba($white, 0.28),
+            inset 0 -1px 0 rgba($white, 0.08);
+        -webkit-backdrop-filter: blur(28px) saturate(200%) brightness(1.1);
+        backdrop-filter: blur(28px) saturate(200%) brightness(1.1);
 
+        // The selected tab sits on a raised drop of glass, with its own rim.
         .ios-segmented-thumb {
-            background-color: rgba($white, 0.12);
-            box-shadow: none;
+            background: linear-gradient(to bottom, rgba($white, 0.24), rgba($white, 0.12));
+            box-shadow:
+                inset 0 1px 0 rgba($white, 0.35),
+                inset 0 0 0 0.5px rgba($white, 0.18),
+                0 2px 10px rgba($black, 0.35);
         }
 
         .ios-segmented-item {
@@ -450,7 +458,8 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
             font-size: 0.625rem;
             font-weight: $font-weight-semibold;
             letter-spacing: 0;
-            color: $label-secondary;
+            // Brighter than $label-secondary: the glass lets busy content through, so labels need the extra contrast.
+            color: rgba($white, 0.82);
 
             &[aria-checked="true"] {
                 color: $tint;
