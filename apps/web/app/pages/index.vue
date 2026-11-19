@@ -29,10 +29,11 @@ const offsetOf = (timeZone: string) =>
 const timeZones = [...new Set([detectedZone, ...Intl.supportedValuesOf('timeZone')])].sort()
     .map(zone => ({ zone, label: `${zone.replaceAll('_', ' ')} · ${offsetOf(zone)}` }))
 
-const themes: { label: string, value: ThemeId }[] = [
-    { label: 'Birthday', value: 'birthday' },
-    { label: 'Anniversary', value: 'anniversary' },
-    { label: 'Goal', value: 'goal' },
+const themes: { label: string, value: ThemeId, icon: string }[] = [
+    // Phosphor names: the tab bar needs both a -bold (outline) and a -fill version of each.
+    { label: 'Birthday', value: 'birthday', icon: 'cake' },
+    { label: 'Anniversary', value: 'anniversary', icon: 'heart' },
+    { label: 'Goal', value: 'goal', icon: 'star' },
 ]
 const models = deviceModels()
 
@@ -173,6 +174,9 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
                 <span class="ios-segmented-thumb" aria-hidden="true" />
                 <button v-for="t in themes" :key="t.value" type="button" role="radio"
                     :aria-checked="form.theme === t.value" :tabindex="form.theme === t.value ? 0 : -1" class="ios-segmented-item" @click="form.theme = t.value">
+                    <!-- Both rendered, CSS shows one: no icon fetch or flash when the selection changes. -->
+                    <UIcon :name="`i-ph-${t.icon}-bold`" class="themes-icon themes-icon--outline" aria-hidden="true" />
+                    <UIcon :name="`i-ph-${t.icon}-fill`" class="themes-icon themes-icon--fill" aria-hidden="true" />
                     {{ t.label }}
                 </button>
             </div>
@@ -307,16 +311,16 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     max-width: 64rem;
     min-height: 100dvh;
     margin: $spacer-0 auto;
-    padding: $spacer-0 $spacer;
+    padding: env(safe-area-inset-top) max(env(safe-area-inset-right), #{$spacer}) $spacer-0 max(env(safe-area-inset-left), #{$spacer});
 
     @include up($bp-sm) {
-        padding-inline: $spacer-4;
+        padding-inline: max(env(safe-area-inset-left), #{$spacer-4}) max(env(safe-area-inset-right), #{$spacer-4});
     }
 
     @include up($bp-md) {
         justify-content: start;
         gap: $spacer-8;
-        padding-top: $spacer-7;
+        padding-top: calc(#{$spacer-7} + env(safe-area-inset-top));
     }
 }
 
@@ -328,7 +332,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     align-self: start;
 
     @include up($bp-md) {
-        // Tabs over the phone, logo over the form: the phone and the first field start on the same line.
         grid-template-areas: "themes intro" "preview form";
         grid-template-rows: auto 1fr;
         grid-template-columns: auto minmax(0, 32rem);
@@ -392,6 +395,97 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 
     @include up($bp-md) {
         align-self: end;
+    }
+}
+
+.themes-icon {
+    display: none;
+}
+
+@mixin tab-bar {
+    .editor {
+        padding-bottom: calc(3.75rem + #{$spacer-7} + env(safe-area-inset-bottom));
+
+        &::after {
+            content: '';
+            position: fixed;
+            inset: auto 0 0;
+            z-index: 9;
+            height: calc(3.75rem + #{$spacer-8} + env(safe-area-inset-bottom));
+            pointer-events: none;
+            background: linear-gradient(to top, rgba($black, 0.85), rgba($black, 0));
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            mask-image: linear-gradient(to top, #000 50%, transparent);
+        }
+    }
+
+    .themes {
+        position: fixed;
+        inset: auto 0 max(env(safe-area-inset-bottom), #{$spacer});
+        z-index: 10;
+        width: min(32rem, calc(100% - 2 * #{$spacer}));
+        margin-inline: auto;
+        border-color: rgba($white, 0.14);
+        background-color: rgba(18, 18, 20, 0.72);
+        box-shadow: 0 8px 32px rgba($black, 0.5), inset 0 1px 0 rgba($white, 0.08);
+        -webkit-backdrop-filter: blur(24px) saturate(180%);
+        backdrop-filter: blur(24px) saturate(180%);
+
+        .ios-segmented-thumb {
+            background-color: rgba($white, 0.08);
+            box-shadow: none;
+        }
+
+        .ios-segmented-item {
+            flex-direction: column;
+            gap: 2px;
+            min-height: 3.75rem;
+            padding: $spacer-2;
+            font-size: 0.75rem;
+            font-weight: $font-weight-medium;
+            letter-spacing: 0;
+            color: rgba($white, 0.82);
+
+            &[aria-checked="true"] {
+                color: $tint;
+
+                .themes-icon--outline {
+                    display: none;
+                }
+
+                .themes-icon--fill {
+                    display: block;
+                }
+            }
+        }
+
+        .themes-icon--outline {
+            display: block;
+        }
+
+        .themes-icon {
+            width: 1.625rem;
+            height: 1.625rem;
+        }
+    }
+}
+
+@media (display-mode: standalone) {
+    @include down($bp-md) {
+        @include tab-bar;
+
+        .workspace {
+            grid-template-areas: "intro" "preview" "form";
+        }
+    }
+
+    @media #{$phone-landscape} and (min-width: $bp-md) {
+        @include tab-bar;
+
+        .workspace {
+            grid-template-areas: "preview intro" "preview form";
+        }
     }
 }
 
@@ -474,8 +568,8 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     a {
         display: grid;
         place-items: center;
-        width: $row-height;
-        height: $row-height;
+        width: 2.5rem;
+        height: 2.5rem;
         margin: -$spacer-3 0;
         border-radius: $radius-pill;
 
@@ -500,15 +594,12 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 .font-picker {
     display: flex;
     gap: $spacer-2;
-    // Room for the focus ring, which the scroll container would otherwise clip.
     padding: 4px;
     margin: -4px;
     overflow-x: auto;
     scroll-snap-type: x proximity;
-    // Matches the padding, so the first chip snaps back to scroll position 0 and the start fade clears.
     scroll-padding-inline: 4px;
     scrollbar-width: none;
-    // The mask fades chips into whatever dark surface sits behind the row.
     --fade-start: 0px;
     --fade-end: 0px;
     mask-image: linear-gradient(to right, transparent, #000 var(--fade-start), #000 calc(100% - var(--fade-end)), transparent);
@@ -531,7 +622,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     }
 }
 
-// Registered, so the fade width can transition instead of jumping.
 @property --fade-start {
     syntax: '<length>';
     inherits: false;
@@ -653,6 +743,25 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 
     @include up($bp-sm) {
         flex-direction: row;
+    }
+}
+
+@media #{$phone-landscape} {
+    .workspace {
+        grid-template-columns: auto minmax(0, 1fr);
+        column-gap: $spacer-6;
+    }
+
+    .preview :deep(.phone) {
+        --screen: 240px;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .actions .actions-main {
+        flex: none;
     }
 }
 

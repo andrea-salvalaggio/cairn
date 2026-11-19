@@ -65,6 +65,8 @@ $ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 $bp-sm: 36rem;
 $bp-md: 48rem;
 $bp-lg: 62rem;
+// A phone held sideways: short and wide, whatever its width breakpoint.
+$phone-landscape: "(orientation: landscape) and (max-height: 30rem)";
 
 @mixin up($bp) {
     @media (min-width: $bp) {

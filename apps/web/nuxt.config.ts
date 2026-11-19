@@ -39,9 +39,12 @@ export default defineNuxtConfig({
         head: {
             title: 'Cairn | A Wallpaper That Grows',
             htmlAttrs: { lang: 'en' },
+            // cover: env(safe-area-inset-*) is only non-zero with it, the installed app's tab bar needs the bottom inset.
+            viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
             link: [
                 { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
                 { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+                { rel: 'manifest', href: '/manifest.webmanifest' },
             ],
             meta: [
                 { name: 'description', content: 'A free iPhone Lock Screen wallpaper that grows one stone at a time: for your life, your anniversary or your goal.' },
