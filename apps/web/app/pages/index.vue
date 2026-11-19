@@ -311,8 +311,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     max-width: 64rem;
     min-height: 100dvh;
     margin: $spacer-0 auto;
-    // viewport-fit=cover lets the page run under the notch in landscape: never pad less than the safe area.
-    // The top inset keeps the page clear of the status bar in the installed app.
     padding: env(safe-area-inset-top) max(env(safe-area-inset-right), #{$spacer}) $spacer-0 max(env(safe-area-inset-left), #{$spacer});
 
     @include up($bp-sm) {
@@ -334,7 +332,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     align-self: start;
 
     @include up($bp-md) {
-        // Tabs over the phone, logo over the form: the phone and the first field start on the same line.
         grid-template-areas: "themes intro" "preview form";
         grid-template-rows: auto 1fr;
         grid-template-columns: auto minmax(0, 32rem);
@@ -401,18 +398,14 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     }
 }
 
-// Only the installed app's tab bar shows icons; the in-page pills stay text.
 .themes-icon {
     display: none;
 }
 
-// Installed on the Home Screen there is no Safari toolbar at the bottom: the theme switcher becomes a floating tab bar.
 @mixin tab-bar {
     .editor {
-        // Leaves room for the bar.
         padding-bottom: calc(3.75rem + #{$spacer-7} + env(safe-area-inset-bottom));
 
-        // A blurred band behind the bar, fading upward, so the bar reads as its own layer over the scrolling page.
         &::after {
             content: '';
             position: fixed;
@@ -433,8 +426,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
         z-index: 10;
         width: min(32rem, calc(100% - 2 * #{$spacer}));
         margin-inline: auto;
-        // iOS tab bar: a glass capsule, icon over a small label, the selected tab tinted on a soft lighter pill.
-        // The dark base keeps the labels readable over busy content.
         border-color: rgba($white, 0.14);
         background-color: rgba(18, 18, 20, 0.72);
         box-shadow: 0 8px 32px rgba($black, 0.5), inset 0 1px 0 rgba($white, 0.08);
@@ -451,11 +442,9 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
             gap: 2px;
             min-height: 3.75rem;
             padding: $spacer-2;
-            // 12px under a 26px icon: about iOS's label-to-glyph ratio, so the two read as one unit.
             font-size: 0.75rem;
             font-weight: $font-weight-medium;
             letter-spacing: 0;
-            // Brighter than $label-secondary: the glass lets busy content through, so labels need the extra contrast.
             color: rgba($white, 0.82);
 
             &[aria-checked="true"] {
@@ -491,7 +480,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
         }
     }
 
-    // Only from md up: a narrower phone on its side keeps the one-column layout above.
     @media #{$phone-landscape} and (min-width: $bp-md) {
         @include tab-bar;
 
@@ -606,15 +594,12 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 .font-picker {
     display: flex;
     gap: $spacer-2;
-    // Room for the focus ring, which the scroll container would otherwise clip.
     padding: 4px;
     margin: -4px;
     overflow-x: auto;
     scroll-snap-type: x proximity;
-    // Matches the padding, so the first chip snaps back to scroll position 0 and the start fade clears.
     scroll-padding-inline: 4px;
     scrollbar-width: none;
-    // The mask fades chips into whatever dark surface sits behind the row.
     --fade-start: 0px;
     --fade-end: 0px;
     mask-image: linear-gradient(to right, transparent, #000 var(--fade-start), #000 calc(100% - var(--fade-end)), transparent);
@@ -637,7 +622,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     }
 }
 
-// Registered, so the fade width can transition instead of jumping.
 @property --fade-start {
     syntax: '<length>';
     inherits: false;
@@ -762,7 +746,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     }
 }
 
-// A phone on its side: wide enough for two columns but the notch insets eat the width, so shrink the phone and the gap.
 @media #{$phone-landscape} {
     .workspace {
         grid-template-columns: auto minmax(0, 1fr);
@@ -777,7 +760,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
         flex-direction: column;
     }
 
-    // flex: 1 is for the row; in a column it would size the height from 0 and squash the button.
     .actions .actions-main {
         flex: none;
     }
