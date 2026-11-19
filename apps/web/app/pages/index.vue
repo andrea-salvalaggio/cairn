@@ -30,9 +30,10 @@ const timeZones = [...new Set([detectedZone, ...Intl.supportedValuesOf('timeZone
     .map(zone => ({ zone, label: `${zone.replaceAll('_', ' ')} · ${offsetOf(zone)}` }))
 
 const themes: { label: string, value: ThemeId, icon: string }[] = [
-    { label: 'Birthday', value: 'birthday', icon: 'i-lucide-cake' },
-    { label: 'Anniversary', value: 'anniversary', icon: 'i-lucide-heart' },
-    { label: 'Goal', value: 'goal', icon: 'i-lucide-star' },
+    // Phosphor names: the tab bar needs both a -bold (outline) and a -fill version of each.
+    { label: 'Birthday', value: 'birthday', icon: 'cake' },
+    { label: 'Anniversary', value: 'anniversary', icon: 'heart' },
+    { label: 'Goal', value: 'goal', icon: 'star' },
 ]
 const models = deviceModels()
 
@@ -173,7 +174,9 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
                 <span class="ios-segmented-thumb" aria-hidden="true" />
                 <button v-for="t in themes" :key="t.value" type="button" role="radio"
                     :aria-checked="form.theme === t.value" :tabindex="form.theme === t.value ? 0 : -1" class="ios-segmented-item" @click="form.theme = t.value">
-                    <UIcon :name="t.icon" class="themes-icon" aria-hidden="true" />
+                    <!-- Both rendered, CSS shows one: no icon fetch or flash when the selection changes. -->
+                    <UIcon :name="`i-ph-${t.icon}-bold`" class="themes-icon themes-icon--outline" aria-hidden="true" />
+                    <UIcon :name="`i-ph-${t.icon}-fill`" class="themes-icon themes-icon--fill" aria-hidden="true" />
                     {{ t.label }}
                 </button>
             </div>
@@ -407,7 +410,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 @mixin tab-bar {
     .editor {
         // Leaves room for the bar.
-        padding-bottom: calc(3.25rem + #{$spacer-7} + env(safe-area-inset-bottom));
+        padding-bottom: calc(3.75rem + #{$spacer-7} + env(safe-area-inset-bottom));
 
         // A blurred band behind the bar, fading upward, so the bar reads as its own layer over the scrolling page.
         &::after {
@@ -415,7 +418,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
             position: fixed;
             inset: auto 0 0;
             z-index: 9;
-            height: calc(3.25rem + #{$spacer-8} + env(safe-area-inset-bottom));
+            height: calc(3.75rem + #{$spacer-8} + env(safe-area-inset-bottom));
             pointer-events: none;
             background: linear-gradient(to top, rgba($black, 0.85), rgba($black, 0));
             -webkit-backdrop-filter: blur(12px);
@@ -430,46 +433,51 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
         z-index: 10;
         width: min(32rem, calc(100% - 2 * #{$spacer}));
         margin-inline: auto;
-        // Dark Liquid Glass: a see-through capsule lit by a bright top rim and a faint bottom one, over a deep drop shadow.
-        border-color: rgba($white, 0.22);
-        background: linear-gradient(to bottom, rgba($white, 0.1), rgba($white, 0.03)), rgba(28, 28, 30, 0.42);
-        box-shadow:
-            0 12px 40px rgba($black, 0.6),
-            0 2px 6px rgba($black, 0.35),
-            inset 0 1px 0 rgba($white, 0.28),
-            inset 0 -1px 0 rgba($white, 0.08);
-        -webkit-backdrop-filter: blur(28px) saturate(200%) brightness(1.1);
-        backdrop-filter: blur(28px) saturate(200%) brightness(1.1);
+        // iOS tab bar: a glass capsule, icon over a small label, the selected tab tinted on a soft lighter pill.
+        // The dark base keeps the labels readable over busy content.
+        border-color: rgba($white, 0.14);
+        background-color: rgba(18, 18, 20, 0.72);
+        box-shadow: 0 8px 32px rgba($black, 0.5), inset 0 1px 0 rgba($white, 0.08);
+        -webkit-backdrop-filter: blur(24px) saturate(180%);
+        backdrop-filter: blur(24px) saturate(180%);
 
-        // The selected tab sits on a raised drop of glass, with its own rim.
         .ios-segmented-thumb {
-            background: linear-gradient(to bottom, rgba($white, 0.24), rgba($white, 0.12));
-            box-shadow:
-                inset 0 1px 0 rgba($white, 0.35),
-                inset 0 0 0 0.5px rgba($white, 0.18),
-                0 2px 10px rgba($black, 0.35);
+            background-color: rgba($white, 0.08);
+            box-shadow: none;
         }
 
         .ios-segmented-item {
             flex-direction: column;
             gap: 2px;
-            min-height: 3.25rem;
-            padding: 0.375rem $spacer-2;
-            font-size: 0.625rem;
-            font-weight: $font-weight-semibold;
+            min-height: 3.75rem;
+            padding: $spacer-2;
+            // 12px under a 26px icon: about iOS's label-to-glyph ratio, so the two read as one unit.
+            font-size: 0.75rem;
+            font-weight: $font-weight-medium;
             letter-spacing: 0;
             // Brighter than $label-secondary: the glass lets busy content through, so labels need the extra contrast.
             color: rgba($white, 0.82);
 
             &[aria-checked="true"] {
                 color: $tint;
+
+                .themes-icon--outline {
+                    display: none;
+                }
+
+                .themes-icon--fill {
+                    display: block;
+                }
             }
         }
 
-        .themes-icon {
+        .themes-icon--outline {
             display: block;
-            width: 1.5rem;
-            height: 1.5rem;
+        }
+
+        .themes-icon {
+            width: 1.625rem;
+            height: 1.625rem;
         }
     }
 }
