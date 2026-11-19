@@ -29,10 +29,10 @@ const offsetOf = (timeZone: string) =>
 const timeZones = [...new Set([detectedZone, ...Intl.supportedValuesOf('timeZone')])].sort()
     .map(zone => ({ zone, label: `${zone.replaceAll('_', ' ')} · ${offsetOf(zone)}` }))
 
-const themes: { label: string, value: ThemeId }[] = [
-    { label: 'Birthday', value: 'birthday' },
-    { label: 'Anniversary', value: 'anniversary' },
-    { label: 'Goal', value: 'goal' },
+const themes: { label: string, value: ThemeId, icon: string }[] = [
+    { label: 'Birthday', value: 'birthday', icon: 'i-lucide-cake' },
+    { label: 'Anniversary', value: 'anniversary', icon: 'i-lucide-heart' },
+    { label: 'Goal', value: 'goal', icon: 'i-lucide-star' },
 ]
 const models = deviceModels()
 
@@ -173,6 +173,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
                 <span class="ios-segmented-thumb" aria-hidden="true" />
                 <button v-for="t in themes" :key="t.value" type="button" role="radio"
                     :aria-checked="form.theme === t.value" :tabindex="form.theme === t.value ? 0 : -1" class="ios-segmented-item" @click="form.theme = t.value">
+                    <UIcon :name="t.icon" class="themes-icon" aria-hidden="true" />
                     {{ t.label }}
                 </button>
             </div>
@@ -397,10 +398,16 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     }
 }
 
+// Only the installed app's tab bar shows icons; the in-page pills stay text.
+.themes-icon {
+    display: none;
+}
+
 // Installed on the Home Screen there is no Safari toolbar at the bottom: the theme switcher becomes a floating tab bar.
 @mixin tab-bar {
     .editor {
-        padding-bottom: calc(#{$row-height} + #{$spacer-6} + env(safe-area-inset-bottom));
+        // Leaves room for the bar.
+        padding-bottom: calc(3.25rem + #{$spacer-7} + env(safe-area-inset-bottom));
 
         // A blurred band behind the bar, fading upward, so the bar reads as its own layer over the scrolling page.
         &::after {
@@ -408,7 +415,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
             position: fixed;
             inset: auto 0 0;
             z-index: 9;
-            height: calc(#{$row-height} + #{$spacer-8} + env(safe-area-inset-bottom));
+            height: calc(3.25rem + #{$spacer-8} + env(safe-area-inset-bottom));
             pointer-events: none;
             background: linear-gradient(to top, rgba($black, 0.85), rgba($black, 0));
             -webkit-backdrop-filter: blur(12px);
@@ -423,9 +430,38 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
         z-index: 10;
         width: min(32rem, calc(100% - 2 * #{$spacer}));
         margin-inline: auto;
-        background-color: rgba($black, 0.6);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        backdrop-filter: blur(20px) saturate(180%);
+        // iOS tab bar: a glass capsule, icon over a small label, the selected tab tinted on a soft lighter pill.
+        border-color: rgba($white, 0.14);
+        background-color: rgba(40, 40, 44, 0.55);
+        box-shadow: 0 8px 32px rgba($black, 0.4), inset 0 1px 0 rgba($white, 0.08);
+        -webkit-backdrop-filter: blur(24px) saturate(180%);
+        backdrop-filter: blur(24px) saturate(180%);
+
+        .ios-segmented-thumb {
+            background-color: rgba($white, 0.12);
+            box-shadow: none;
+        }
+
+        .ios-segmented-item {
+            flex-direction: column;
+            gap: 2px;
+            min-height: 3.25rem;
+            padding: 0.375rem $spacer-2;
+            font-size: 0.625rem;
+            font-weight: $font-weight-semibold;
+            letter-spacing: 0;
+            color: $label-secondary;
+
+            &[aria-checked="true"] {
+                color: $tint;
+            }
+        }
+
+        .themes-icon {
+            display: block;
+            width: 1.5rem;
+            height: 1.5rem;
+        }
     }
 }
 
@@ -722,6 +758,11 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 
     .actions {
         flex-direction: column;
+    }
+
+    // flex: 1 is for the row; in a column it would size the height from 0 and squash the button.
+    .actions .actions-main {
+        flex: none;
     }
 }
 
