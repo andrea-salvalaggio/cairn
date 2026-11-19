@@ -308,7 +308,8 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     min-height: 100dvh;
     margin: $spacer-0 auto;
     // viewport-fit=cover lets the page run under the notch in landscape: never pad less than the safe area.
-    padding: $spacer-0 max(env(safe-area-inset-right), #{$spacer}) $spacer-0 max(env(safe-area-inset-left), #{$spacer});
+    // The top inset keeps the page clear of the status bar in the installed app.
+    padding: env(safe-area-inset-top) max(env(safe-area-inset-right), #{$spacer}) $spacer-0 max(env(safe-area-inset-left), #{$spacer});
 
     @include up($bp-sm) {
         padding-inline: max(env(safe-area-inset-left), #{$spacer-4}) max(env(safe-area-inset-right), #{$spacer-4});
@@ -317,7 +318,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     @include up($bp-md) {
         justify-content: start;
         gap: $spacer-8;
-        padding-top: $spacer-7;
+        padding-top: calc(#{$spacer-7} + env(safe-area-inset-top));
     }
 }
 
@@ -397,23 +398,52 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 }
 
 // Installed on the Home Screen there is no Safari toolbar at the bottom: the theme switcher becomes a floating tab bar.
+@mixin tab-bar {
+    .editor {
+        padding-bottom: calc(#{$row-height} + #{$spacer-6} + env(safe-area-inset-bottom));
+
+        // A blurred band behind the bar, fading upward, so the bar reads as its own layer over the scrolling page.
+        &::after {
+            content: '';
+            position: fixed;
+            inset: auto 0 0;
+            z-index: 9;
+            height: calc(#{$row-height} + #{$spacer-8} + env(safe-area-inset-bottom));
+            pointer-events: none;
+            background: linear-gradient(to top, rgba($black, 0.85), rgba($black, 0));
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            mask-image: linear-gradient(to top, #000 50%, transparent);
+        }
+    }
+
+    .themes {
+        position: fixed;
+        inset: auto 0 max(env(safe-area-inset-bottom), #{$spacer});
+        z-index: 10;
+        width: min(32rem, calc(100% - 2 * #{$spacer}));
+        margin-inline: auto;
+        background-color: rgba($black, 0.6);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        backdrop-filter: blur(20px) saturate(180%);
+    }
+}
+
 @media (display-mode: standalone) {
     @include down($bp-md) {
-        .editor {
-            padding-bottom: calc(#{$row-height} + #{$spacer-6} + env(safe-area-inset-bottom));
-        }
+        @include tab-bar;
 
         .workspace {
             grid-template-areas: "intro" "preview" "form";
         }
+    }
 
-        .themes {
-            position: fixed;
-            inset: auto $spacer max(env(safe-area-inset-bottom), #{$spacer});
-            z-index: 10;
-            background-color: rgba($black, 0.6);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            backdrop-filter: blur(20px) saturate(180%);
+    // Only from md up: a narrower phone on its side keeps the one-column layout above.
+    @media #{$phone-landscape} and (min-width: $bp-md) {
+        @include tab-bar;
+
+        .workspace {
+            grid-template-areas: "preview intro" "preview form";
         }
     }
 }
@@ -676,6 +706,22 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 
     @include up($bp-sm) {
         flex-direction: row;
+    }
+}
+
+// A phone on its side: wide enough for two columns but the notch insets eat the width, so shrink the phone and the gap.
+@media #{$phone-landscape} {
+    .workspace {
+        grid-template-columns: auto minmax(0, 1fr);
+        column-gap: $spacer-6;
+    }
+
+    .preview :deep(.phone) {
+        --screen: 240px;
+    }
+
+    .actions {
+        flex-direction: column;
     }
 }
 
