@@ -307,10 +307,11 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     max-width: 64rem;
     min-height: 100dvh;
     margin: $spacer-0 auto;
-    padding: $spacer-0 $spacer;
+    // viewport-fit=cover lets the page run under the notch in landscape: never pad less than the safe area.
+    padding: $spacer-0 max(env(safe-area-inset-right), #{$spacer}) $spacer-0 max(env(safe-area-inset-left), #{$spacer});
 
     @include up($bp-sm) {
-        padding-inline: $spacer-4;
+        padding-inline: max(env(safe-area-inset-left), #{$spacer-4}) max(env(safe-area-inset-right), #{$spacer-4});
     }
 
     @include up($bp-md) {
@@ -395,6 +396,28 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     }
 }
 
+// Installed on the Home Screen there is no Safari toolbar at the bottom: the theme switcher becomes a floating tab bar.
+@media (display-mode: standalone) {
+    @include down($bp-md) {
+        .editor {
+            padding-bottom: calc(#{$row-height} + #{$spacer-6} + env(safe-area-inset-bottom));
+        }
+
+        .workspace {
+            grid-template-areas: "intro" "preview" "form";
+        }
+
+        .themes {
+            position: fixed;
+            inset: auto $spacer max(env(safe-area-inset-bottom), #{$spacer});
+            z-index: 10;
+            background-color: rgba($black, 0.6);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(20px) saturate(180%);
+        }
+    }
+}
+
 .preview {
     grid-area: preview;
 
@@ -474,8 +497,8 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     a {
         display: grid;
         place-items: center;
-        width: $row-height;
-        height: $row-height;
+        width: 2.5rem;
+        height: 2.5rem;
         margin: -$spacer-3 0;
         border-radius: $radius-pill;
 
