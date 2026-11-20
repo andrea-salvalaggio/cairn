@@ -537,7 +537,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     }
 
     a {
-        color: $label;
+        color: inherit;
         text-decoration: none;
         transition: color 0.2s ease, transform 120ms $ease-out;
 
