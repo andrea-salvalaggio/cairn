@@ -27,7 +27,7 @@ const hex = computed({
 
 <template>
     <div class="color-field">
-        <UPopover :content="{ align: 'start', sideOffset: 8 }">
+        <UPopover :content="{ align: 'start', sideOffset: 8, positionStrategy: 'absolute' }">
             <button type="button" class="color-trigger" v-bind="$attrs">
                 <span class="color-dot" :style="{ backgroundColor: hex }" />
                 <span class="color-hex">{{ hex }}</span>
