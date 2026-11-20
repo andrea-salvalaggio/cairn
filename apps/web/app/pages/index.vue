@@ -320,7 +320,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     @include up($bp-md) {
         justify-content: start;
         gap: $spacer-8;
-        padding-top: calc(#{$spacer-7} + env(safe-area-inset-top));
     }
 }
 
@@ -332,8 +331,8 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     align-self: start;
 
     @include up($bp-md) {
-        grid-template-areas: "themes intro" "preview form";
-        grid-template-rows: auto 1fr;
+        grid-template-areas: "intro intro" "themes form" "preview form";
+        grid-template-rows: auto auto 1fr;
         grid-template-columns: auto minmax(0, 32rem);
         gap: $spacer-5 $spacer-8;
     }
@@ -341,52 +340,46 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 
 .intro {
     grid-area: intro;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacer;
+    padding: $spacer $spacer-0;
+
+    @include up($bp-md) {
+        margin-bottom: $spacer-4;
+    }
 
     h1 {
         margin: $spacer-0;
-        font-size: $font-size-large-title;
-        font-weight: $font-weight-bold;
         line-height: $line-height-tight;
-        letter-spacing: -0.025em;
+    }
+
+    .cairn-logo {
+        height: 1.25rem;
     }
 
     p {
-        margin: $spacer-2 $spacer-0 $spacer-0;
+        margin: $spacer-0;
+        font-size: $font-size-footnote;
+        line-height: $line-height-tight;
+        text-align: right;
         color: $label-secondary;
     }
 
-    @include down($bp-md) {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: $spacer;
-        padding: $spacer $spacer-0;
+    .intro-line {
+        display: block;
+    }
 
-        .cairn-logo {
-            height: 1.25rem;
-        }
-
-        p {
-            margin: $spacer-0;
-            font-size: $font-size-footnote;
-            line-height: $line-height-tight;
-            text-align: right;
-        }
-
-        .intro-line {
-            display: block;
-        }
-
-        &::after {
-            content: '';
-            position: absolute;
-            inset: auto 0 0;
-            height: 0.5px;
-            background-color: $separator;
-            box-shadow: 0 0 0 100vmax $separator;
-            clip-path: inset(0 -100vmax);
-        }
+    &::after {
+        content: '';
+        position: absolute;
+        inset: auto 0 0;
+        height: 0.5px;
+        background-color: $separator;
+        box-shadow: 0 0 0 100vmax $separator;
+        clip-path: inset(0 -100vmax);
     }
 }
 
@@ -526,7 +519,6 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 
     @include up($bp-md) {
         margin-top: $spacer-6;
-        padding-left: $spacer-5;
     }
     
     &::before {
