@@ -1,0 +1,204 @@
+<!-- Shown while the editor's JavaScript loads (the page renders on the client only). Plain HTML and CSS:
+     no SCSS or components here, so every size mirrors _variables.scss, index.vue and IPhoneMockup.vue by hand.
+     When the editor's layout changes, update this file too, or the page jumps when the editor replaces it. -->
+<div class="sk" aria-busy="true" aria-label="Loading the editor">
+    <div class="sk-workspace">
+        <div class="sk-intro">
+            <span class="sk-block sk-logo"></span>
+            <span class="sk-tagline"><span class="sk-block sk-text" style="width: 8.625rem"></span><span class="sk-block sk-text" style="width: 6.25rem"></span></span>
+        </div>
+
+        <span class="sk-block sk-themes"></span>
+
+        <!-- The iPhone's silhouette at IPhoneMockup's size for the default iPhone (6.3", 402 × 874 pt): body and side keys, nothing inside. -->
+        <div class="sk-preview">
+            <div class="sk-block sk-phone">
+                <span class="sk-block sk-key" style="top: calc(150 * var(--u)); height: calc(30 * var(--u))"></span>
+                <span class="sk-block sk-key" style="top: calc(210 * var(--u)); height: calc(58 * var(--u))"></span>
+                <span class="sk-block sk-key" style="top: calc(285 * var(--u)); height: calc(58 * var(--u))"></span>
+                <span class="sk-block sk-key sk-key--side"></span>
+                <span class="sk-screen"></span>
+            </div>
+        </div>
+
+        <div class="sk-form">
+            <div class="sk-field"><span class="sk-label"><i class="sk-block"></i></span><span class="sk-block sk-box"></span></div>
+            <div class="sk-field">
+                <span class="sk-label"><i class="sk-block"></i></span>
+                <span class="sk-chips"><span class="sk-block sk-chip"></span><span class="sk-block sk-chip"></span><span class="sk-block sk-chip"></span><span class="sk-block sk-chip"></span><span class="sk-block sk-chip"></span></span>
+            </div>
+            <div class="sk-field"><span class="sk-label"><i class="sk-block"></i></span><span class="sk-block sk-box"></span><span class="sk-hint"><i class="sk-block" style="width: 11rem"></i></span></div>
+            <div class="sk-field"><span class="sk-label"><i class="sk-block"></i></span><span class="sk-block sk-box sk-box--date"></span><span class="sk-hint"><i class="sk-block" style="width: 88%"></i><i class="sk-block sk-narrow" style="width: 40%"></i></span></div>
+            <div class="sk-field"><span class="sk-label"><i class="sk-block"></i></span><span class="sk-block sk-box"></span></div>
+            <div class="sk-field"><span class="sk-label"><i class="sk-block"></i></span><span class="sk-block sk-box"></span><span class="sk-hint"><i class="sk-block" style="width: 96%"></i><i class="sk-block" style="width: 72%"></i></span></div>
+            <div class="sk-actions"><span class="sk-block sk-button sk-button--main"></span><span class="sk-block sk-button"></span></div>
+        </div>
+    </div>
+
+    <div class="sk-credits">
+        <span class="sk-block sk-text" style="width: 9.5rem"></span>
+        <span class="sk-icons"><span class="sk-block sk-icon"></span><span class="sk-block sk-icon"></span><span class="sk-block sk-icon"></span></span>
+    </div>
+</div>
+<style>
+    html, body { margin: 0; background: #000; }
+
+    /* .editor */
+    .sk {
+        display: grid;
+        grid-template-rows: 1fr auto;
+        grid-template-columns: minmax(0, max-content);
+        justify-content: center;
+        gap: 3rem;
+        max-width: 64rem;
+        min-height: 100dvh;
+        margin: 0 auto;
+        padding: env(safe-area-inset-top) max(env(safe-area-inset-right), 1rem) 0 max(env(safe-area-inset-left), 1rem);
+        box-sizing: border-box;
+    }
+
+    /* .workspace */
+    .sk-workspace {
+        display: grid;
+        grid-template-areas: "intro" "themes" "preview" "form";
+        grid-template-columns: minmax(0, 32rem);
+        gap: 1.5rem;
+        align-self: start;
+    }
+
+    .sk-block {
+        display: block;
+        border-radius: .375rem;
+        background: linear-gradient(90deg, #1C1C1E 0%, #2C2C2E 50%, #1C1C1E 100%) 0 0 / 200% 100%;
+        animation: sk-shine 1.4s ease-in-out infinite;
+    }
+    @keyframes sk-shine { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+    @media (prefers-reduced-motion: reduce) { .sk-block { animation: none; background: #1C1C1E; } }
+
+    /* Text stand-ins: a bar centred in a line box of the real text's height. */
+    .sk-text { height: .5rem; margin-block: .3375rem; border-radius: .25rem; }
+
+    /* .intro: 1rem padding around the two-line tagline (13px × 1.2), hairline below */
+    .sk-intro {
+        grid-area: intro;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 0;
+        box-shadow: 0 0.5px 0 rgba(84, 84, 88, 0.6);
+    }
+    .sk-logo { width: 5.08rem; height: 1.25rem; }
+    .sk-tagline { display: grid; justify-items: end; }
+    .sk-tagline .sk-text { margin-block: .2375rem; }
+
+    /* .ios-segmented--pill: 2.75rem rows plus 4px padding */
+    .sk-themes { grid-area: themes; height: 3.375rem; border-radius: 50rem; }
+
+    /* .phone: --u is one iOS point; 3 pt edge around a screen with a 5.5 pt bezel */
+    .sk-preview { grid-area: preview; }
+    .sk-phone {
+        --screen: min(300px, calc(100vw - 72px));
+        --u: calc(var(--screen) / 402);
+        position: relative;
+        width: max-content;
+        margin: 0 auto;
+        padding: calc(3 * var(--u));
+        border-radius: calc(70.5 * var(--u));
+    }
+    /* Holds the size only, built like .screen (content box plus bezel border) so the browser rounds it the same way. */
+    .sk-screen {
+        display: block;
+        box-sizing: content-box;
+        width: var(--screen);
+        aspect-ratio: 402 / 874;
+        border: calc(5.5 * var(--u)) solid transparent;
+    }
+    .sk-key {
+        position: absolute;
+        left: calc(-3 * var(--u));
+        width: calc(3 * var(--u));
+        border-radius: calc(2 * var(--u)) 0 0 calc(2 * var(--u));
+    }
+    .sk-key--side {
+        top: calc(240 * var(--u));
+        left: auto;
+        right: calc(-3 * var(--u));
+        height: calc(95 * var(--u));
+        border-radius: 0 calc(2 * var(--u)) calc(2 * var(--u)) 0;
+    }
+
+    /* .form, .fields, .field: a fixed 32rem like the real form's widest hint, capped by the column */
+    .sk-form { grid-area: form; display: flex; flex-direction: column; gap: 1.5rem; width: 32rem; max-width: 100%; }
+    .sk-field { display: flex; flex-direction: column; gap: .5rem; }
+    .sk-label { display: block; height: 1.25rem; padding-block: .375rem; box-sizing: border-box; }
+    .sk-label i { width: 4.5rem; height: 100%; border-radius: .25rem; }
+    .sk-box { height: 2.75rem; border-radius: .625rem; }
+    .sk-box--date { height: 2.625rem; }
+    .sk-chips { display: flex; gap: .5rem; overflow: hidden; }
+    .sk-chip { flex: none; width: 5.5rem; height: 2.125rem; border-radius: 50rem; }
+    .sk-hint { display: grid; }
+    .sk-hint i { height: .5rem; margin-block: .31875rem; border-radius: .25rem; }
+    /* Extra hint lines only where the real text wraps further. */
+    .sk-narrow { display: none; }
+    @media (max-width: 35.99rem) { .sk-narrow { display: block; } }
+
+    /* .actions: stacked on phones, side by side from 36rem */
+    .sk-actions { display: flex; flex-direction: column; gap: .75rem; margin-top: .5rem; }
+    .sk-button { height: 3.125rem; border-radius: .75rem; }
+
+    /* .credits */
+    .sk-credits {
+        display: flex;
+        align-self: end;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        padding: 1.5rem 0;
+        box-shadow: 0 -0.5px 0 rgba(84, 84, 88, 0.6);
+    }
+    .sk-icons { display: flex; gap: 1.25rem; }
+    .sk-icon { width: 1.25rem; height: 1.25rem; border-radius: 50rem; }
+
+    @media (min-width: 36rem) {
+        .sk { padding-inline: max(env(safe-area-inset-left), 1.5rem) max(env(safe-area-inset-right), 1.5rem); }
+        .sk-actions { flex-direction: row; }
+        .sk-button { width: 11.5625rem; }
+        .sk-button--main { flex: 1; }
+    }
+
+    /* Phones: the editor draws the iPhone at half the viewport width. */
+    @media (max-width: 47.99rem) {
+        .sk-phone { --screen: min(300px, 50vw); }
+    }
+
+    /* Desktop: preview on the left, form on the right. */
+    @media (min-width: 48rem) {
+        .sk { justify-content: start; gap: 5rem; }
+        .sk-workspace {
+            grid-template-areas: "intro intro" "themes form" "preview form";
+            grid-template-rows: auto auto 1fr;
+            grid-template-columns: auto minmax(0, 32rem);
+            gap: 2rem 5rem;
+        }
+        .sk-intro { margin-bottom: 1.5rem; }
+        .sk-themes { align-self: end; width: 22.5rem; }
+        .sk-preview { align-self: start; }
+        .sk-credits { margin-top: 3rem; }
+    }
+
+    /* The installed app on a phone: the theme switcher floats at the bottom as a tab bar. */
+    @media (display-mode: standalone) and (max-width: 47.99rem) {
+        .sk { padding-bottom: calc(3.75rem + 4rem + env(safe-area-inset-bottom)); }
+        .sk-themes {
+            position: fixed;
+            left: 50%;
+            bottom: max(env(safe-area-inset-bottom), 1rem);
+            z-index: 10;
+            width: min(32rem, calc(100% - 2rem));
+            height: 3.75rem;
+            translate: -50% 0;
+        }
+    }
+</style>
