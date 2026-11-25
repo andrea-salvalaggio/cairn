@@ -42,9 +42,9 @@ function peak(i: number, cx: number, cy: number, d: number, color: string): stri
         seed = (seed * 1664525 + 1013904223) % 4294967296
         return seed / 4294967296
     }
-    const w = d * (0.95 + 0.35 * rnd())
-    const h = d * (0.8 + 0.35 * rnd())
-    const lean = d * (rnd() - 0.5) * 0.45
+    const w = d * (1.0 + 0.15 * rnd())
+    const h = d * (0.9 + 0.15 * rnd())
+    const lean = d * (rnd() - 0.5) * 0.2
     const base = d * 0.5
     const left: [number, number] = [-w / 2, base]
     const right: [number, number] = [w / 2, base]
