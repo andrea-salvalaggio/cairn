@@ -212,7 +212,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
                     <div class="field">
                         <span id="accent-label" class="field-label">Color</span>
                         <span class="field-box"><ColorField v-model="form.accent" aria-labelledby="accent-label" /></span>
-                        <p class="field-hint">Colors the current stone and the counter.</p>
+                        <p class="field-hint">Colors the current stone.</p>
                     </div>
 
                     <!-- out-in: the old theme's dates leave before the new ones enter, so the form never holds both. -->
@@ -239,7 +239,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
                                 <span id="start-label" class="field-label">Counting from</span>
                                 <span class="field-box" :class="{ 'is-invalid': fieldError('startDate') }"><DateField v-model="form.goalStart" aria-labelledby="start-label" /></span>
                                 <p v-if="fieldError('startDate')" class="field-hint field-error" role="alert">{{ fieldError('startDate') }}</p>
-                                <p v-else class="field-hint">One stone per day, the colored one is the target. Longer goals switch to weeks or months.</p>
+                                <p v-else class="field-hint">One stone per day, the colored one is today. Longer goals switch to weeks or months.</p>
                             </div>
                         </div>
                     </Transition>
