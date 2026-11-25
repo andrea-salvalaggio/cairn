@@ -2,15 +2,15 @@
 
 A free, open-source iPhone Lock Screen wallpaper that grows one stone at a time.
 
-A cairn is a pile of stones that marks a path. Each dot is a stone; the moment that matters gets a different shape.
+A cairn is a pile of stones that marks a path. Each dot is a stone, laid from the bottom up; the current one takes the accent color, everything else is monochrome.
 
 ## Themes
 
-| Theme | Dots | Symbol | Counter |
+| Theme | Stones | Accent stone | Counter |
 |---|---|---|---|
-| Birthday | One per year of a 90-year life | The current year is a flame | `34 years · 56 ahead` |
-| Anniversary | One stone per anniversary reached, the row completed with empty stones | The latest anniversary is in the accent color | `8 years · April 22, 2018` |
-| Goal | One per day until the target | The target is a star | `64d left · 27%` |
+| Birthday | One per year of a 90-year life | The current year | `34 years` |
+| Anniversary | One per anniversary reached, plus the next one | The latest anniversary | `8 years · April 22, 2018` |
+| Goal | One per day until the target | Today | `64d left · 27%` |
 
 Dots have a fixed size. When the data does not fit, the unit grows (days, weeks, months, years) and the dots stay the same.
 
@@ -45,9 +45,8 @@ docs/adr        Architecture Decision Records
 ## Known limits
 
 - Safe-area positions are provisional estimates, not Apple figures. They still need to be measured on real devices.
-- The Goal theme uses a star as its symbol for now; the icon library comes later.
 - The Shortcut guide explains how to build the Shortcut by hand; there is no shared iCloud Shortcut link yet.
 
 ## License
 
-Code: [MIT](LICENSE). The bundled Geist font is licensed under the SIL Open Font License (`apps/web/server/assets/fonts/OFL.txt`). The heart, fire and star symbols are [Font Awesome Free](https://fontawesome.com) icons, licensed under [CC BY 4.0](https://fontawesome.com/license/free).
+Code: [MIT](LICENSE). The bundled Geist font is licensed under the SIL Open Font License (`apps/web/server/assets/fonts/OFL.txt`).

@@ -12,8 +12,8 @@
         <svg y="15" width="32.5" height="29.9" viewBox="78 112 250 230">
             <g fill="currentColor" stroke="currentColor" stroke-width="6" stroke-linejoin="round">
                 <path transform="translate(140 290)" d="M-53.7 50L-32.2 17.2L-15.5 -7.4L3.1 -41L18.8 -7.9L34 21.4L53.7 50L0.9 47.4Z" />
-                <path transform="translate(260 290)" d="M-60.8 50L-37.9 15.4L-17.2 -13.5L9.7 -45.3L27.3 -13.4L41.8 16.5L60.8 50L0.9 50.1Z" />
-                <path class="cairn-logo-top" transform="translate(200 178)" d="M-52.8 50L-32.5 13.6L-6.1 -19.7L18.4 -58.1L30.3 -22.1L43.5 14L52.8 50L-1.4 48.4Z" />
+                <path transform="translate(260 290)" d="M-56 50L-34.9 15.4L-15.8 -13.5L8.9 -45.3L25.1 -13.4L38.5 16.5L56 50L0.8 50.1Z" />
+                <path class="cairn-logo-top" transform="translate(200 178)" d="M-52.8 50L-35.3 15.3L-11.5 -16.4L10 -53L24.7 -18.7L40.7 15.7L52.8 50L-1.5 48.5Z" />
             </g>
         </svg>
         <path
