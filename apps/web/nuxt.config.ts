@@ -21,6 +21,8 @@ export default defineNuxtConfig({
 
     // The editor depends on the visitor's clock and time zone, so it renders on the client.
     routeRules: { '/': { ssr: false } },
+    // Skeleton of the editor shown until it mounts. Explicit path: the default lookup adds an extra app/ to srcDir.
+    spaLoadingTemplate: 'spa-loading-template.html',
 
     // The preview draws the wallpaper SVG in the browser: load the fonts the server renders with, so the two match.
     // Global, so the style picker can show each name in its own font before the style is chosen.
