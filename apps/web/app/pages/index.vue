@@ -409,7 +409,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
             background: linear-gradient(to top, rgba($black, 0.85), rgba($black, 0));
             -webkit-backdrop-filter: blur(12px);
             backdrop-filter: blur(12px);
-            mask-image: linear-gradient(to top, #000 50%, transparent);
+            mask-image: linear-gradient(to top, $black 50%, transparent);
         }
     }
 
@@ -594,7 +594,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     scrollbar-width: none;
     --fade-start: 0px;
     --fade-end: 0px;
-    mask-image: linear-gradient(to right, transparent, #000 var(--fade-start), #000 calc(100% - var(--fade-end)), transparent);
+    mask-image: linear-gradient(to right, transparent, $black var(--fade-start), $black calc(100% - var(--fade-end)), transparent);
     transition: --fade-start 200ms ease, --fade-end 200ms ease;
 
     &.fade-start {
