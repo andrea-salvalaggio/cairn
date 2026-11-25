@@ -8,7 +8,8 @@ const STEPS = [
     // Every step's text sits at the top of the body, so title-to-text spacing is the same on each one.
     // Steps the user follows on the iPhone are a numbered list, not a sentence of commas.
     { title: 'Create the Shortcut', instructions: ['Open Shortcuts on your iPhone', 'Tap +', 'Add these two actions'] },
-    { title: 'Run it every morning', instructions: ['In Shortcuts, open the Automation tab', 'Tap +', 'Choose Time of Day and set it like this'] },
+    // iOS 27: the trigger is an action at the top of the same shortcut, no separate Automation tab.
+    { title: 'Run it every morning', instructions: ['In the same shortcut, open the actions', 'Choose the Automation category', 'Tap Time of Day and set it like this'] },
 ]
 
 const step = ref(0)
@@ -130,6 +131,13 @@ function confetti(from: HTMLElement) {
                     <ol class="instructions">
                         <li v-for="line in STEPS[1]!.instructions" :key="line">{{ line }}</li>
                     </ol>
+                    <!-- The trigger sits on top of the shortcut, dimmed: it is added in step 3. -->
+                    <div class="action action--later">
+                        <span class="action-icon action-icon--tint"><UIcon name="i-lucide-clock" class="action-glyph" /></span>
+                        <p>At <span class="token">6:00 AM</span>, <span class="token">Daily</span></p>
+                        <span class="later">Step 3</span>
+                    </div>
+                    <div class="connector" />
                     <div class="action">
                         <span class="action-icon action-icon--blue"><UIcon name="i-lucide-globe" class="action-glyph" /></span>
                         <p>Get contents of <span class="token">your link</span></p>
@@ -153,11 +161,13 @@ function confetti(from: HTMLElement) {
                         <li v-for="line in STEPS[2]!.instructions" :key="line">{{ line }}</li>
                     </ol>
                     <ol class="ios-group ios-group--elevated">
+                        <li class="ios-row"><span>Automation</span><span class="ios-value">Time of Day</span></li>
                         <li class="ios-row"><span>Time</span><span class="ios-value">6:00 AM</span></li>
                         <li class="ios-row"><span>Repeat</span><span class="ios-value">Daily</span></li>
-                        <li class="ios-row"><span>Run Immediately</span><UIcon name="i-lucide-check" class="ios-icon check" /></li>
-                        <li class="ios-row"><span>Shortcut</span><span class="ios-value">Your new shortcut</span></li>
                     </ol>
+                    <p class="ios-footnote hint">
+                        Tap the <strong>ⓘ</strong> button, then <em>Privacy</em>, and turn on <strong>Allow Running When Locked</strong> so it runs without asking.
+                    </p>
                     <div class="note">
                         <UIcon name="i-lucide-info" class="ios-icon note-icon" />
                         <p>
@@ -230,7 +240,6 @@ function confetti(from: HTMLElement) {
 }
 
 .link-icon,
-.check,
 .note-icon {
     color: $tint;
 }
@@ -266,6 +275,21 @@ function confetti(from: HTMLElement) {
     &--indigo {
         background-color: $indigo;
     }
+
+    &--tint {
+        background-color: $tint;
+    }
+}
+
+.action--later {
+    opacity: 0.55;
+}
+
+.later {
+    margin-left: auto;
+    font-size: $font-size-footnote;
+    white-space: nowrap;
+    color: $label-secondary;
 }
 
 .action-glyph {
