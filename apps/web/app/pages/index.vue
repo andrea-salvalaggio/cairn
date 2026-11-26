@@ -106,7 +106,19 @@ onMounted(() => {
 })
 onBeforeUnmount(() => window.removeEventListener('resize', updateFade))
 
-const titleHasEmoji = computed(() => stripEmoji(form.titles[form.theme]) !== form.titles[form.theme])
+// The wallpaper font has no emoji and the iOS emoji key can't be hidden, so emoji are dropped as they're typed or pasted.
+const emojiBlocked = ref(false)
+function onTitleInput(event: Event) {
+    const input = event.target as HTMLInputElement
+    const clean = stripEmoji(input.value)
+    emojiBlocked.value = clean !== input.value
+    if (emojiBlocked.value) {
+        const caret = stripEmoji(input.value.slice(0, input.selectionStart ?? input.value.length)).length
+        input.value = clean
+        input.setSelectionRange(caret, caret)
+    }
+    form.titles[form.theme] = clean
+}
 
 const result = computed<{ config?: Config, svg?: string, error?: ConfigError }>(() => {
     const date = (key: keyof typeof EXAMPLE_DATES) => form[key] || EXAMPLE_DATES[key]
@@ -153,6 +165,15 @@ const contacts = [
 // The download gives no sign of its own, so the button says it started for a moment.
 const downloaded = ref(false)
 let resetDownloaded: ReturnType<typeof setTimeout> | undefined
+// The hover glow sits under the pointer: CSS reads the position from these two variables.
+function trackGlow(event: PointerEvent) {
+    if (event.pointerType !== 'mouse') return
+    const button = event.currentTarget as HTMLElement
+    const rect = button.getBoundingClientRect()
+    button.style.setProperty('--mx', `${event.clientX - rect.left}px`)
+    button.style.setProperty('--my', `${event.clientY - rect.top}px`)
+}
+
 function onDownload() {
     downloaded.value = true
     clearTimeout(resetDownloaded)
@@ -189,10 +210,10 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
                 <div class="fields">
                     <label class="field">
                         <span class="field-label">Title</span>
-                        <span class="field-box">
-                            <input v-model="form.titles[form.theme]" class="field-input" maxlength="48" :placeholder="defaultTitles[form.theme]">
+                        <span class="field-box" :class="{ 'is-invalid': emojiBlocked }">
+                            <input :value="form.titles[form.theme]" class="field-input" maxlength="48" :placeholder="defaultTitles[form.theme]" @input="onTitleInput">
                         </span>
-                        <p v-if="titleHasEmoji" class="field-hint" role="status">Emoji aren’t supported: they won’t appear in the preview or on your wallpaper.</p>
+                        <p v-if="emojiBlocked" class="field-hint field-error" role="alert">Emoji aren’t supported on the wallpaper.</p>
                     </label>
 
                     <div class="field">
@@ -271,11 +292,11 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 
                 <div class="actions">
                     <button type="button" class="ios-button ios-button--filled actions-main" :disabled="!pngPath"
-                        @click="guideOpen = true">
+                        @click="guideOpen = true" @pointermove="trackGlow">
                         <UIcon name="i-heroicons-sparkles-20-solid" class="ios-icon" /> Set up your wallpaper
                     </button>
                     <a :href="pngPath" :aria-disabled="!pngPath" download="cairn-wallpaper.png"
-                        class="ios-button ios-button--tinted" @click="onDownload">
+                        class="ios-button ios-button--tinted actions-download" @click="onDownload" @pointermove="trackGlow">
                         <Transition name="swap" mode="out-in">
                             <span :key="downloaded ? 'done' : 'idle'" class="ios-button-content">
                                 <UIcon :name="downloaded ? 'i-lucide-check' : 'i-lucide-arrow-down-to-line'" class="ios-icon" />
@@ -529,6 +550,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
         background-color: $separator;
         box-shadow: 0 0 0 100vmax $separator;
         clip-path: inset(0 -100vmax);
+        opacity: 0.6;
     }
 
     p {
@@ -765,6 +787,69 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 
     @include up($bp-sm) {
         flex: 1;
+    }
+}
+
+.actions .ios-button {
+    --glow-fill: rgba(255, 255, 255, 0.06);
+    --glow-edge: rgba(255, 255, 255, 0.45);
+    position: relative;
+    isolation: isolate;
+
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 240ms ease;
+    }
+
+    &::before {
+        z-index: -1;
+        background: radial-gradient(9rem circle at var(--mx, 50%) var(--my, 50%), var(--glow-fill), transparent 70%);
+    }
+
+    &::after {
+        padding: 1px;
+        background: radial-gradient(6rem circle at var(--mx, 50%) var(--my, 50%), var(--glow-edge), transparent 70%);
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    }
+}
+
+.actions .ios-button--filled {
+    --glow-fill: rgba(255, 255, 255, 0.3);
+    --glow-edge: rgba(255, 255, 255, 0.8);
+}
+
+.actions .ios-icon {
+    transition: transform 200ms $ease-out;
+}
+
+@media (min-width: $bp-sm) and (hover: hover) and (pointer: fine) {
+    .actions .ios-button:hover::before,
+    .actions .ios-button:hover::after {
+        opacity: 1;
+    }
+}
+
+@media (min-width: $bp-sm) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .actions .ios-button:hover .ios-icon {
+        transform: scale(1.2);
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .actions-download .swap-enter-active .ios-icon {
+        transition: transform 180ms $ease-out;
+    }
+
+    .actions-download .swap-enter-from .ios-icon {
+        transform: scale(0.8);
     }
 }
 </style>
