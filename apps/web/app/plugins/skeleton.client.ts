@@ -1,6 +1,6 @@
 // Nuxt removes the skeleton the instant the editor mounts: from cache that is a flash and a hard cut.
 // Take it over instead: keep it until MIN_VISIBLE ms after the page started loading, then fade it out over the editor.
-const MIN_VISIBLE = 500
+const MIN_VISIBLE = 300
 const FADE = 250 // matches the transition on #cairn-loader in spa-loading-template.html
 
 export default defineNuxtPlugin((nuxtApp) => {

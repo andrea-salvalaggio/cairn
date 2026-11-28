@@ -58,8 +58,8 @@ function nudge() {
     )
 }
 
-// Little stones (ochre, white, grey) thrown up from the button, then falling away.
-const CONFETTI_COLORS = ['#FF9F0A', '#F5F5F7', '#8E8E93']
+// Little stones (accent, white, grey) thrown up from the button, then falling away.
+const CONFETTI_COLORS = ['var(--tint)', '#F5F5F7', '#8E8E93']
 
 function confetti(from: HTMLElement) {
     const { left, top, width } = from.getBoundingClientRect()
@@ -344,7 +344,7 @@ function confetti(from: HTMLElement) {
     font-size: $font-size-subhead;
     line-height: $line-height-base;
     border-radius: $radius;
-    background-color: rgba($tint, 0.1);
+    background-color: color-mix(in srgb, $tint 10%, transparent);
 
     .note-icon {
         margin-top: 2px;
