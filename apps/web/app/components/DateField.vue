@@ -35,7 +35,7 @@ const input = useTemplateRef('input')
             <UPopover :reference="input?.inputsRef[3]?.$el" modal>
                 <UButton color="neutral" variant="link" size="sm" icon="i-lucide-calendar" aria-label="Choose from calendar" class="px-0" />
                 <template #content>
-                    <UCalendar v-model="value" locale="it-IT" class="p-2" />
+                    <UCalendar v-model="value" locale="it-IT" class="p-2" :ui="{ cellTrigger: 'data-selected:text-(--on-tint)' }" />
                 </template>
             </UPopover>
         </template>

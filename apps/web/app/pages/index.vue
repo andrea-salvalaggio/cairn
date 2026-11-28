@@ -58,6 +58,18 @@ const form = reactive({
     goalTarget: '',
 })
 
+// Black or white text on the accent, whichever reads better (WCAG relative luminance).
+function onAccent(hex: string) {
+    const [r, g, b] = [1, 3, 5].map((i) => {
+        const c = parseInt(hex.slice(i, i + 2), 16) / 255
+        return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
+    })
+    return 0.2126 * r! + 0.7152 * g! + 0.0722 * b! > 0.179 ? '#000000' : '#FFFFFF'
+}
+
+// The chosen accent tints the whole site, not only the wallpaper.
+useHead({ htmlAttrs: { style: () => `--tint: ${form.accent}; --on-tint: ${onAccent(form.accent)}` } })
+
 // Only ever drawn in the preview, picked so the sample pile looks good.
 const EXAMPLE_DATES = {
     birthDate: '1995-01-01',
@@ -203,6 +215,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
             </div>
 
             <section class="preview" aria-label="Wallpaper preview">
+                <span class="preview-grain" aria-hidden="true" />
                 <IPhoneMockup :device="device" :svg="result.svg" :theme="form.theme" :time-zone="form.timeZone" :now="now" />
             </section>
 
@@ -504,7 +517,36 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
 }
 
 .preview {
+    position: relative;
+    isolation: isolate;
     grid-area: preview;
+
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        border-radius: 50%;
+        filter: blur(56px);
+        pointer-events: none;
+        animation: glow-drift 11s ease-in-out infinite alternate;
+
+        @include reduced-motion {
+            animation: none;
+        }
+    }
+
+    &::before {
+        inset: 10% 5% 25% 0;
+        background: radial-gradient(circle, color-mix(in srgb, $tint 85%, transparent), transparent 70%);
+    }
+
+    &::after {
+        inset: 35% 0 5% 10%;
+        background: radial-gradient(circle, color-mix(in srgb, $tint 65%, transparent), transparent 70%);
+        animation-duration: 14s;
+        animation-direction: alternate-reverse;
+    }
 
     @include down($bp-md) {
         :deep(.phone) {
@@ -516,6 +558,30 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
         position: sticky;
         top: $spacer-7;
         align-self: start;
+    }
+}
+
+.preview-grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    mask-image: radial-gradient(closest-side, $black, transparent);
+    pointer-events: none;
+}
+
+@keyframes glow-drift {
+    0% {
+        transform: translate(-12%, -8%) scale(1);
+    }
+
+    50% {
+        transform: translate(10%, 6%) scale(1.15);
+    }
+
+    100% {
+        transform: translate(-4%, 12%) scale(0.92);
     }
 }
 
