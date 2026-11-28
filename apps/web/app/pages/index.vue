@@ -169,7 +169,6 @@ const liveUrl = computed(() => (pngPath.value ? new URL(pngPath.value, window.lo
 const guideOpen = ref(false)
 
 const contacts = [
-    { label: 'Email', icon: 'i-fa7-solid-envelope', href: 'mailto:andrea.salvalaggio95@gmail.com' },
     { label: 'LinkedIn', icon: 'i-fa7-brands-linkedin-in', href: 'https://linkedin.com/in/andrea-salvalaggio' },
     { label: 'GitHub', icon: 'i-fa7-brands-github', href: 'https://github.com/andrea-salvalaggio' },
 ]
@@ -327,7 +326,7 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
             <p>Made by <a href="https://andreasalvalaggio.vercel.app/" target="_blank" rel="noopener">Andrea Salvalaggio</a></p>
             <nav class="credits-links" aria-label="Contact">
                 <a v-for="link in contacts" :key="link.label" :href="link.href" :aria-label="link.label" :title="link.label"
-                    :target="link.href.startsWith('mailto:') ? undefined : '_blank'" rel="noopener">
+                    target="_blank" rel="noopener">
                     <UIcon :name="link.icon" class="credits-icon" />
                 </a>
             </nav>
@@ -622,6 +621,12 @@ onBeforeUnmount(() => clearTimeout(resetDownloaded))
     p {
         margin: $spacer-0;
         white-space: nowrap;
+
+        a {
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 3px;
+        }
     }
 
     a {
